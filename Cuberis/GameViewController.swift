@@ -32,7 +32,7 @@ class GameViewController: UIViewController {
 
 //        let trail = SCNParticleSystem(named: "Stars.scnp", inDirectory: nil)!
 //        let node = SCNNode()
-//        node.position = SCNVector3(2.5, 2.5, 0)
+//        node.position = SCNVector3(2.5, 2.5, -3)
 //        node.addParticleSystem(trail)
 //        scnScene.rootNode.addChildNode(node)
     }
