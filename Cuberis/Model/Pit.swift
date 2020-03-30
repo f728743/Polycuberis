@@ -16,14 +16,14 @@ struct Pit {
     var width: Int { size.width }
     var height: Int { size.height }
     var depth: Int { size.depth }
-    private(set) var cells: [Int]
+    private var cells: [Int]
 
     init(width: Int, height: Int, depth: Int) {
         size = PitSize(width: width, height: height, depth: depth)
         cells = Array(repeating: 0, count: width * height * depth)
     }
 
-    func indexOf(x: Int, y: Int, z: Int) -> Int { x + y * width + z * width * height }
+    func indexOf(x: Int, y: Int, z: Int) -> Int { x + y * width + -z * width * height }
     func index(of cell: Vector3i) -> Int { indexOf(x: cell.x, y: cell.y, z: cell.z) }
 
     mutating func add(cubes: [Vector3i]) {
@@ -32,19 +32,22 @@ struct Pit {
 
     mutating func collapse(layer: Int, upTo bound: Int) {
         var i = layer
-        while i > bound {
-            copy(layer: i - 1, toLayer: i)
-            i -= 1
+        while i < bound {
+            copy(layer: i + 1, toLayer: i)
+            i += 1
         }
         fill(layer: bound, with: 0)
     }
 
     mutating func removeLayers() -> Int {
         var removed = 0
-        for i in 0..<depth {
+        var i = (-depth + 1)
+        while i < -removed {
             if isFull(layer: i) {
-                collapse(layer: i, upTo: removed)
+                collapse(layer: i, upTo: -removed)
                 removed += 1
+            } else {
+                i += 1
             }
         }
         return removed
@@ -62,7 +65,7 @@ struct Pit {
     func excess(of cell: Vector3i) -> Vector3i {
         Vector3i(x: excess(of: cell.x, over: width),
                  y: excess(of: cell.y, over: height),
-                 z: excess(of: cell.z, over: depth))
+                 z: -excess(of: -cell.z, over: depth))
     }
 
     func allSatisfy(ofLayer layer: Int, condition: (Int) -> Bool) -> Bool {

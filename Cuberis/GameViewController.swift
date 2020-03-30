@@ -43,7 +43,7 @@ class GameViewController: UIViewController {
     func setupView() {
         gameView.autoenablesDefaultLighting = true
         gameView.gamepadDelegate = game
-        gameView.antialiasingMode = .multisampling4X
+//        gameView.antialiasingMode = .multisampling4X
     }
 
     func setupScene() {
@@ -57,7 +57,6 @@ class GameViewController: UIViewController {
         cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
         cameraNode.position = geometry.cameraPosition
-        cameraNode.rotation = SCNVector4(0, 1, 0, Float.pi)
         scnScene.rootNode.addChildNode(cameraNode)
     }
 

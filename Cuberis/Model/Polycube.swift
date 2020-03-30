@@ -45,14 +45,15 @@ struct Polycube {
 
     init(cubes: [Vector3i], allRot: [Orientation], info: PolycubeInfo) {
         self.info = info
-        self.cubes = cubes
+        let w = Polycube.width(of: cubes)
+        let h = Polycube.height(of: cubes)
+        let d = Polycube.depth(of: cubes)
+        self.cubes = cubes.map { Vector3i( w - $0.x - 1, $0.y, -$0.z) }
         self.allRot = allRot
-        width = Polycube.width(of: cubes)
-        height = Polycube.height(of: cubes)
-        depth = Polycube.depth(of: cubes)
-        center = Vector3i(x: width - 1,
-                          y: 1,
-                          z: depth - 1)
+        width = w
+        height = h
+        depth = d
+        center = Vector3i(x: 1, y: 1, z: -d + 1)
     }
 
     static func width(of cells: [Vector3i]) -> Int { (cells.max { $0.x < $1.x }?.x ?? 0) + 1 }
@@ -60,7 +61,7 @@ struct Polycube {
     static func depth(of cells: [Vector3i]) -> Int { (cells.max { $0.z < $1.z }?.z ?? 0) + 1 }
 
     func haveVisibleFace(withIndex index: Int, in cube: Vector3i) -> Bool {
-        let faceBorders = [[0, 0, -1], [-1, 0, 0], [0, 0, 1], [1, 0, 0], [0, 1, 0], [0, -1, 0]]
+        let faceBorders = [[0, 0, 1], [-1, 0, 0], [0, 0, -1], [1, 0, 0], [0, 1, 0], [0, -1, 0]]
         return !cubes.contains(cube + Vector3i(faceBorders[index]))
     }
 }
@@ -70,8 +71,8 @@ func fround(_ x: Float) -> Int { Int(x < 0.0 ? x - 0.5 : x + 0.5) }
 extension Polycube {
     func cubes(afterRotation rotation: SCNMatrix4, andTranslation translation: Vector3i) -> [Vector3i] {
         return cubes.map {
-            let r = (SCNVector3($0 - center) + SCNVector3(0.5, 0.5, 0.5)) * rotation
-            return Vector3i(fround(r.x - 0.5), fround(r.y - 0.5), fround(r.z - 0.5)) + center + translation
+            let r = (SCNVector3($0 - center) + SCNVector3(0.5, 0.5, -0.5)) * rotation
+            return Vector3i(fround(r.x - 0.5), fround(r.y - 0.5), fround(r.z + 0.5)) + center + translation
         }
     }
 }

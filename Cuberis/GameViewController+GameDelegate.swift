@@ -7,9 +7,8 @@ import SceneKit
 
 extension GameViewController: GameDelegate {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {
-        let cubeSize = geometry.cubeSize(pitHeight: game.pit.height)
         let node = geometry.createNode(of: polycube)
-        node.position = SCNVector3(position + polycube.center) * cubeSize
+        node.position = SCNVector3(position + polycube.center) * geometry.cubeSize
         scnScene.rootNode.addChildNode(node)
         self.polycube?.removeFromParentNode()
         self.polycube = node
@@ -17,8 +16,7 @@ extension GameViewController: GameDelegate {
 
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
         guard let polycube = polycube else { return }
-        let cubeSize = geometry.cubeSize(pitHeight: game.pit.height)
-        let moveAction = SCNAction.move(by: SCNVector3(delta) * cubeSize, duration: moveDuration)
+        let moveAction = SCNAction.move(by: SCNVector3(delta) * geometry.cubeSize, duration: moveDuration)
         polycube.runAction(moveAction)
 
         let child = polycube.childNodes[0]
