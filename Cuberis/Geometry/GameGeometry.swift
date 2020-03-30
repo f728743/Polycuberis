@@ -30,6 +30,19 @@ class GameGeometry {
         self.pitSize = pitSize
     }
 
+    private func createCubeEdges(size: Float) -> SCNGeometry {
+        let edgeVertices = [[0, 0, 0], [0, 1, 0], [1, 1, 0], [1, 0, 0],
+                           [0, 0, 1], [0, 1, 1], [1, 1, 1], [1, 0, 1]]
+        let vertices = edgeVertices.map { SCNVector3($0[0], $0[1], -$0[2]) * size }
+        let source = SCNGeometrySource(vertices: vertices)
+
+        let edgeIndices: [Int32] = [0, 1, 1, 2, 2, 3, 3, 0,
+                                    4, 5, 5, 6, 6, 7, 7, 4,
+                                    0, 4, 1, 5, 2, 6, 3, 7]
+        let edges = SCNGeometryElement(indices: edgeIndices, primitiveType: .line)
+        return SCNGeometry(sources: [source], elements: [edges])
+    }
+
     private func createCubeFaces(size: Float) -> SCNGeometry {
         let mesh = deduplicate(
             vertices: cubeVertices.flatMap { $0.map { SCNVector3($0[0], $0[1], -$0[2]) * size } },
@@ -44,6 +57,9 @@ class GameGeometry {
                                    .systemRed, .systemPurple, .systemOrange, .systemGray]
         let cube = createCubeFaces(size: cubeSize)
         cube.firstMaterial?.diffuse.contents = palette[1]
+        let cubeEdges = createCubeEdges(size: cubeSize)
+        cubeEdges.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant
+        cubeEdges.firstMaterial?.diffuse.contents = UIColor.black
         let node = SCNNode()
         var layer = -pit.depth + 1
         while layer <= 0 && !pit.isEmpty(layer: layer) {
@@ -56,10 +72,17 @@ class GameGeometry {
                     let cell = Vector3i(x, y, layer)
                     if pit.isOccupied(at: cell) {
                         let cubeFacesNode = SCNNode(geometry: layerCube)
-                        let facesScale: Float = 0.98
-                        cubeFacesNode.position = SCNVector3(cell) * cubeSize + .unit * ((1.0 - facesScale) / 2)
+                        let facesScale: Float = 0.99
+                        cubeFacesNode.position = SCNVector3(cell) * cubeSize +
+                            SCNVector3(1, 1, -1) * ((1.0 - facesScale) / 2)
                         cubeFacesNode.scale = .unit * facesScale
                         node.addChildNode(cubeFacesNode)
+                        let edgesScale: Float = 0.991
+                        let cubeEdgesNode = SCNNode(geometry: cubeEdges)
+                        cubeEdgesNode.position = SCNVector3(cell) * cubeSize +
+                            SCNVector3(1, 1, -1) * ((1.0 - edgesScale) / 2)
+                        cubeEdgesNode.scale = .unit * edgesScale
+                        node.addChildNode(cubeEdgesNode)
                     }
                 }
             }
