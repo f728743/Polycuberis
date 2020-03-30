@@ -128,7 +128,7 @@ class GameGeometry {
         let element = SCNGeometryElement(indices: mesh.indices, primitiveType: .triangles)
         let source = SCNGeometrySource(vertices: mesh.vertices)
         let geometry = SCNGeometry(sources: [source], elements: [element])
-        geometry.firstMaterial?.diffuse.contents = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.6)
+        geometry.firstMaterial?.diffuse.contents = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 0.6)
 
         let node = SCNNode(geometry: geometry)
         node.pivot = SCNMatrix4MakeTranslation(SCNVector3(polycube.center) * cubeSize)

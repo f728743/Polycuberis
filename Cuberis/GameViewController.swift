@@ -25,6 +25,7 @@ class GameViewController: UIViewController {
         setupView()
         setupScene()
         setupCamera()
+        scnScene.rootNode.addChildNode(LightNode())
         createPit()
         game.newPolycube()
         didUpdateCells(of: game.pit)
@@ -41,7 +42,6 @@ class GameViewController: UIViewController {
     }
 
     func setupView() {
-        gameView.autoenablesDefaultLighting = true
         gameView.gamepadDelegate = game
 //        gameView.antialiasingMode = .multisampling4X
     }
