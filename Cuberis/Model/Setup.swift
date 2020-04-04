@@ -13,7 +13,7 @@ struct PolycubeSet {
 
 struct Setup {
     let speed: Int
-    let pitSize: PitSize
+    let pitSize: Size3i
     let polycubeSet: PolycubeSet
 }
 
@@ -47,6 +47,6 @@ func loadSetup() -> Setup {
     let maxSize = defaults.object(forKey: UserDefaultsKey.maxPolycubeSize.rawValue) as? Int ?? 5
 
     return Setup(speed: gameSpeed,
-                 pitSize: PitSize(width: pitWidth, height: pitHeight, depth: pitDepth),
+                 pitSize: Size3i(width: pitWidth, height: pitHeight, depth: pitDepth),
                  polycubeSet: PolycubeSet(basic: basic, flat: flat, maxSize: maxSize))
 }

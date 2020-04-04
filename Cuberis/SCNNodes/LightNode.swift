@@ -1,6 +1,11 @@
+//
+//  PitNode.swift
+//  Cuberis
+//
+
 import SceneKit
 
-final class LightNode: SCNNode {
+class LightNode: SCNNode {
     override init() {
         super.init()
 

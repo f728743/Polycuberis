@@ -5,21 +5,15 @@
 
 import Foundation
 
-struct PitSize {
-    let width: Int
-    let height: Int
-    let depth: Int
-}
-
 struct Pit {
-    let size: PitSize
+    let size: Size3i
     var width: Int { size.width }
     var height: Int { size.height }
     var depth: Int { size.depth }
     private var cells: [Int]
 
     init(width: Int, height: Int, depth: Int) {
-        size = PitSize(width: width, height: height, depth: depth)
+        size = Size3i(width: width, height: height, depth: depth)
         cells = Array(repeating: 0, count: width * height * depth)
     }
 

@@ -10,6 +10,12 @@
 		7C0786A7243892A5002A94B4 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0786A6243892A5002A94B4 /* CGPoint+Extension.swift */; };
 		7C0786A9243892DD002A94B4 /* CGSize+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0786A8243892DD002A94B4 /* CGSize+Extension.swift */; };
 		7C0786AB2438934E002A94B4 /* SKScene+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0786AA2438934E002A94B4 /* SKScene+Extension.swift */; };
+		7C167D3D2438DDCE00BE43A5 /* PitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D3C2438DDCE00BE43A5 /* PitNode.swift */; };
+		7C167D3F2438F6E200BE43A5 /* PitMeshNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D3E2438F6E200BE43A5 /* PitMeshNode.swift */; };
+		7C167D412439023100BE43A5 /* Size3i.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D402439023100BE43A5 /* Size3i.swift */; };
+		7C167D432439050900BE43A5 /* PitContentNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D422439050900BE43A5 /* PitContentNode.swift */; };
+		7C167D4524390C1800BE43A5 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D4424390C1800BE43A5 /* Geometry.swift */; };
+		7C167D472439114500BE43A5 /* PolycubeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D462439114500BE43A5 /* PolycubeNode.swift */; };
 		7C1FD64B2437857000ED901C /* GamepadScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD6482437857000ED901C /* GamepadScene.swift */; };
 		7C1FD64C2437857000ED901C /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD6492437857000ED901C /* MainMenuScene.swift */; };
 		7C1FD64F2437859F00ED901C /* Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD64E2437859F00ED901C /* Setup.swift */; };
@@ -25,7 +31,6 @@
 		7C4AAD9023DAEFEA00A9590B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C4AAD8F23DAEFEA00A9590B /* Assets.xcassets */; };
 		7C4AAD9323DAEFEA00A9590B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C4AAD9123DAEFEA00A9590B /* LaunchScreen.storyboard */; };
 		7C729FE2241BA7D9007DE4B8 /* Pit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C729FE1241BA7D9007DE4B8 /* Pit.swift */; };
-		7C729FE9241BC824007DE4B8 /* GameGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C729FE8241BC824007DE4B8 /* GameGeometry.swift */; };
 		7C9F8DA424220FA8005189EA /* GamepadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F8DA324220FA8005189EA /* GamepadProtocol.swift */; };
 		7CA349BD23DD89CB000721E9 /* polycubes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA349BC23DD89CA000721E9 /* polycubes.json */; };
 		7CB1F781243228580057499F /* LightNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB1F780243228580057499F /* LightNode.swift */; };
@@ -38,6 +43,12 @@
 		7C0786A6243892A5002A94B4 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
 		7C0786A8243892DD002A94B4 /* CGSize+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+Extension.swift"; sourceTree = "<group>"; };
 		7C0786AA2438934E002A94B4 /* SKScene+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKScene+Extension.swift"; sourceTree = "<group>"; };
+		7C167D3C2438DDCE00BE43A5 /* PitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitNode.swift; sourceTree = "<group>"; };
+		7C167D3E2438F6E200BE43A5 /* PitMeshNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitMeshNode.swift; sourceTree = "<group>"; };
+		7C167D402439023100BE43A5 /* Size3i.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size3i.swift; sourceTree = "<group>"; };
+		7C167D422439050900BE43A5 /* PitContentNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitContentNode.swift; sourceTree = "<group>"; };
+		7C167D4424390C1800BE43A5 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		7C167D462439114500BE43A5 /* PolycubeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolycubeNode.swift; sourceTree = "<group>"; };
 		7C1FD6482437857000ED901C /* GamepadScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamepadScene.swift; sourceTree = "<group>"; };
 		7C1FD6492437857000ED901C /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		7C1FD64E2437859F00ED901C /* Setup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Setup.swift; sourceTree = "<group>"; };
@@ -55,7 +66,6 @@
 		7C4AAD9223DAEFEA00A9590B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C4AAD9423DAEFEA00A9590B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C729FE1241BA7D9007DE4B8 /* Pit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pit.swift; sourceTree = "<group>"; };
-		7C729FE8241BC824007DE4B8 /* GameGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGeometry.swift; sourceTree = "<group>"; };
 		7C9F8DA324220FA8005189EA /* GamepadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamepadProtocol.swift; sourceTree = "<group>"; };
 		7CA349BC23DD89CA000721E9 /* polycubes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = polycubes.json; sourceTree = "<group>"; };
 		7CB1F780243228580057499F /* LightNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightNode.swift; sourceTree = "<group>"; };
@@ -79,7 +89,10 @@
 			isa = PBXGroup;
 			children = (
 				7CB1F780243228580057499F /* LightNode.swift */,
-				7C729FE8241BC824007DE4B8 /* GameGeometry.swift */,
+				7C167D3C2438DDCE00BE43A5 /* PitNode.swift */,
+				7C167D3E2438F6E200BE43A5 /* PitMeshNode.swift */,
+				7C167D422439050900BE43A5 /* PitContentNode.swift */,
+				7C167D462439114500BE43A5 /* PolycubeNode.swift */,
 			);
 			path = SCNNodes;
 			sourceTree = "<group>";
@@ -123,9 +136,9 @@
 			children = (
 				7C096F1E2438865A00D4D4D7 /* SCNNodes */,
 				7C1FD650243785B600ED901C /* SKNodes */,
+				7C1FD6472437857000ED901C /* Scenes */,
 				7CFB47E02426A1AD00B2A4B3 /* Extensions */,
 				7C7CB72D24058F6A00EFA46D /* Model */,
-				7C1FD6472437857000ED901C /* Scenes */,
 				7CE36ED823DC6D9800982EF9 /* AppDelegate.swift */,
 				7C4AAD8A23DAEFEA00A9590B /* GameViewController.swift */,
 				7C33F99024273889007BE88C /* GameViewController+GameDelegate.swift */,
@@ -148,6 +161,8 @@
 				7C729FE1241BA7D9007DE4B8 /* Pit.swift */,
 				7C1FD64E2437859F00ED901C /* Setup.swift */,
 				7CC34F66242A3F9000928EE1 /* Vector3i.swift */,
+				7C167D402439023100BE43A5 /* Size3i.swift */,
+				7C167D4424390C1800BE43A5 /* Geometry.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -263,21 +278,26 @@
 				7C0786A7243892A5002A94B4 /* CGPoint+Extension.swift in Sources */,
 				7CE36ED923DC6D9800982EF9 /* AppDelegate.swift in Sources */,
 				7C1FD654243785B600ED901C /* GamepadButtonNode.swift in Sources */,
+				7C167D3F2438F6E200BE43A5 /* PitMeshNode.swift in Sources */,
 				7C1FD64F2437859F00ED901C /* Setup.swift in Sources */,
 				7C0786A9243892DD002A94B4 /* CGSize+Extension.swift in Sources */,
+				7C167D3D2438DDCE00BE43A5 /* PitNode.swift in Sources */,
 				7C9F8DA424220FA8005189EA /* GamepadProtocol.swift in Sources */,
 				7C4AAD8B23DAEFEA00A9590B /* GameViewController.swift in Sources */,
 				7C36F48823DC54F3004CB85E /* Polycube.swift in Sources */,
 				7C729FE2241BA7D9007DE4B8 /* Pit.swift in Sources */,
 				7C36F48A23DC6978004CB85E /* Game.swift in Sources */,
+				7C167D472439114500BE43A5 /* PolycubeNode.swift in Sources */,
 				7C33F98F24273180007BE88C /* SCNMatrix4+Operations.swift in Sources */,
 				7CFB47DF2426A10500B2A4B3 /* SCNVector3+Operations.swift in Sources */,
 				7C33F99124273889007BE88C /* GameViewController+GameDelegate.swift in Sources */,
 				7CC34F67242A3F9000928EE1 /* Vector3i.swift in Sources */,
-				7C729FE9241BC824007DE4B8 /* GameGeometry.swift in Sources */,
+				7C167D412439023100BE43A5 /* Size3i.swift in Sources */,
 				7CB1F781243228580057499F /* LightNode.swift in Sources */,
+				7C167D432439050900BE43A5 /* PitContentNode.swift in Sources */,
 				7C0786AB2438934E002A94B4 /* SKScene+Extension.swift in Sources */,
 				7C1FD653243785B600ED901C /* ButtonNode.swift in Sources */,
+				7C167D4524390C1800BE43A5 /* Geometry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
