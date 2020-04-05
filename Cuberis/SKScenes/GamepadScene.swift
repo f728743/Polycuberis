@@ -41,7 +41,7 @@ class GamepadScene: SKScene {
     override func didMove(to view: SKView) {
         layoutSubnodes()
         alpha = 0.0
-        run(SKAction.fadeIn(withDuration: SceneConstants.presentDuration * 2))
+        run(SKAction.fadeIn(withDuration: SceneConstants.scenePresentDuration * 2))
     }
 
     func layoutSubnodes() {

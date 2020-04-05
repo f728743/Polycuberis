@@ -1,5 +1,5 @@
 //
-//  Game.swift
+//  GameEngine.swift
 //  Cuberis
 //
 
@@ -21,7 +21,7 @@ extension GameDelegate {
     func gameOver() {}
 }
 
-class Game {
+class GameEngine {
     var pit = Pit(width: 5, height: 5, depth: 12)
     var polycubeCount = 0
     let allPolycubes: [Polycube]
@@ -148,7 +148,7 @@ class Game {
     }
 }
 
-extension Game: GamepadProtocol {
+extension GameEngine: GamepadProtocol {
     func rotateXClockwise() { rotate(by: SCNMatrix4MakeRotation(Float.pi / 2.0, -1.0, 0.0, 0.0)) }
     func rotateXCounterclockwise() { rotate(by: SCNMatrix4MakeRotation(Float.pi / 2.0, 1.0, 0.0, 0.0)) }
     func rotateYClockwise() { rotate(by: SCNMatrix4MakeRotation(Float.pi / 2.0, 0.0, -1.0, 0.0)) }

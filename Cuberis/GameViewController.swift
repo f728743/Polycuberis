@@ -6,24 +6,13 @@
 import UIKit
 import SceneKit
 
-struct SceneConstants {
-    static let presentDuration: TimeInterval = 0.3
-}
 
 class GameViewController: UIViewController {
-
+    var gameScene: GameScene!
     var setup = loadSetup()
-    var game: Game!
-    let moveDuration: TimeInterval = 0.1
     var scnView: SCNView! { self.view as? SCNView }
     var scnScene: SCNScene!
     var camera: SCNNode!
-    var polycube: SCNNode?
-
-    var pitNode: PitNode!
-
-    var pitContent: SCNNode?
-
     var mainMenuScene: MainMenuScene!
     var gamepadScene: GamepadScene!
 
@@ -37,27 +26,17 @@ class GameViewController: UIViewController {
         gameCameraPosition + SCNVector3(-2.0, 0.0, 0.0)
     }
 
-
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     private var firstTimeMainMenu = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        game.delegate = self
-
         setupScene()
         setupCamera()
-        scnScene.rootNode.addChildNode(LightNode())
-
-        pitNode = PitNode(pitSize: game.pit.size)
-        scnScene.rootNode.addChildNode(pitNode)
-        didUpdateCells(of: game.pit)
-
+        gameScene = GameScene(scnScene: scnScene)
         let viewSize = scnView.bounds.size
         mainMenuScene = MainMenuScene(size: viewSize)
         gamepadScene = GamepadScene(size: viewSize)
-        gamepadScene.gamepadDelegate = game
         schedulePresentMainMenu()
     }
 
@@ -74,7 +53,6 @@ class GameViewController: UIViewController {
                 self.presentGame(setup: self.setup) {
                     self.schedulePresentMainMenu()
                 }
-                self.game.newPolycube()
             case .options:
                 self.presentSetupMenu(setup: self.setup) { newSetup in
                     if let newSetup = newSetup {
@@ -91,9 +69,11 @@ class GameViewController: UIViewController {
     }
 
     func setupScene() {
-        scnScene = SCNScene()
-        scnView.scene = scnScene
-        scnScene.background.contents = "art.scnassets/Background_Diffuse.jpg"
+        let scene = SCNScene()
+        scene.background.contents = "art.scnassets/Background_Diffuse.jpg"
+        scene.rootNode.addChildNode(LightNode())
+        scnView.scene = scene
+        scnScene = scene
     }
 
     func setupCamera() {
@@ -103,8 +83,9 @@ class GameViewController: UIViewController {
     }
 
     func presentMainMenu(setup: Setup, animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
+        let duration = SceneConstants.scenePresentDuration
         if animated {
-            camera.runAction(SCNAction.move(to: menuCameraPosition, duration: SceneConstants.presentDuration))
+            camera.runAction(SCNAction.move(to: menuCameraPosition, duration: duration))
         } else {
             camera.position = menuCameraPosition
         }
@@ -113,9 +94,12 @@ class GameViewController: UIViewController {
     }
 
     func presentGame(setup: Setup, completion: @escaping () -> Void) {
-        camera.runAction(SCNAction.move(to: gameCameraPosition, duration: SceneConstants.presentDuration))
-        scnView.overlaySKScene = gamepadScene
+        let duration = SceneConstants.scenePresentDuration
+        camera.runAction(SCNAction.move(to: gameCameraPosition, duration: duration))
         gamepadScene.completion = completion
+        gamepadScene.gamepadDelegate = gameScene.game
+        scnView.overlaySKScene = gamepadScene
+        gameScene.game.newPolycube()
     }
 
     func presentSetupMenu(setup: Setup, completion: (Setup?) -> Void) {
