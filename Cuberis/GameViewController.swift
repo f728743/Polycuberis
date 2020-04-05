@@ -12,8 +12,7 @@ class GameViewController: UIViewController {
     var scnView: SCNView! { self.view as? SCNView }
     var scnScene: SCNScene!
     var camera: SCNNode!
-    var mainMenuScene: MainMenuScene!
-    var gamepadScene: GamepadScene!
+    var sceneManager: SceneManager!
     var engine: GameEngine?
 
     // todo: haptic
@@ -36,9 +35,7 @@ class GameViewController: UIViewController {
         setupScene()
         setupCamera()
         sceneController = GameSceneController(scnScene: scnScene, pitSize: setup.pitSize)
-        let viewSize = scnView.bounds.size
-        mainMenuScene = MainMenuScene(size: viewSize)
-        gamepadScene = GamepadScene(size: viewSize)
+        sceneManager = SceneManager(viewSize: scnView.bounds.size)
         resetGame()
         schedulePresentMainMenu()
     }
@@ -93,16 +90,16 @@ class GameViewController: UIViewController {
         } else {
             camera.position = menuCameraPosition
         }
-        mainMenuScene.completion = completion
-        scnView.overlaySKScene = mainMenuScene
+        sceneManager.mainMenu.completion = completion
+        scnView.overlaySKScene = sceneManager.mainMenu
     }
 
     func presentGame(setup: Setup, completion: @escaping () -> Void) {
         let duration = SceneConstants.scenePresentDuration
         camera.runAction(SCNAction.move(to: gameCameraPosition, duration: duration))
-        gamepadScene.completion = completion
-        gamepadScene.gamepadDelegate = engine
-        scnView.overlaySKScene = gamepadScene
+        sceneManager.gamepad.completion = completion
+        sceneManager.gamepad.gamepadDelegate = engine
+        scnView.overlaySKScene = sceneManager.gamepad
         engine?.newPolycube()
     }
 

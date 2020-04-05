@@ -10,7 +10,7 @@ enum MainMenuOption: String {
    case options
 }
 
-func createButton(title: String, option: MainMenuOption) -> ButtonNode {
+private func createButton(title: String, option: MainMenuOption) -> ButtonNode {
     let button = ButtonNode(buttonImageName: "GreenButton", title: title)
     button.name = option.rawValue
     button.fontName = "GillSans-Light"
@@ -22,15 +22,17 @@ func createButton(title: String, option: MainMenuOption) -> ButtonNode {
 class MainMenuScene: SKScene {
     var completion: ((MainMenuOption) -> Void)?
 
+    let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let startButton = createButton(title: "START", option: .start)
     let optionsButton = createButton(title: "OPTIONS", option: .options)
 
     override init(size: CGSize) {
         super.init(size: size)
+        addChild(panel)
         startButton.responder = self
-        addChild(startButton)
+        panel.addChild(startButton)
         optionsButton.responder = self
-        addChild(optionsButton)
+        panel.addChild(optionsButton)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,9 +40,12 @@ class MainMenuScene: SKScene {
     }
 
     func layoutSubnodes() {
-        let anchor = CGPoint(x: safeAreaInsets.left + startButton.size.midW + 40, y: frame.height)
-        startButton.position = anchor + CGPoint(0, -80)
-        optionsButton.position = anchor + CGPoint(0, -140)
+        panel.position = CGPoint(safeAreaInsets.left + panel.size.midW + 10, frame.midY)
+        let spacing: CGFloat = 20
+        let anchor = CGPoint(0, panel.size.midH - (startButton.size.midH + spacing))
+        let step = -(startButton.size.height + spacing)
+        startButton.position = anchor + CGPoint(0, 0 * step)
+        optionsButton.position = anchor + CGPoint(0, 1 * step)
     }
 
     override func didMove(to view: SKView) {

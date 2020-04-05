@@ -17,6 +17,10 @@ struct Setup {
     let polycubeSet: PolycubeSet
 }
 
+// w 3-7
+// h 3-7
+// d 6-18
+
 enum UserDefaultsKey: String {
     case gameSpeed
     case pitWidth, pitHeight, pitDepth
