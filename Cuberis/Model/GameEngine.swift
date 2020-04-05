@@ -31,6 +31,7 @@ class GameEngine {
     var rotation = SCNMatrix4Identity
     var isDropHappened = false
     weak var delegate: GameEngineDelegate?
+    var isStopped = false
 
     init(pitSize: Size3i) {
         pit = Pit(size: pitSize)
@@ -130,6 +131,7 @@ class GameEngine {
     }
 
     func step() {
+        if isStopped { return }
         guard let polycube = currentPolycube else { fatalError("Current polycube fucked up") }
         let delta = Vector3i(0, 0, -1)
         if isOverlapped(afterRotation: rotation, andTranslation: position + delta) {

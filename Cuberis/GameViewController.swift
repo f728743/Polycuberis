@@ -14,7 +14,9 @@ class GameViewController: UIViewController {
     var camera: SCNNode!
     var mainMenuScene: MainMenuScene!
     var gamepadScene: GamepadScene!
-    var engine: GameEngine!
+    var engine: GameEngine?
+
+    // todo: haptic
 
     var gameCameraPosition: SCNVector3 {
         SCNVector3(x: Float(setup.pitSize.width) / 2.0,
@@ -37,8 +39,7 @@ class GameViewController: UIViewController {
         let viewSize = scnView.bounds.size
         mainMenuScene = MainMenuScene(size: viewSize)
         gamepadScene = GamepadScene(size: viewSize)
-        engine = GameEngine(pitSize: setup.pitSize)
-        engine.delegate = sceneController
+        resetGame()
         schedulePresentMainMenu()
     }
 
@@ -53,6 +54,7 @@ class GameViewController: UIViewController {
             switch selectedOption {
             case .start:
                 self.presentGame(setup: self.setup) {
+                    self.resetGame()
                     self.schedulePresentMainMenu()
                 }
             case .options:
@@ -101,7 +103,7 @@ class GameViewController: UIViewController {
         gamepadScene.completion = completion
         gamepadScene.gamepadDelegate = engine
         scnView.overlaySKScene = gamepadScene
-        engine.newPolycube()
+        engine?.newPolycube()
     }
 
     func presentSetupMenu(setup: Setup, completion: (Setup?) -> Void) {
@@ -113,4 +115,32 @@ class GameViewController: UIViewController {
         completion(setup)
     }
 
+    func resetGame() {
+        if let oldEngine = engine {
+            oldEngine.isStopped = true // stop retaining old engine by Timer to let deinit
+            oldEngine.delegate = nil
+        }
+        engine = GameEngine(pitSize: setup.pitSize)
+        engine!.delegate = self
+        sceneController.deletePolycube()
+        sceneController.updateContent(of: engine!.pit)
+    }
+}
+
+extension GameViewController: GameEngineDelegate {
+    func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {
+        sceneController.spawnNew(polycube: polycube, at: position, rotated: rotation)
+    }
+
+    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
+        sceneController.movePolycube(by: delta, andRotateBy: rotationDelta)
+    }
+
+    func gameOver() {
+        print("Game over")
+    }
+
+    func didUpdateContent(of pit: Pit) {
+        sceneController.updateContent(of: pit)
+    }
 }

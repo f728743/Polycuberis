@@ -21,10 +21,13 @@ class GameSceneController {
         pit = PitNode(size: pitSize)
         scnScene.rootNode.addChildNode(pit)
     }
-}
 
-extension GameSceneController: GameEngineDelegate {
-    func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {
+    func deletePolycube() {
+        self.polycube?.removeFromParentNode()
+        polycube = nil
+    }
+
+    func spawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {
         let node = PolycubeNode(polycube: polycube)
         node.position = SCNVector3(position + polycube.center)
         pit.addChildNode(node)
@@ -32,7 +35,7 @@ extension GameSceneController: GameEngineDelegate {
         self.polycube = node
     }
 
-    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
+    func movePolycube(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
         guard let polycube = polycube else { return }
         let duration = SceneConstants.polycubeMoveDuration
         let moveAction = SCNAction.move(by: SCNVector3(delta), duration: duration)
@@ -49,11 +52,7 @@ extension GameSceneController: GameEngineDelegate {
         child.transform = to
     }
 
-    func gameOver() {
-        print("Game over")
-    }
-
-    func didUpdateContent(of pit: Pit) {
+    func updateContent(of pit: Pit) {
         let node = PitContentNode(pit: pit)
         self.pit.addChildNode(node)
         pitContent?.removeFromParentNode()
