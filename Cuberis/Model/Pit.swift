@@ -12,9 +12,9 @@ struct Pit {
     var depth: Int { size.depth }
     private var cells: [Int]
 
-    init(width: Int, height: Int, depth: Int) {
-        size = Size3i(width: width, height: height, depth: depth)
-        cells = Array(repeating: 0, count: width * height * depth)
+    init(size: Size3i) {
+        self.size = size
+        cells = Array(repeating: 0, count: size.width * size.height * size.depth)
     }
 
     func indexOf(x: Int, y: Int, z: Int) -> Int { x + y * width + -z * width * height }

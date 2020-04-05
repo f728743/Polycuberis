@@ -1,5 +1,5 @@
 //
-//  GameScene.swift
+//  GameSceneController.swift
 //  Cuberis
 //
 
@@ -10,26 +10,24 @@ struct SceneConstants {
     static let polycubeMoveDuration: TimeInterval = 0.1
 }
 
-class GameScene {
-    var polycube: SCNNode?
-    var pitNode: PitNode
-    var pitContent: SCNNode?
+class GameSceneController {
     var scnScene: SCNScene
-    var game = GameEngine()
+    var pit: SCNNode
+    var polycube: SCNNode?
+    var pitContent: SCNNode?
 
-    init(scnScene: SCNScene) {
+    init(scnScene: SCNScene, pitSize: Size3i) {
         self.scnScene = scnScene
-        pitNode = PitNode(pitSize: game.pit.size)
-        scnScene.rootNode.addChildNode(pitNode)
-        game.delegate = self
+        pit = PitNode(size: pitSize)
+        scnScene.rootNode.addChildNode(pit)
     }
 }
 
-extension GameScene: GameDelegate {
+extension GameSceneController: GameEngineDelegate {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {
         let node = PolycubeNode(polycube: polycube)
         node.position = SCNVector3(position + polycube.center)
-        scnScene.rootNode.addChildNode(node)
+        pit.addChildNode(node)
         self.polycube?.removeFromParentNode()
         self.polycube = node
     }
@@ -55,9 +53,9 @@ extension GameScene: GameDelegate {
         print("Game over")
     }
 
-    func didUpdateCells(of pit: Pit) {
-        let node = PitContentNode(pit: game.pit)
-        scnScene.rootNode.addChildNode(node)
+    func didUpdateContent(of pit: Pit) {
+        let node = PitContentNode(pit: pit)
+        self.pit.addChildNode(node)
         pitContent?.removeFromParentNode()
         pitContent = node
     }

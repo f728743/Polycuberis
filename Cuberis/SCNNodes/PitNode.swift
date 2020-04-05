@@ -8,10 +8,9 @@ import SceneKit
 class PitNode: SCNNode {
     var pitMesh: SCNNode
 
-    init(pitSize: Size3i) {
-        pitMesh =  PitMeshNode(size: pitSize)
+    init(size: Size3i) {
+        pitMesh =  PitMeshNode(size: size)
         super.init()
-
         addChildNode(pitMesh)
     }
 

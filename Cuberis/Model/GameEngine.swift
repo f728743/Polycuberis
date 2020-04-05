@@ -5,24 +5,24 @@
 
 import SceneKit
 
-protocol GameDelegate: AnyObject {
+protocol GameEngineDelegate: AnyObject {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4)
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4)
     func collision(at cells: [Vector3i], afterMoveBy delta: Vector3i, andRotate rotation: SCNMatrix4)
-    func didUpdateCells(of pit: Pit)
+    func didUpdateContent(of pit: Pit)
     func gameOver()
 }
 
-extension GameDelegate {
+extension GameEngineDelegate {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {}
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {}
     func collision(at cells: [Vector3i], afterMoveBy delta: Vector3i, andRotate rotation: SCNMatrix4) {}
-    func didUpdateCells(of pit: Pit) {}
+    func didUpdateContent(of pit: Pit) {}
     func gameOver() {}
 }
 
 class GameEngine {
-    var pit = Pit(width: 5, height: 5, depth: 12)
+    var pit: Pit
     var polycubeCount = 0
     let allPolycubes: [Polycube]
     let currentSet: [Polycube]
@@ -30,9 +30,10 @@ class GameEngine {
     var position = Vector3i()
     var rotation = SCNMatrix4Identity
     var isDropHappened = false
-    weak var delegate: GameDelegate?
+    weak var delegate: GameEngineDelegate?
 
-    init() {
+    init(pitSize: Size3i) {
+        pit = Pit(size: pitSize)
         let url = Bundle.main.resourceURL!.appendingPathComponent("polycubes.json")
         allPolycubes = loadPolycubes(from: url)
         currentSet = allPolycubes.filter { $0.info.basic || $0.info.flat }
@@ -134,7 +135,7 @@ class GameEngine {
         if isOverlapped(afterRotation: rotation, andTranslation: position + delta) {
             pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
             let lines = pit.removeLayers()
-            delegate?.didUpdateCells(of: pit)
+            delegate?.didUpdateContent(of: pit)
             accountScores(for: polycube, linesRemoved: lines)
             newPolycube()
         } else {

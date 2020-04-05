@@ -6,15 +6,15 @@
 import UIKit
 import SceneKit
 
-
 class GameViewController: UIViewController {
-    var gameScene: GameScene!
+    var sceneController: GameSceneController!
     var setup = loadSetup()
     var scnView: SCNView! { self.view as? SCNView }
     var scnScene: SCNScene!
     var camera: SCNNode!
     var mainMenuScene: MainMenuScene!
     var gamepadScene: GamepadScene!
+    var engine: GameEngine!
 
     var gameCameraPosition: SCNVector3 {
         SCNVector3(x: Float(setup.pitSize.width) / 2.0,
@@ -33,10 +33,12 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         setupScene()
         setupCamera()
-        gameScene = GameScene(scnScene: scnScene)
+        sceneController = GameSceneController(scnScene: scnScene, pitSize: setup.pitSize)
         let viewSize = scnView.bounds.size
         mainMenuScene = MainMenuScene(size: viewSize)
         gamepadScene = GamepadScene(size: viewSize)
+        engine = GameEngine(pitSize: setup.pitSize)
+        engine.delegate = sceneController
         schedulePresentMainMenu()
     }
 
@@ -97,9 +99,9 @@ class GameViewController: UIViewController {
         let duration = SceneConstants.scenePresentDuration
         camera.runAction(SCNAction.move(to: gameCameraPosition, duration: duration))
         gamepadScene.completion = completion
-        gamepadScene.gamepadDelegate = gameScene.game
+        gamepadScene.gamepadDelegate = engine
         scnView.overlaySKScene = gamepadScene
-        gameScene.game.newPolycube()
+        engine.newPolycube()
     }
 
     func presentSetupMenu(setup: Setup, completion: (Setup?) -> Void) {
