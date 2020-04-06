@@ -25,14 +25,36 @@ class MainMenuScene: SKScene {
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let startButton = createButton(title: "START", option: .start)
     let optionsButton = createButton(title: "OPTIONS", option: .options)
+    let speedControl: NumericUpDown
+
+    func tst(to range: CountableClosedRange<Int>) {
+        for i in range {
+            print(i)
+        }
+    }
 
     override init(size: CGSize) {
+        speedControl = NumericUpDown(label: "Speed:", value: 3, range: 1...10)
         super.init(size: size)
         addChild(panel)
+        panel.addChild(speedControl)
         startButton.responder = self
         panel.addChild(startButton)
         optionsButton.responder = self
         panel.addChild(optionsButton)
+
+        speedControl.fontName = "GillSans"
+        speedControl.fontColor = .white
+        speedControl.fontSize = 26
+
+        tst(to: 1...12)
+
+        let spacing: CGFloat = 20
+        let anchor = CGPoint(0, panel.size.midH - (startButton.size.midH + spacing))
+        let step = -(startButton.size.height + spacing)
+        startButton.position = anchor + CGPoint(0, 0 * step)
+        optionsButton.position = anchor + CGPoint(0, 1 * step)
+        speedControl.position = anchor + CGPoint(0, 2 * step)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,11 +63,6 @@ class MainMenuScene: SKScene {
 
     func layoutSubnodes() {
         panel.position = CGPoint(safeAreaInsets.left + panel.size.midW + 10, frame.midY)
-        let spacing: CGFloat = 20
-        let anchor = CGPoint(0, panel.size.midH - (startButton.size.midH + spacing))
-        let step = -(startButton.size.height + spacing)
-        startButton.position = anchor + CGPoint(0, 0 * step)
-        optionsButton.position = anchor + CGPoint(0, 1 * step)
     }
 
     override func didMove(to view: SKView) {
