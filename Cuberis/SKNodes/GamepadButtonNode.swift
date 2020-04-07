@@ -6,7 +6,7 @@
 import SpriteKit
 
 public class GamepadButtonNode: SKSpriteNode {
-	public var action:(() -> Void)?
+	var action:(() -> Void)?
 
     init(buttonImageName: String) {
         let buttonTexture = SKTexture(imageNamed: buttonImageName)

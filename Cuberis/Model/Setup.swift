@@ -6,13 +6,13 @@
 import Foundation
 
 struct PolycubeSet {
-    let basic: Bool
-    let flat: Bool
-    let maxSize: Int
+    var basic: Bool
+    var flat: Bool
+    var maxSize: Int
 }
 
 struct Setup {
-    let speed: Int
+    var speed: Int
     let pitSize: Size3i
     let polycubeSet: PolycubeSet
 }

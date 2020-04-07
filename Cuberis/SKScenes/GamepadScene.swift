@@ -22,7 +22,7 @@ class GamepadScene: SKScene {
 
     override init(size: CGSize) {
         super.init(size: size)
-        goBackButton.responder = self
+        goBackButton.action = { self.completion?() }
         addChild(goBackButton)
         addGamepadButton(rotateXCounterclockwiseButton) { self.gamepadDelegate?.rotateXCounterclockwise() }
         addGamepadButton(rotateYCounterclockwiseButton) { self.gamepadDelegate?.rotateYCounterclockwise() }
@@ -92,12 +92,4 @@ class GamepadScene: SKScene {
             CGPoint(-20, 20)
     }
 
-}
-
-extension GamepadScene: ButtonNodeResponderType {
-    func buttonTriggered(button: ButtonNode) {
-        if let completion = completion {
-            completion()
-        }
-    }
 }

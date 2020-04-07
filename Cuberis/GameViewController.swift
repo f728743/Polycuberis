@@ -15,8 +15,6 @@ class GameViewController: UIViewController {
     var sceneManager: SceneManager!
     var engine: GameEngine?
 
-    // todo: haptic
-
     var gameCameraPosition: SCNVector3 {
         SCNVector3(x: Float(setup.pitSize.width) / 2.0,
                           y: Float(setup.pitSize.height) / 2.0,
@@ -27,8 +25,8 @@ class GameViewController: UIViewController {
         gameCameraPosition + SCNVector3(-2.0, 0.0, 0.0)
     }
 
+    // todo: haptic
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    private var firstTimeMainMenu = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,29 +35,24 @@ class GameViewController: UIViewController {
         sceneController = GameSceneController(scnScene: scnScene, pitSize: setup.pitSize)
         sceneManager = SceneManager(viewSize: scnView.bounds.size)
         resetGame()
-        schedulePresentMainMenu()
+
     }
 
-    func schedulePresentMainMenu() {
-        DispatchQueue.main.async { self.presentMainMenu() }
+    override func viewDidAppear(_ animated: Bool) {
+        goToMainMenu(animated: false)
     }
 
-    func presentMainMenu() {
-        print("presentMainMenu")
-        presentMainMenu(setup: setup, animated: !firstTimeMainMenu) { selectedOption in
-            self.firstTimeMainMenu = false
+    func goToMainMenu(animated: Bool) {
+        presentMainMenu(animated: animated) { selectedOption in
             switch selectedOption {
             case .start:
                 self.presentGame(setup: self.setup) {
                     self.resetGame()
-                    self.schedulePresentMainMenu()
+                    DispatchQueue.main.async { self.goToMainMenu(animated: true) }
                 }
             case .options:
-                self.presentSetupMenu(setup: self.setup) { newSetup in
-                    if let newSetup = newSetup {
-                        self.setup = newSetup
-                    }
-                    self.schedulePresentMainMenu()
+                self.presentSetupMenu(setup: self.setup) {
+                    DispatchQueue.main.async { self.goToMainMenu(animated: false) }
                 }
             }
         }
@@ -83,13 +76,14 @@ class GameViewController: UIViewController {
         scnScene.rootNode.addChildNode(camera)
     }
 
-    func presentMainMenu(setup: Setup, animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
+    func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
         let duration = SceneConstants.scenePresentDuration
         if animated {
             camera.runAction(SCNAction.move(to: menuCameraPosition, duration: duration))
         } else {
             camera.position = menuCameraPosition
         }
+        sceneManager.mainMenu.animatedAppearance = animated
         sceneManager.mainMenu.completion = completion
         scnView.overlaySKScene = sceneManager.mainMenu
     }
@@ -103,13 +97,14 @@ class GameViewController: UIViewController {
         engine?.newPolycube()
     }
 
-    func presentSetupMenu(setup: Setup, completion: (Setup?) -> Void) {
+    func presentSetupMenu(setup: Setup, completion: @escaping (/*Setup*/) -> Void) {
         print("presentSetupMenu")
 
-        let setup = Setup(speed: 0,
-                          pitSize: Size3i(width: 5, height: 5, depth: 12),
-                          polycubeSet: PolycubeSet(basic: false, flat: true, maxSize: 5))
-        completion(setup)
+//        let setup = Setup(speed: 0,
+//                          pitSize: Size3i(width: 5, height: 5, depth: 12),
+//                          polycubeSet: PolycubeSet(basic: false, flat: true, maxSize: 5))
+        sceneManager.setup.completion = completion
+        scnView.overlaySKScene = sceneManager.setup
     }
 
     func resetGame() {

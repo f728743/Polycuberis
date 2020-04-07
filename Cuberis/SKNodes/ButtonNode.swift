@@ -1,12 +1,7 @@
 import SpriteKit
 
-protocol ButtonNodeResponderType: class {
-    func buttonTriggered(button: ButtonNode)
-}
-
 class ButtonNode: SKSpriteNode {
-    var responder: ButtonNodeResponderType?
-
+    var action:(() -> Void)?
     var isFocused = false {
         didSet {
             guard oldValue != isFocused else { return }
@@ -93,7 +88,7 @@ class ButtonNode: SKSpriteNode {
 
     func buttonTriggered() {
         if isUserInteractionEnabled {
-            responder?.buttonTriggered(button: self)
+            action?()
         }
     }
 
