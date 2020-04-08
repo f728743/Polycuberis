@@ -35,7 +35,6 @@ class GameViewController: UIViewController {
         sceneController = GameSceneController(scnScene: scnScene, pitSize: setup.pitSize)
         sceneManager = SceneManager(viewSize: scnView.bounds.size)
         resetGame()
-
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -50,7 +49,7 @@ class GameViewController: UIViewController {
                     self.resetGame()
                     DispatchQueue.main.async { self.goToMainMenu(animated: true) }
                 }
-            case .options:
+            case .setup:
                 self.presentSetupMenu(setup: self.setup) {
                     DispatchQueue.main.async { self.goToMainMenu(animated: false) }
                 }

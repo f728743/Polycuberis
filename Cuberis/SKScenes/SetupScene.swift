@@ -1,5 +1,5 @@
 //
-//  OptionsScene.swift
+//  SetupScene.swift
 //  Cuberis
 //
 
@@ -11,7 +11,7 @@ func setupPickerFont(control: PickerNode) {
     control.fontSize = 26
 }
 
-class OptionsScene: SKScene {
+class SetupScene: SKScene {
     var completion: (() -> Void)?
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let gameTypePicker: StringPickerNode

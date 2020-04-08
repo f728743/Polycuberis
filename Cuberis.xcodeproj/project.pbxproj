@@ -16,7 +16,7 @@
 		7C167D432439050900BE43A5 /* PitContentNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D422439050900BE43A5 /* PitContentNode.swift */; };
 		7C167D4524390C1800BE43A5 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D4424390C1800BE43A5 /* Geometry.swift */; };
 		7C167D472439114500BE43A5 /* PolycubeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D462439114500BE43A5 /* PolycubeNode.swift */; };
-		7C183F19243BA5540037932D /* OptionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C183F18243BA5540037932D /* OptionsScene.swift */; };
+		7C183F19243BA5540037932D /* SetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C183F18243BA5540037932D /* SetupScene.swift */; };
 		7C1FD4C0243DA1CE0020E3E5 /* PickerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD4BF243DA1CE0020E3E5 /* PickerNode.swift */; };
 		7C1FD64B2437857000ED901C /* GamepadScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD6482437857000ED901C /* GamepadScene.swift */; };
 		7C1FD64C2437857000ED901C /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD6492437857000ED901C /* MainMenuScene.swift */; };
@@ -54,7 +54,7 @@
 		7C167D422439050900BE43A5 /* PitContentNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitContentNode.swift; sourceTree = "<group>"; };
 		7C167D4424390C1800BE43A5 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		7C167D462439114500BE43A5 /* PolycubeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolycubeNode.swift; sourceTree = "<group>"; };
-		7C183F18243BA5540037932D /* OptionsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsScene.swift; sourceTree = "<group>"; };
+		7C183F18243BA5540037932D /* SetupScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScene.swift; sourceTree = "<group>"; };
 		7C1FD4BF243DA1CE0020E3E5 /* PickerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerNode.swift; sourceTree = "<group>"; };
 		7C1FD6482437857000ED901C /* GamepadScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamepadScene.swift; sourceTree = "<group>"; };
 		7C1FD6492437857000ED901C /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 			children = (
 				7C1FD6482437857000ED901C /* GamepadScene.swift */,
 				7C1FD6492437857000ED901C /* MainMenuScene.swift */,
-				7C183F18243BA5540037932D /* OptionsScene.swift */,
+				7C183F18243BA5540037932D /* SetupScene.swift */,
 				7CDA908A243A12A100C9683D /* SceneManager.swift */,
 			);
 			path = SKScenes;
@@ -306,7 +306,7 @@
 				7C167D3F2438F6E200BE43A5 /* PitMeshNode.swift in Sources */,
 				7C1FD64F2437859F00ED901C /* Setup.swift in Sources */,
 				7C0786A9243892DD002A94B4 /* CGSize+Extension.swift in Sources */,
-				7C183F19243BA5540037932D /* OptionsScene.swift in Sources */,
+				7C183F19243BA5540037932D /* SetupScene.swift in Sources */,
 				7C7C3CDB243AFF82004E3D31 /* NumericUpDown.swift in Sources */,
 				7C8AAE802439A9D40083AD7C /* GameScene.swift in Sources */,
 				7C167D3D2438DDCE00BE43A5 /* PitNode.swift in Sources */,

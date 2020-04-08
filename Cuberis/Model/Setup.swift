@@ -8,7 +8,6 @@ import Foundation
 struct PolycubeSet {
     var basic: Bool
     var flat: Bool
-    var maxSize: Int
 }
 
 struct Setup {
@@ -35,7 +34,6 @@ func save(setup: Setup) {
     defaults.set(setup.pitSize.height, forKey: UserDefaultsKey.pitDepth.rawValue)
     defaults.set(setup.polycubeSet.basic, forKey: UserDefaultsKey.basicPolycubeSet.rawValue)
     defaults.set(setup.polycubeSet.flat, forKey: UserDefaultsKey.flatPolycubeSet.rawValue)
-    defaults.set(setup.polycubeSet.maxSize, forKey: UserDefaultsKey.maxPolycubeSize.rawValue)
 }
 
 func loadSetup() -> Setup {
@@ -48,9 +46,8 @@ func loadSetup() -> Setup {
 
     let basic = defaults.object(forKey: UserDefaultsKey.basicPolycubeSet.rawValue) as? Bool ?? false
     let flat = defaults.object(forKey: UserDefaultsKey.pitDepth.rawValue) as? Bool ?? true
-    let maxSize = defaults.object(forKey: UserDefaultsKey.maxPolycubeSize.rawValue) as? Int ?? 5
 
     return Setup(speed: gameSpeed,
                  pitSize: Size3i(width: pitWidth, height: pitHeight, depth: pitDepth),
-                 polycubeSet: PolycubeSet(basic: basic, flat: flat, maxSize: maxSize))
+                 polycubeSet: PolycubeSet(basic: basic, flat: flat))
 }

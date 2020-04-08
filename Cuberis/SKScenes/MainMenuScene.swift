@@ -7,7 +7,7 @@ import SpriteKit
 
 enum MainMenuOption {
    case start
-   case options
+   case setup
 }
 
 func createButton(title: String) -> ButtonNode {
@@ -24,7 +24,7 @@ class MainMenuScene: SKScene {
 
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let startButton = createButton(title: "START")
-    let optionsButton = createButton(title: "OPTIONS")
+    let setupButton = createButton(title: "SETUP")
     let speedControl: NumericUpDownNode
 
     override init(size: CGSize) {
@@ -34,8 +34,8 @@ class MainMenuScene: SKScene {
         panel.addChild(speedControl)
         startButton.action = { self.completion?(.start) }
         panel.addChild(startButton)
-        optionsButton.action = { self.completion?(.options) }
-        panel.addChild(optionsButton)
+        setupButton.action = { self.completion?(.setup) }
+        panel.addChild(setupButton)
 
         setupPickerFont(control: speedControl)
 
@@ -43,7 +43,7 @@ class MainMenuScene: SKScene {
         let anchor = CGPoint(0, panel.size.midH - (startButton.size.midH + spacing))
         let step = -(startButton.size.height + spacing)
         startButton.position = anchor + CGPoint(0, 0 * step)
-        optionsButton.position = anchor + CGPoint(0, 1 * step)
+        setupButton.position = anchor + CGPoint(0, 1 * step)
         speedControl.position = anchor + CGPoint(0, 2 * step)
     }
 
