@@ -1,16 +1,17 @@
 //
-//  NumericUpDown.swift
+//  PickerNode.swift
 //  Cuberis
 //
 
 import SpriteKit
 
-class NumericUpDownNode: SKSpriteNode {
+class PickerNode: SKSpriteNode {
     enum ButtonIdentifier: String {
        case decrease
        case increase
     }
 
+    var changed:(() -> Void)?
     let width: CGFloat = 216
     let height: CGFloat
     let decreaseButton = ButtonNode(buttonImageName: "DecreaseButton")
@@ -34,35 +35,38 @@ class NumericUpDownNode: SKSpriteNode {
         set { labelNode.fontSize = newValue }
     }
 
-    private var value: Int {
+    var index: Int {
         didSet {
-            labelNode.text = "\(label) \(value)"
+            if oldValue != index {
+                changed?()
+            }
+            labelNode.text = options[index]
         }
     }
-    private var label = ""
+
+    private let options: [String]
     private let labelNode: SKLabelNode
 
-    init(label: String, value: Int, range: CountableClosedRange<Int>) {
-        self.value = value
-        self.label = label
-        labelNode = SKLabelNode(text: label)
+    init(options: [String]) {
+        self.options = options
+        self.index = 0
+        labelNode = SKLabelNode(text: options[0])
         height = decreaseButton.size.height
         super.init(texture: nil, color: .clear, size: CGSize(width: width, height: height))
 
         addChild(labelNode)
-        labelNode.text = "\(label) \(value)"
         labelNode.verticalAlignmentMode = .center
         labelNode.zPosition = 0
 
         addChild(decreaseButton)
         decreaseButton.position = CGPoint(-width / 2 + decreaseButton.size.midW, 0)
         decreaseButton.name = ButtonIdentifier.decrease.rawValue
-        decreaseButton.action = { if range.contains(self.value - 1) { self.value -= 1 } }
+        decreaseButton.action = { self.index = self.index - 1 < 0 ? self.options.count - 1 : self.index - 1 }
 
         addChild(increaseButton)
         increaseButton.position = CGPoint(width / 2 - increaseButton.size.midW, 0)
         increaseButton.name = ButtonIdentifier.increase.rawValue
-        increaseButton.action = { if range.contains(self.value + 1) { self.value += 1 } }
+        increaseButton.action = { self.index = self.index + 1 == self.options.count ? 0 : self.index + 1 }
     }
 
     required init?(coder aDecoder: NSCoder) {
