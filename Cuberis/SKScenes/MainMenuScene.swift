@@ -37,9 +37,7 @@ class MainMenuScene: SKScene {
         optionsButton.action = { self.completion?(.options) }
         panel.addChild(optionsButton)
 
-        speedControl.fontName = "GillSans"
-        speedControl.fontColor = .white
-        speedControl.fontSize = 26
+        setupPickerFont(control: speedControl)
 
         let spacing: CGFloat = 20
         let anchor = CGPoint(0, panel.size.midH - (startButton.size.midH + spacing))

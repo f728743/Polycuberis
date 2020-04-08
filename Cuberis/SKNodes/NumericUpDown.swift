@@ -5,63 +5,51 @@
 
 import SpriteKit
 
-class NumericUpDownNode: SKSpriteNode {
-    enum ButtonIdentifier: String {
-       case decrease
-       case increase
-    }
-
-    let width: CGFloat = 216
-    let height: CGFloat
-    let decreaseButton = ButtonNode(buttonImageName: "DecreaseButton")
-    let increaseButton = ButtonNode(buttonImageName: "IncreaseButton")
-    var enabled: Bool = true {
-        didSet {
-            decreaseButton.isHidden = !enabled
-            increaseButton.isHidden = !enabled
+class NumericUpDownNode: PickerNode {
+    override var fontColor: UIColor? {
+        get { super.fontColor }
+        set {
+            super.fontColor = newValue
+            valueNode.fontColor = newValue
         }
     }
-    var fontColor: UIColor? {
-        get { labelNode.fontColor }
-        set { labelNode.fontColor = newValue }
-    }
-    var fontName: String? {
-        get { labelNode.fontName }
-        set { labelNode.fontName = newValue }
-    }
-    var fontSize: CGFloat {
-        get { labelNode.fontSize }
-        set { labelNode.fontSize = newValue }
-    }
-
-    private var value: Int {
-        didSet {
-            labelNode.text = "\(label) \(value)"
+    override var fontName: String? {
+        get { super.fontName }
+        set {
+            super.fontName = newValue
+            valueNode.fontName = newValue
         }
     }
-    private var label = ""
-    private let labelNode: SKLabelNode
+    override var fontSize: CGFloat {
+        get { super.fontSize }
+        set {
+            super.fontSize = newValue
+            valueNode.fontSize = newValue
+        }
+    }
+
+    private(set) var value: Int {
+        didSet {
+            valueNode.text = "\(value)"
+        }
+    }
+    private let valueNode: SKLabelNode
 
     init(label: String, value: Int, range: CountableClosedRange<Int>) {
+        let inset: CGFloat = 13
         self.value = value
-        self.label = label
-        labelNode = SKLabelNode(text: label)
-        height = decreaseButton.size.height
-        super.init(texture: nil, color: .clear, size: CGSize(width: width, height: height))
-
-        addChild(labelNode)
-        labelNode.text = "\(label) \(value)"
-        labelNode.verticalAlignmentMode = .center
-        labelNode.zPosition = 0
-
-        addChild(decreaseButton)
-        decreaseButton.position = CGPoint(-width / 2 + decreaseButton.size.midW, 0)
-        decreaseButton.name = ButtonIdentifier.decrease.rawValue
+        valueNode = SKLabelNode(text: label)
+        super.init()
+        labelNode.text = label
+        labelNode.horizontalAlignmentMode = .left
+        labelNode.position = CGPoint(-width / 2 + decreaseButton.size.width + inset, -9)
+        addChild(valueNode)
+        valueNode.text = "\(value)"
+        valueNode.verticalAlignmentMode = .baseline
+        valueNode.horizontalAlignmentMode = .right
+        valueNode.position = CGPoint(width / 2 - increaseButton.size.width - inset, -9)
+        valueNode.zPosition = labelNode.zPosition
         decreaseButton.action = { if range.contains(self.value - 1) { self.value -= 1 } }
-
-        addChild(increaseButton)
-        increaseButton.position = CGPoint(width / 2 - increaseButton.size.midW, 0)
-        increaseButton.name = ButtonIdentifier.increase.rawValue
         increaseButton.action = { if range.contains(self.value + 1) { self.value += 1 } }
     }
 

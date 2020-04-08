@@ -5,23 +5,29 @@
 
 import SpriteKit
 
+func setupPickerFont(control: PickerNode) {
+    control.fontName = "GillSans"
+    control.fontColor = .white
+    control.fontSize = 26
+}
+
 class OptionsScene: SKScene {
     var completion: (() -> Void)?
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
-    let gameTypePicker: PickerNode
+    let gameTypePicker: StringPickerNode
     let widthPicker: NumericUpDownNode
     let heightPicker: NumericUpDownNode
     let depthPicker: NumericUpDownNode
-    let polycubeSetPicker: PickerNode
+    let polycubeSetPicker: StringPickerNode
     let okButton = createButton(title: "OK")
 
     override init(size: CGSize) {
         let options = ["3D Mania", "Flat Fun", "Out of control", "Custom"]
-        gameTypePicker = PickerNode(options: options)
+        gameTypePicker = StringPickerNode(options: options)
         widthPicker = NumericUpDownNode(label: "Pit width:", value: 5, range: 3...7)
         heightPicker = NumericUpDownNode(label: "Pit height:", value: 5, range: 3...7)
         depthPicker = NumericUpDownNode(label: "Pit depth:", value: 12, range: 6...18)
-        polycubeSetPicker = PickerNode(options: ["Flat", "Basic", "Extended"])
+        polycubeSetPicker = StringPickerNode(options: ["Flat", "Basic", "Extended"])
         super.init(size: size)
         addChild(panel)
         panel.addChild(gameTypePicker)
@@ -29,15 +35,15 @@ class OptionsScene: SKScene {
             self.setSetupEdit(enabled: self.gameTypePicker.index == options.count - 1)
         }
         setSetupEdit(enabled: false)
-        setupFont(control: gameTypePicker)
+        setupPickerFont(control: gameTypePicker)
         panel.addChild(widthPicker)
-        setupFont(control: widthPicker)
+        setupPickerFont(control: widthPicker)
         panel.addChild(heightPicker)
-        setupFont(control: (heightPicker))
+        setupPickerFont(control: (heightPicker))
         panel.addChild(depthPicker)
-        setupFont(control: depthPicker)
+        setupPickerFont(control: depthPicker)
         panel.addChild(polycubeSetPicker)
-        setupFont(control: polycubeSetPicker)
+        setupPickerFont(control: polycubeSetPicker)
 
         panel.addChild(okButton)
         okButton.action = { self.completion?() }
@@ -72,20 +78,4 @@ class OptionsScene: SKScene {
         depthPicker.enabled = enabled
         polycubeSetPicker.enabled = enabled
     }
-
-}
-
-protocol Fnts: AnyObject {
-    var fontColor: UIColor? { get set }
-    var fontName: String? { get set }
-    var fontSize: CGFloat { get set }
-}
-
-extension NumericUpDownNode: Fnts {}
-extension PickerNode: Fnts {}
-
-func setupFont(control: Fnts) {
-    control.fontName = "GillSans"
-    control.fontColor = .white
-    control.fontSize = 26
 }
