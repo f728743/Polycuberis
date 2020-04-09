@@ -5,49 +5,100 @@
 
 import Foundation
 
-struct PolycubeSet {
-    var basic: Bool
-    var flat: Bool
+enum PolycubeSet: Int, CaseIterable {
+    case flat
+    case basic
+    case extended
+    static let names = ["Flat", "Basic", "Extended"]
 }
 
-struct Setup {
-    var speed: Int
+struct ModeSetup {
+    let name: String
     let pitSize: Size3i
     let polycubeSet: PolycubeSet
 }
 
-// w 3-7
-// h 3-7
-// d 6-18
-
-enum UserDefaultsKey: String {
-    case gameSpeed
-    case pitWidth, pitHeight, pitDepth
-    case basicPolycubeSet, flatPolycubeSet, maxPolycubeSize
+enum GameMode: Int, CaseIterable {
+    case flatFun
+    case the3DMania
+    case outOfControl
+    case custom
+    static let names = ["Flat Fun", "3D Mania", "Out of control", "Custom"]
 }
 
-func save(setup: Setup) {
-    let defaults = UserDefaults.standard
-    defaults.set(setup.speed, forKey: UserDefaultsKey.gameSpeed.rawValue)
-    defaults.set(setup.pitSize.width, forKey: UserDefaultsKey.pitWidth.rawValue)
-    defaults.set(setup.pitSize.height, forKey: UserDefaultsKey.pitHeight.rawValue)
-    defaults.set(setup.pitSize.height, forKey: UserDefaultsKey.pitDepth.rawValue)
-    defaults.set(setup.polycubeSet.basic, forKey: UserDefaultsKey.basicPolycubeSet.rawValue)
-    defaults.set(setup.polycubeSet.flat, forKey: UserDefaultsKey.flatPolycubeSet.rawValue)
-}
+struct Setup {
+    static let speedRange = 1...10
+    static let customWidthRange =  3...7
+    static let customHeighthRange =  3...7
+    static let customDepthRange =  6...18
+    static let defaultMode = GameMode.flatFun
+    static let defaultSpeed = 1
+    static let defaultWidth = 5
+    static let defaultHeight = 5
+    static let defaultDepth = 12
+    static let defaultPolycubeSet = PolycubeSet.flat
 
-func loadSetup() -> Setup {
-    let defaults = UserDefaults.standard
-    let gameSpeed = defaults.object(forKey: UserDefaultsKey.gameSpeed.rawValue) as? Int ?? 0
+    var speed: Int
+    var mode: GameMode
+    var customSetup: ModeSetup
+    var pitSize: Size3i { mode == .custom ? customSetup.pitSize : setups[mode.rawValue].pitSize }
+    var polycubeSet: PolycubeSet { mode == .custom ? customSetup.polycubeSet : setups[mode.rawValue].polycubeSet }
+    var name: String { mode == .custom ? customSetup.name : setups[mode.rawValue].name }
 
-    let pitWidth = defaults.object(forKey: UserDefaultsKey.pitWidth.rawValue) as? Int ?? 5
-    let pitHeight = defaults.object(forKey: UserDefaultsKey.pitHeight.rawValue) as? Int ?? 5
-    let pitDepth = defaults.object(forKey: UserDefaultsKey.pitDepth.rawValue) as? Int ?? 12
+    enum UserDefaultsKey: String {
+        case gameSpeed
+        case gameMode
+        case pitWidth, pitHeight, pitDepth
+        case polycubeSet
+    }
 
-    let basic = defaults.object(forKey: UserDefaultsKey.basicPolycubeSet.rawValue) as? Bool ?? false
-    let flat = defaults.object(forKey: UserDefaultsKey.pitDepth.rawValue) as? Bool ?? true
+    private let setups = [ModeSetup(name: GameMode.names[GameMode.flatFun.rawValue],
+                                    pitSize: Size3i(width: 5, height: 5, depth: 12),
+                                    polycubeSet: .flat),
+                          ModeSetup(name: GameMode.names[GameMode.the3DMania.rawValue],
+                                    pitSize: Size3i(width: 3, height: 3, depth: 10),
+                                    polycubeSet: .basic),
+                          ModeSetup(name: GameMode.names[GameMode.outOfControl.rawValue],
+                                    pitSize: Size3i(width: 5, height: 5, depth: 10),
+                                    polycubeSet: .extended)]
 
-    return Setup(speed: gameSpeed,
-                 pitSize: Size3i(width: pitWidth, height: pitHeight, depth: pitDepth),
-                 polycubeSet: PolycubeSet(basic: basic, flat: flat))
+    init() {
+        speed = Setup.defaultSpeed
+        mode = Setup.defaultMode
+        customSetup = ModeSetup(name: GameMode.names[GameMode.custom.rawValue],
+                                pitSize: Size3i(width: Setup.defaultWidth,
+                                                height: Setup.defaultHeight,
+                                                depth: Setup.defaultDepth),
+                                polycubeSet: Setup.defaultPolycubeSet)
+    }
+
+    func save() {
+        save(speed, forKey: .gameSpeed)
+        save(mode.rawValue, forKey: .gameMode)
+        save(customSetup.pitSize.width, forKey: .pitWidth)
+        save(customSetup.pitSize.height, forKey: .pitHeight)
+        save(customSetup.pitSize.depth, forKey: .pitDepth)
+        save(customSetup.polycubeSet.rawValue, forKey: .polycubeSet)
+    }
+
+    mutating func load() {
+        speed = loadInt(forKey: .gameSpeed) ?? Setup.defaultSpeed
+        mode = GameMode(rawValue: loadInt(forKey: .gameMode) ?? Setup.defaultMode.rawValue) ?? Setup.defaultMode
+        let width = loadInt(forKey: .pitWidth) ?? Setup.defaultWidth
+        let height = loadInt(forKey: .pitHeight) ?? Setup.defaultHeight
+        let depth = loadInt(forKey: .pitDepth) ?? Setup.defaultDepth
+        let set = PolycubeSet(rawValue: loadInt(forKey: .polycubeSet) ??
+            Setup.defaultPolycubeSet.rawValue) ?? Setup.defaultPolycubeSet
+        customSetup = ModeSetup(name: customSetup.name,
+                                pitSize: Size3i(width: width, height: height, depth: depth),
+                                polycubeSet: set)
+    }
+
+    private func save(_ value: Int, forKey key: UserDefaultsKey) {
+        UserDefaults.standard.set(value, forKey: key.rawValue)
+    }
+    private func loadInt(forKey key: UserDefaultsKey) -> Int? {
+        return UserDefaults.standard.object(forKey: key.rawValue) as? Int ?? 5
+    }
+
 }

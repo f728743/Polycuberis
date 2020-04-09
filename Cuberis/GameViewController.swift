@@ -8,7 +8,7 @@ import SceneKit
 
 class GameViewController: UIViewController {
     var sceneController: GameSceneController!
-    var setup = loadSetup()
+    var setup = Setup()
     var scnView: SCNView! { self.view as? SCNView }
     var scnScene: SCNScene!
     var camera: SCNNode!
@@ -17,8 +17,8 @@ class GameViewController: UIViewController {
 
     var gameCameraPosition: SCNVector3 {
         SCNVector3(x: Float(setup.pitSize.width) / 2.0,
-                          y: Float(setup.pitSize.height) / 2.0,
-                          z: 5.0)
+                   y: Float(setup.pitSize.height) / 2.0,
+                   z: 5.0)
     }
 
     var menuCameraPosition: SCNVector3 {
@@ -30,6 +30,7 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup.load()
         setupScene()
         setupCamera()
         sceneController = GameSceneController(scnScene: scnScene, pitSize: setup.pitSize)
@@ -42,15 +43,18 @@ class GameViewController: UIViewController {
     }
 
     func goToMainMenu(animated: Bool) {
-        presentMainMenu(animated: animated) { selectedOption in
+        presentMainMenu(animated: animated) { [unowned self] selectedOption in
             switch selectedOption {
             case .start:
-                self.presentGame(setup: self.setup) {
+                self.presentGame { [unowned self] in
                     self.resetGame()
                     DispatchQueue.main.async { self.goToMainMenu(animated: true) }
                 }
             case .setup:
-                self.presentSetupMenu(setup: self.setup) {
+                self.presentSetupMenu { [unowned self] newSetup in
+                    print(newSetup.pitSize, newSetup.mode)
+                    self.setup = newSetup
+                    self.setup.save()
                     DispatchQueue.main.async { self.goToMainMenu(animated: false) }
                 }
             }
@@ -87,7 +91,7 @@ class GameViewController: UIViewController {
         scnView.overlaySKScene = sceneManager.mainMenu
     }
 
-    func presentGame(setup: Setup, completion: @escaping () -> Void) {
+    func presentGame(completion: @escaping () -> Void) {
         let duration = SceneConstants.scenePresentDuration
         camera.runAction(SCNAction.move(to: gameCameraPosition, duration: duration))
         sceneManager.gamepad.completion = completion
@@ -96,13 +100,9 @@ class GameViewController: UIViewController {
         engine?.newPolycube()
     }
 
-    func presentSetupMenu(setup: Setup, completion: @escaping (/*Setup*/) -> Void) {
-        print("presentSetupMenu")
-
-//        let setup = Setup(speed: 0,
-//                          pitSize: Size3i(width: 5, height: 5, depth: 12),
-//                          polycubeSet: PolycubeSet(basic: false, flat: true, maxSize: 5))
+    func presentSetupMenu(completion: @escaping (Setup) -> Void) {
         sceneManager.setup.completion = completion
+        sceneManager.setup.setup = setup
         scnView.overlaySKScene = sceneManager.setup
     }
 
@@ -112,6 +112,7 @@ class GameViewController: UIViewController {
             oldEngine.delegate = nil
         }
         engine = GameEngine(pitSize: setup.pitSize)
+
         engine!.delegate = self
         sceneController.deletePolycube()
         sceneController.updateContent(of: engine!.pit)

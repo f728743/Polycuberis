@@ -32,9 +32,9 @@ class MainMenuScene: SKScene {
         super.init(size: size)
         addChild(panel)
         panel.addChild(speedControl)
-        startButton.action = { self.completion?(.start) }
+        startButton.action = { [unowned self] in self.completion?(.start) }
         panel.addChild(startButton)
-        setupButton.action = { self.completion?(.setup) }
+        setupButton.action = { [unowned self] in self.completion?(.setup) }
         panel.addChild(setupButton)
 
         setupPickerFont(control: speedControl)

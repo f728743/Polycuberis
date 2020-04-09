@@ -6,6 +6,7 @@
 import SpriteKit
 
 class PickerNode: SKSpriteNode {
+    var changed:(() -> Void)?
     let width: CGFloat = 216
     let height: CGFloat
     let decreaseButton = ButtonNode(buttonImageName: "DecreaseButton")

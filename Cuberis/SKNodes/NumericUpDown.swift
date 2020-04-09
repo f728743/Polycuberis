@@ -28,16 +28,24 @@ class NumericUpDownNode: PickerNode {
         }
     }
 
-    private(set) var value: Int {
+    var value: Int {
+        willSet {
+            guard range.contains(newValue) else { return }
+        }
         didSet {
+            if enabled {
+                changed?()
+            }
             valueNode.text = "\(value)"
         }
     }
+    let range: CountableClosedRange<Int>
     private let valueNode: SKLabelNode
 
     init(label: String, value: Int, range: CountableClosedRange<Int>) {
         let inset: CGFloat = 13
         self.value = value
+        self.range = range
         valueNode = SKLabelNode(text: label)
         super.init()
         labelNode.text = label

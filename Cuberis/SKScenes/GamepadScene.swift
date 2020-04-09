@@ -24,14 +24,20 @@ class GamepadScene: SKScene {
         super.init(size: size)
         goBackButton.action = { self.completion?() }
         addChild(goBackButton)
-        addGamepadButton(rotateXCounterclockwiseButton) { self.gamepadDelegate?.rotateXCounterclockwise() }
-        addGamepadButton(rotateYCounterclockwiseButton) { self.gamepadDelegate?.rotateYCounterclockwise() }
-        addGamepadButton(rotateZCounterclockwiseButton) { self.gamepadDelegate?.rotateZCounterclockwise() }
-        addGamepadButton(moveUpButton) { self.gamepadDelegate?.moveUp() }
-        addGamepadButton(moveLeftButton) { self.gamepadDelegate?.moveLeft() }
-        addGamepadButton(moveRightButton) { self.gamepadDelegate?.moveRight() }
-        addGamepadButton(moveDownButton) { self.gamepadDelegate?.moveDown() }
-        addGamepadButton(dropButton) { self.gamepadDelegate?.drop() }
+        addGamepadButton(rotateXCounterclockwiseButton) { [unowned self] in
+            self.gamepadDelegate?.rotateXCounterclockwise()
+        }
+        addGamepadButton(rotateYCounterclockwiseButton) { [unowned self] in
+            self.gamepadDelegate?.rotateYCounterclockwise()
+        }
+        addGamepadButton(rotateZCounterclockwiseButton) { [unowned self] in
+            self.gamepadDelegate?.rotateZCounterclockwise()
+        }
+        addGamepadButton(moveUpButton) { [unowned self] in self.gamepadDelegate?.moveUp() }
+        addGamepadButton(moveLeftButton) { [unowned self] in self.gamepadDelegate?.moveLeft() }
+        addGamepadButton(moveRightButton) { [unowned self] in self.gamepadDelegate?.moveRight() }
+        addGamepadButton(moveDownButton) { [unowned self] in self.gamepadDelegate?.moveDown() }
+        addGamepadButton(dropButton) { [unowned self] in self.gamepadDelegate?.drop() }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -91,5 +97,4 @@ class GamepadScene: SKScene {
             dropButton.size.mid * CGPoint(-1, 1) +
             CGPoint(-20, 20)
     }
-
 }

@@ -6,14 +6,13 @@
 import SpriteKit
 
 class StringPickerNode: PickerNode {
-    var changed:(() -> Void)?
     var index: Int = 0 {
         didSet {
-            if oldValue != index { changed?() }
+            if oldValue != index && enabled { changed?() }
             labelNode.text = options[index]
         }
     }
-    private let options: [String]
+    let options: [String]
 
     init(options: [String]) {
         self.options = options
