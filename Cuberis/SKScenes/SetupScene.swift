@@ -16,7 +16,13 @@ protocol SetupSceneDelegate: AnyObject {
     func changed(polycubeSet: PolycubeSet)
 }
 
+extension SetupSceneDelegate {
+    func changed(pitSize: Size3i) {}
+    func changed(polycubeSet: PolycubeSet) {}
+}
+
 class SetupScene: SKScene {
+    weak var setupDelegate: SetupSceneDelegate?
     var completion: ((Setup) -> Void)?
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let modePicker: StringPickerNode
@@ -64,7 +70,7 @@ class SetupScene: SKScene {
         setupPickerFont(control: polycubeSetPicker)
 
         panel.addChild(okButton)
-        okButton.action = { [unowned self] in  self.completion?(self.setup) }
+        okButton.action = { [unowned self] in self.completion?(self.setup) }
 
         let spacing: CGFloat = 14
         let anchor = CGPoint(0, panel.size.midH - (modePicker.size.midH + 10))
@@ -90,6 +96,7 @@ class SetupScene: SKScene {
         modePicker.changed = { [unowned self] in
             self.setup.mode = GameMode(rawValue: self.modePicker.index)!
             self.updateModeParams()
+            self.setupDelegate?.changed(pitSize: self.setup.pitSize)
         }
     }
 
@@ -118,6 +125,7 @@ class SetupScene: SKScene {
         let current = setup.customSetup
         let newPitSize = Size3i(width: widthPicker.value, height: current.pitSize.height, depth: current.pitSize.depth)
         guard newPitSize != current.pitSize else { return }
+        setupDelegate?.changed(pitSize: newPitSize)
         setup.customSetup = ModeSetup(name: current.name,
                                       pitSize: newPitSize,
                                       polycubeSet: current.polycubeSet)
@@ -127,6 +135,7 @@ class SetupScene: SKScene {
         let current = setup.customSetup
         let newPitSize = Size3i(width: current.pitSize.width, height: heightPicker.value, depth: current.pitSize.depth)
         guard newPitSize != current.pitSize else { return }
+        setupDelegate?.changed(pitSize: newPitSize)
         setup.customSetup = ModeSetup(name: current.name,
                                       pitSize: newPitSize,
                                       polycubeSet: current.polycubeSet)
@@ -136,6 +145,7 @@ class SetupScene: SKScene {
         let current = setup.customSetup
         let newPitSize = Size3i(width: current.pitSize.width, height: current.pitSize.height, depth: depthPicker.value)
         guard newPitSize != current.pitSize else { return }
+        setupDelegate?.changed(pitSize: newPitSize)
         setup.customSetup = ModeSetup(name: current.name,
                                       pitSize: newPitSize,
                                       polycubeSet: current.polycubeSet)
@@ -145,6 +155,7 @@ class SetupScene: SKScene {
         let current = setup.customSetup
         let newSet = PolycubeSet(rawValue: polycubeSetPicker.index)!
         guard newSet != current.polycubeSet else { return }
+        setupDelegate?.changed(polycubeSet: newSet)
         setup.customSetup = ModeSetup(name: current.name,
                                       pitSize: current.pitSize,
                                       polycubeSet: newSet)

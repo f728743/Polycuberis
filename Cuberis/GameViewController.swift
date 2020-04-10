@@ -30,7 +30,6 @@ class GameViewController: UIViewController {
         setup.load()
         sceneController = GameSceneController(pitSize: setup.pitSize)
         scnView.scene = sceneController.scnScene
-        resetGame()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -41,8 +40,9 @@ class GameViewController: UIViewController {
         presentMainMenu(animated: animated) { [unowned self] selectedOption in
             switch selectedOption {
             case .start:
+                self.startGame()
                 self.presentGame { [unowned self] in
-                    self.resetGame()
+                    self.stopGame()
                     DispatchQueue.main.async { self.goToMainMenu(animated: true) }
                 }
             case .setup:
@@ -73,25 +73,37 @@ class GameViewController: UIViewController {
         gamepad.completion = completion
         gamepad.gamepadDelegate = engine
         scnView.overlaySKScene = gamepad
-        engine?.newPolycube()
     }
 
     func presentSetupMenu(completion: @escaping (Setup) -> Void) {
         let setupMenu = SetupScene(size: scnView.bounds.size)
         setupMenu.completion = completion
         setupMenu.setup = setup
+        setupMenu.setupDelegate = self
         scnView.overlaySKScene = setupMenu
     }
 
-    func resetGame() {
+    func stopGame() {
         if let oldEngine = engine {
             oldEngine.isStopped = true // stop retaining old engine by existing Timer to let deinit
-            oldEngine.delegate = nil
+            oldEngine.delegate = nil  // prevent sceneController from receving messages from old engine
         }
+        engine = nil
+        sceneController.deletePolycube()
+        sceneController.clearPit()
+    }
+
+    func startGame() {
         engine = GameEngine(pitSize: setup.pitSize)
         engine!.delegate = self
-        sceneController.deletePolycube()
         sceneController.updateContent(of: engine!.pit)
+        engine?.newPolycube()
+    }
+}
+
+extension GameViewController: SetupSceneDelegate {
+    func changed(pitSize: Size3i) {
+        sceneController.setPitSize(pitSize)
     }
 }
 

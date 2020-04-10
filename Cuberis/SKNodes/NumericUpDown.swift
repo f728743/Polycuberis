@@ -57,8 +57,8 @@ class NumericUpDownNode: PickerNode {
         valueNode.horizontalAlignmentMode = .right
         valueNode.position = CGPoint(width / 2 - increaseButton.size.width - inset, -9)
         valueNode.zPosition = labelNode.zPosition
-        decreaseButton.action = { if range.contains(self.value - 1) { self.value -= 1 } }
-        increaseButton.action = { if range.contains(self.value + 1) { self.value += 1 } }
+        decreaseButton.action = { [unowned self] in if range.contains(self.value - 1) { self.value -= 1 } }
+        increaseButton.action = { [unowned self] in if range.contains(self.value + 1) { self.value += 1 } }
     }
 
     required init?(coder aDecoder: NSCoder) {

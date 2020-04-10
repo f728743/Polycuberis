@@ -29,13 +29,21 @@ class GameSceneController {
         scnScene.rootNode.addChildNode(pit)
     }
 
-    // TODO:
     func setPitSize(_ size: Size3i) {
+        let node = PitNode(size: size)
+        scnScene.rootNode.addChildNode(node)
+        pit.removeFromParentNode()
+        pit = node
     }
 
     func deletePolycube() {
         self.polycube?.removeFromParentNode()
         polycube = nil
+    }
+
+    func clearPit() {
+        self.pitContent?.removeFromParentNode()
+        pitContent = nil
     }
 
     func moveCamera(to position: SCNVector3, animated: Bool) {

@@ -22,7 +22,7 @@ class GamepadScene: SKScene {
 
     override init(size: CGSize) {
         super.init(size: size)
-        goBackButton.action = { self.completion?() }
+        goBackButton.action = { [unowned self] in self.completion?() }
         addChild(goBackButton)
         addGamepadButton(rotateXCounterclockwiseButton) { [unowned self] in
             self.gamepadDelegate?.rotateXCounterclockwise()
