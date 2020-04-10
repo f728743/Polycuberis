@@ -10,7 +10,6 @@ class GameViewController: UIViewController {
     var sceneController: GameSceneController!
     var setup = Setup()
     var scnView: SCNView! { self.view as? SCNView }
-    var sceneManager: SceneManager!
     var engine: GameEngine?
 
     var gameCameraPosition: SCNVector3 {
@@ -31,7 +30,6 @@ class GameViewController: UIViewController {
         setup.load()
         sceneController = GameSceneController(pitSize: setup.pitSize)
         scnView.scene = sceneController.scnScene
-        sceneManager = SceneManager(viewSize: scnView.bounds.size)
         resetGame()
     }
 
@@ -49,7 +47,6 @@ class GameViewController: UIViewController {
                 }
             case .setup:
                 self.presentSetupMenu { [unowned self] newSetup in
-                    print(newSetup.pitSize, newSetup.mode)
                     self.setup = newSetup
                     self.setup.save()
                     DispatchQueue.main.async { self.goToMainMenu(animated: false) }
@@ -64,23 +61,26 @@ class GameViewController: UIViewController {
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
         sceneController.moveCamera(to: menuCameraPosition, animated: animated)
-        sceneManager.mainMenu.animatedAppearance = animated
-        sceneManager.mainMenu.completion = completion
-        scnView.overlaySKScene = sceneManager.mainMenu
+        let mainMenu = MainMenuScene(size: scnView.bounds.size)
+        mainMenu.animatedAppearance = animated
+        mainMenu.completion = completion
+        scnView.overlaySKScene = mainMenu
     }
 
     func presentGame(completion: @escaping () -> Void) {
         sceneController.moveCamera(to: gameCameraPosition, animated: true)
-        sceneManager.gamepad.completion = completion
-        sceneManager.gamepad.gamepadDelegate = engine
-        scnView.overlaySKScene = sceneManager.gamepad
+        let gamepad = GamepadScene(size: scnView.bounds.size)
+        gamepad.completion = completion
+        gamepad.gamepadDelegate = engine
+        scnView.overlaySKScene = gamepad
         engine?.newPolycube()
     }
 
     func presentSetupMenu(completion: @escaping (Setup) -> Void) {
-        sceneManager.setup.completion = completion
-        sceneManager.setup.setup = setup
-        scnView.overlaySKScene = sceneManager.setup
+        let setupMenu = SetupScene(size: scnView.bounds.size)
+        setupMenu.completion = completion
+        setupMenu.setup = setup
+        scnView.overlaySKScene = setupMenu
     }
 
     func resetGame() {

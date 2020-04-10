@@ -11,6 +11,11 @@ func setupPickerFont(control: PickerNode) {
     control.fontSize = 26
 }
 
+protocol SetupSceneDelegate: AnyObject {
+    func changed(pitSize: Size3i)
+    func changed(polycubeSet: PolycubeSet)
+}
+
 class SetupScene: SKScene {
     var completion: ((Setup) -> Void)?
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
