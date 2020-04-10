@@ -15,16 +15,35 @@ class GameSceneController {
     var pit: SCNNode
     var polycube: SCNNode?
     var pitContent: SCNNode?
+    var camera: SCNNode
 
-    init(scnScene: SCNScene, pitSize: Size3i) {
-        self.scnScene = scnScene
+    init(pitSize: Size3i) {
+        scnScene = SCNScene()
+        scnScene.background.contents = "art.scnassets/Background_Diffuse.jpg"
+        scnScene.rootNode.addChildNode(LightNode())
+        camera = SCNNode()
+        camera.camera = SCNCamera()
+        scnScene.rootNode.addChildNode(camera)
+
         pit = PitNode(size: pitSize)
         scnScene.rootNode.addChildNode(pit)
+    }
+
+    // TODO:
+    func setPitSize(_ size: Size3i) {
     }
 
     func deletePolycube() {
         self.polycube?.removeFromParentNode()
         polycube = nil
+    }
+
+    func moveCamera(to position: SCNVector3, animated: Bool) {
+        if animated {
+            camera.runAction(SCNAction.move(to: position, duration: SceneConstants.scenePresentDuration))
+        } else {
+            camera.position = position
+        }
     }
 
     func spawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {

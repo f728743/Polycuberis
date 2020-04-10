@@ -10,8 +10,6 @@ class GameViewController: UIViewController {
     var sceneController: GameSceneController!
     var setup = Setup()
     var scnView: SCNView! { self.view as? SCNView }
-    var scnScene: SCNScene!
-    var camera: SCNNode!
     var sceneManager: SceneManager!
     var engine: GameEngine?
 
@@ -31,9 +29,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup.load()
-        setupScene()
-        setupCamera()
-        sceneController = GameSceneController(scnScene: scnScene, pitSize: setup.pitSize)
+        sceneController = GameSceneController(pitSize: setup.pitSize)
+        scnView.scene = sceneController.scnScene
         sceneManager = SceneManager(viewSize: scnView.bounds.size)
         resetGame()
     }
@@ -65,35 +62,15 @@ class GameViewController: UIViewController {
         return true
     }
 
-    func setupScene() {
-        let scene = SCNScene()
-        scene.background.contents = "art.scnassets/Background_Diffuse.jpg"
-        scene.rootNode.addChildNode(LightNode())
-        scnView.scene = scene
-        scnScene = scene
-    }
-
-    func setupCamera() {
-        camera = SCNNode()
-        camera.camera = SCNCamera()
-        scnScene.rootNode.addChildNode(camera)
-    }
-
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
-        let duration = SceneConstants.scenePresentDuration
-        if animated {
-            camera.runAction(SCNAction.move(to: menuCameraPosition, duration: duration))
-        } else {
-            camera.position = menuCameraPosition
-        }
+        sceneController.moveCamera(to: menuCameraPosition, animated: animated)
         sceneManager.mainMenu.animatedAppearance = animated
         sceneManager.mainMenu.completion = completion
         scnView.overlaySKScene = sceneManager.mainMenu
     }
 
     func presentGame(completion: @escaping () -> Void) {
-        let duration = SceneConstants.scenePresentDuration
-        camera.runAction(SCNAction.move(to: gameCameraPosition, duration: duration))
+        sceneController.moveCamera(to: gameCameraPosition, animated: true)
         sceneManager.gamepad.completion = completion
         sceneManager.gamepad.gamepadDelegate = engine
         scnView.overlaySKScene = sceneManager.gamepad
@@ -108,11 +85,10 @@ class GameViewController: UIViewController {
 
     func resetGame() {
         if let oldEngine = engine {
-            oldEngine.isStopped = true // stop retaining old engine by Timer to let deinit
+            oldEngine.isStopped = true // stop retaining old engine by existing Timer to let deinit
             oldEngine.delegate = nil
         }
         engine = GameEngine(pitSize: setup.pitSize)
-
         engine!.delegate = self
         sceneController.deletePolycube()
         sceneController.updateContent(of: engine!.pit)
