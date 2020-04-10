@@ -10,14 +10,39 @@ struct SceneConstants {
     static let polycubeMoveDuration: TimeInterval = 0.1
 }
 
+enum CameraPosition {
+    case menu
+    case game
+}
+
 class GameSceneController {
+    var pitSize: Size3i {
+        didSet {
+            let node = PitNode(size: pitSize)
+            scnScene.rootNode.addChildNode(node)
+            pit.removeFromParentNode()
+            pit = node
+            moveCamera(to: cameraPosition, animated: false)
+        }
+    }
     var scnScene: SCNScene
     var pit: SCNNode
     var polycube: SCNNode?
     var pitContent: SCNNode?
     var camera: SCNNode
+    var cameraPosition = CameraPosition.menu
+    var gameCameraLocation: SCNVector3 {
+        SCNVector3(x: Float(pitSize.width) / 2.0,
+                   y: Float(pitSize.height) / 2.0,
+                   z: Float(max(pitSize.width, pitSize.height)))
+    }
+
+    var menuCameraLocation: SCNVector3 {
+        gameCameraLocation + SCNVector3(-2.0, 0.0, 0.0)
+    }
 
     init(pitSize: Size3i) {
+        self.pitSize = pitSize
         scnScene = SCNScene()
         scnScene.background.contents = "art.scnassets/Background_Diffuse.jpg"
         scnScene.rootNode.addChildNode(LightNode())
@@ -27,13 +52,6 @@ class GameSceneController {
 
         pit = PitNode(size: pitSize)
         scnScene.rootNode.addChildNode(pit)
-    }
-
-    func setPitSize(_ size: Size3i) {
-        let node = PitNode(size: size)
-        scnScene.rootNode.addChildNode(node)
-        pit.removeFromParentNode()
-        pit = node
     }
 
     func deletePolycube() {
@@ -46,11 +64,19 @@ class GameSceneController {
         pitContent = nil
     }
 
-    func moveCamera(to position: SCNVector3, animated: Bool) {
+    func moveCamera(to position: CameraPosition, animated: Bool) {
+        cameraPosition = position
+        var location = SCNVector3()
+        switch position {
+        case .menu:
+            location = menuCameraLocation
+        case .game:
+            location = gameCameraLocation
+        }
         if animated {
-            camera.runAction(SCNAction.move(to: position, duration: SceneConstants.scenePresentDuration))
+            camera.runAction(SCNAction.move(to: location, duration: SceneConstants.scenePresentDuration))
         } else {
-            camera.position = position
+            camera.position = location
         }
     }
 

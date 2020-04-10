@@ -12,16 +12,6 @@ class GameViewController: UIViewController {
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
 
-    var gameCameraPosition: SCNVector3 {
-        SCNVector3(x: Float(setup.pitSize.width) / 2.0,
-                   y: Float(setup.pitSize.height) / 2.0,
-                   z: 5.0)
-    }
-
-    var menuCameraPosition: SCNVector3 {
-        gameCameraPosition + SCNVector3(-2.0, 0.0, 0.0)
-    }
-
     // todo: haptic
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
@@ -60,7 +50,7 @@ class GameViewController: UIViewController {
     }
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
-        sceneController.moveCamera(to: menuCameraPosition, animated: animated)
+        sceneController.moveCamera(to: .menu, animated: animated)
         let mainMenu = MainMenuScene(size: scnView.bounds.size)
         mainMenu.animatedAppearance = animated
         mainMenu.completion = completion
@@ -68,7 +58,7 @@ class GameViewController: UIViewController {
     }
 
     func presentGame(completion: @escaping () -> Void) {
-        sceneController.moveCamera(to: gameCameraPosition, animated: true)
+        sceneController.moveCamera(to: .game, animated: true)
         let gamepad = GamepadScene(size: scnView.bounds.size)
         gamepad.completion = completion
         gamepad.gamepadDelegate = engine
@@ -103,7 +93,7 @@ class GameViewController: UIViewController {
 
 extension GameViewController: SetupSceneDelegate {
     func changed(pitSize: Size3i) {
-        sceneController.setPitSize(pitSize)
+        sceneController.pitSize = pitSize
     }
 }
 
