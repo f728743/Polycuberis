@@ -9,10 +9,12 @@ Under construction
 ### First phase
 
 * Change speed
+* Use polycube set according setup
 * Account and display score
 * Game Over scene
 * High Score scene
 * Pause button
+* Show pit fullness
 * Correct layout on different devices
 
 ### Second phase

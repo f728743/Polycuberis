@@ -37,9 +37,6 @@ class GameSceneController {
                    z: Float(max(pitSize.width, pitSize.height)))
     }
 
- // 3 -1.185
- // 5 -2
-
     var menuCameraLocation: SCNVector3 {
         gameCameraLocation + SCNVector3(-Float(max(pitSize.width, pitSize.height)) / 2.7, 0.0, 0.0)
     }
