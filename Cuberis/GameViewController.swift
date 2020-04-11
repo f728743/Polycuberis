@@ -117,4 +117,9 @@ extension GameViewController: GameEngineDelegate {
     func didUpdate(statistics: Statistics) {
         print("New score: \(statistics.score)")
     }
+
+    func didСlearLayers(count: Int, andPit isEmpty: Bool) {
+        print("Clear \(count) layer(s)")
+        if isEmpty { print("Pit is empty") }
+    }
 }

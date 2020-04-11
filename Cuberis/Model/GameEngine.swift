@@ -10,6 +10,7 @@ protocol GameEngineDelegate: AnyObject {
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4)
     func didUpdateContent(of pit: Pit)
     func didUpdate(statistics: Statistics)
+    func didСlearLayers(count: Int, andPit isEmpty: Bool)
     func didChangeLevel(to level: Int)
     func gameOver()
 }
@@ -19,6 +20,7 @@ extension GameEngineDelegate {
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {}
     func didUpdate(statistics: Statistics) {}
     func didChangeLevel(to level: Int) {}
+    func didСlearLayers(count: Int, andPit isEmpty: Bool) {}
     func didUpdateContent(of pit: Pit) {}
     func gameOver() {}
 }
@@ -156,6 +158,7 @@ class GameEngine {
                                      layersRemoved: removeResult.layers,
                                      isPitEmpty: removeResult.isPitEmpty,
                                      droppedFrom: isDropHappened ? dropPosition : nil)
+            delegate?.didСlearLayers(count: removeResult.layers, andPit: removeResult.isPitEmpty)
             delegate?.didUpdate(statistics: statistics)
             if level <= GameEngine.maxLevel {
                 if statistics.cubesPlayed >= cubesPerLevel * (level + 1) {
