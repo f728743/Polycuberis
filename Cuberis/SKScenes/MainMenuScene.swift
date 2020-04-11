@@ -6,7 +6,7 @@
 import SpriteKit
 
 enum MainMenuOption {
-   case start
+   case start(Int)
    case setup
 }
 
@@ -27,12 +27,12 @@ class MainMenuScene: SKScene {
     let setupButton = createButton(title: "SETUP")
     let levelControl: NumericUpDownNode
 
-    override init(size: CGSize) {
-        levelControl = NumericUpDownNode(label: "Level:", value: 3, range: 0...9)
+    init(size: CGSize, level: Int) {
+        levelControl = NumericUpDownNode(label: "Level:", value: level, range: Setup.levelRange)
         super.init(size: size)
         addChild(panel)
         panel.addChild(levelControl)
-        startButton.action = { [unowned self] in self.completion?(.start) }
+        startButton.action = { [unowned self] in self.completion?(.start(self.levelControl.value)) }
         panel.addChild(startButton)
         setupButton.action = { [unowned self] in self.completion?(.setup) }
         panel.addChild(setupButton)

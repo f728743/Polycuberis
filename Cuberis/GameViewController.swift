@@ -29,7 +29,9 @@ class GameViewController: UIViewController {
     func goToMainMenu(animated: Bool) {
         presentMainMenu(animated: animated) { [unowned self] selectedOption in
             switch selectedOption {
-            case .start:
+            case let .start(level):
+                self.setup.level = level
+                self.setup.save()
                 self.startGame()
                 self.presentGame { [unowned self] in
                     self.stopGame()
@@ -51,7 +53,7 @@ class GameViewController: UIViewController {
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
         sceneController.moveCamera(to: .menu, animated: animated)
-        let mainMenu = MainMenuScene(size: scnView.bounds.size)
+        let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
         mainMenu.animatedAppearance = animated
         mainMenu.completion = completion
         scnView.overlaySKScene = mainMenu

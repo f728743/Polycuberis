@@ -29,7 +29,7 @@ class GameEngine {
     static let maxLevel = 9
     var statistics: Statistics
     let timeBase: TimeInterval = 5.51
-    let timeLevelFactor = 0.8
+    let timeLevelFactor = 0.69
     var stepTime: TimeInterval
     let cubesPerLevel: Int
     var level: Int
