@@ -42,7 +42,7 @@ class SetupScene: SKScene {
         widthPicker = NumericUpDownNode(label: "Pit width:",
                                         value: setup.pitSize.width,
                                         range: Setup.customWidthRange)
-        heightPicker = NumericUpDownNode(label: "Pit height:",
+        heightPicker = NumericUpDownNode(label: "Pit length:",
                                          value: setup.pitSize.height,
                                          range: Setup.customHeighthRange)
         depthPicker = NumericUpDownNode(label: "Pit depth:",

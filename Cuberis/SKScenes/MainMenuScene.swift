@@ -25,26 +25,26 @@ class MainMenuScene: SKScene {
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let startButton = createButton(title: "START")
     let setupButton = createButton(title: "SETUP")
-    let speedControl: NumericUpDownNode
+    let levelControl: NumericUpDownNode
 
     override init(size: CGSize) {
-        speedControl = NumericUpDownNode(label: "Speed:", value: 3, range: 1...10)
+        levelControl = NumericUpDownNode(label: "Level:", value: 3, range: 0...9)
         super.init(size: size)
         addChild(panel)
-        panel.addChild(speedControl)
+        panel.addChild(levelControl)
         startButton.action = { [unowned self] in self.completion?(.start) }
         panel.addChild(startButton)
         setupButton.action = { [unowned self] in self.completion?(.setup) }
         panel.addChild(setupButton)
 
-        setupPickerFont(control: speedControl)
+        setupPickerFont(control: levelControl)
 
         let spacing: CGFloat = 20
         let anchor = CGPoint(0, panel.size.midH - (startButton.size.midH + spacing))
         let step = -(startButton.size.height + spacing)
         startButton.position = anchor + CGPoint(0, 0 * step)
         setupButton.position = anchor + CGPoint(0, 1 * step)
-        speedControl.position = anchor + CGPoint(0, 2 * step)
+        levelControl.position = anchor + CGPoint(0, 2 * step)
     }
 
     required init?(coder aDecoder: NSCoder) {

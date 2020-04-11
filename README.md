@@ -8,7 +8,7 @@ Under construction
 
 ### First phase
 
-* Change speed
+* Change level
 * Use polycube set according setup
 * Account and display score
 * Game Over scene

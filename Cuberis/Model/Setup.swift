@@ -27,18 +27,18 @@ enum GameMode: Int, CaseIterable {
 }
 
 struct Setup {
-    static let speedRange = 1...10
+    static let levelRange = 0...9
     static let customWidthRange =  3...7
     static let customHeighthRange =  3...7
     static let customDepthRange =  6...18
     static let defaultMode = GameMode.flatFun
-    static let defaultSpeed = 1
+    static let defaultLevel = 1
     static let defaultWidth = 5
     static let defaultHeight = 5
     static let defaultDepth = 12
     static let defaultPolycubeSet = PolycubeSet.flat
 
-    var speed: Int
+    var level: Int
     var mode: GameMode
     var customSetup: ModeSetup
     var pitSize: Size3i { mode == .custom ? customSetup.pitSize : setups[mode.rawValue].pitSize }
@@ -46,7 +46,7 @@ struct Setup {
     var name: String { mode == .custom ? customSetup.name : setups[mode.rawValue].name }
 
     enum UserDefaultsKey: String {
-        case gameSpeed
+        case gameLevel
         case gameMode
         case pitWidth, pitHeight, pitDepth
         case polycubeSet
@@ -63,7 +63,7 @@ struct Setup {
                                     polycubeSet: .extended)]
 
     init() {
-        speed = Setup.defaultSpeed
+        level = Setup.defaultLevel
         mode = Setup.defaultMode
         customSetup = ModeSetup(name: GameMode.names[GameMode.custom.rawValue],
                                 pitSize: Size3i(width: Setup.defaultWidth,
@@ -73,7 +73,7 @@ struct Setup {
     }
 
     func save() {
-        save(speed, forKey: .gameSpeed)
+        save(level, forKey: .gameLevel)
         save(mode.rawValue, forKey: .gameMode)
         save(customSetup.pitSize.width, forKey: .pitWidth)
         save(customSetup.pitSize.height, forKey: .pitHeight)
@@ -82,7 +82,7 @@ struct Setup {
     }
 
     mutating func load() {
-        speed = loadInt(forKey: .gameSpeed) ?? Setup.defaultSpeed
+        level = loadInt(forKey: .gameLevel) ?? Setup.defaultLevel
         mode = GameMode(rawValue: loadInt(forKey: .gameMode) ?? Setup.defaultMode.rawValue) ?? Setup.defaultMode
         let width = loadInt(forKey: .pitWidth) ?? Setup.defaultWidth
         let height = loadInt(forKey: .pitHeight) ?? Setup.defaultHeight

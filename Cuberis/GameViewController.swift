@@ -74,17 +74,13 @@ class GameViewController: UIViewController {
     }
 
     func stopGame() {
-        if let oldEngine = engine {
-            oldEngine.isStopped = true // stop retaining old engine by existing Timer to let deinit
-            oldEngine.delegate = nil  // prevent sceneController from receving messages from old engine
-        }
         engine = nil
         sceneController.deletePolycube()
         sceneController.clearPit()
     }
 
     func startGame() {
-        engine = GameEngine(pitSize: setup.pitSize)
+        engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: setup.level)
         engine!.delegate = self
         sceneController.updateContent(of: engine!.pit)
         engine?.newPolycube()
