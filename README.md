@@ -8,7 +8,7 @@ Under construction
 
 ### First phase
 
-* Redraw pit when changing settings
+* Change speed
 * Account and display score
 * Game Over scene
 * High Score scene
