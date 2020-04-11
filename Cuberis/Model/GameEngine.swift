@@ -9,44 +9,42 @@ protocol GameEngineDelegate: AnyObject {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4)
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4)
     func didUpdateContent(of pit: Pit)
-    func levelDidChanged(to level: Int)
-    func collision(at cells: [Vector3i], afterMoveBy delta: Vector3i, andRotate rotation: SCNMatrix4)
+    func didUpdate(statistics: Statistics)
+    func didChangeLevel(to level: Int)
     func gameOver()
 }
 
 extension GameEngineDelegate {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {}
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {}
-    func levelDidChanged(to level: Int) {}
+    func didUpdate(statistics: Statistics) {}
+    func didChangeLevel(to level: Int) {}
     func didUpdateContent(of pit: Pit) {}
-    func collision(at cells: [Vector3i], afterMoveBy delta: Vector3i, andRotate rotation: SCNMatrix4) {}
     func gameOver() {}
 }
 
 class GameEngine {
-    let polycubeSet: PolycubeSet
+    static let maxLevel = 9
     var statistics: Statistics
-    let maxLevel = 9                            // TODO: Extract to separete class 
-    let timeBase: TimeInterval = 2051.0         // Step Time base (seconds)
-    let timeLevelFactor = 0.64
+    let timeBase: TimeInterval = 5.51
+    let timeLevelFactor = 0.8
     var stepTime: TimeInterval
     let cubesPerLevel: Int
     var level: Int
-    var dropPos = 0
+    var isDropHappened = false
+    var dropPosition = 0
 
     var pit: Pit
-    var polycubeCount = 0
     let allPolycubes: [Polycube]
     let currentSet: [Polycube]
     var currentPolycube: Polycube?
     var position = Vector3i()
     var rotation = SCNMatrix4Identity
-    var isDropHappened = false
+
     weak var delegate: GameEngineDelegate?
 
     init(pitSize: Size3i, polycubeSet: PolycubeSet, level: Int) {
-        self.polycubeSet = polycubeSet
-        self.level = min(level, maxLevel)
+        self.level = min(level, GameEngine.maxLevel)
         statistics = Statistics(polycubeSet: polycubeSet, pitDepth: pitSize.depth)
         stepTime = timeBase * pow(timeLevelFactor, Double(self.level))
         cubesPerLevel = pitSize.height * 15 + pitSize.width * 15
@@ -63,12 +61,11 @@ class GameEngine {
     }
 
     func scheduleStepTimer(afterDrop: Bool) {
-        let interval: TimeInterval = afterDrop ? 0.6 : 2.0
-        let number = polycubeCount
+        let interval: TimeInterval = afterDrop ? 0.6 : stepTime
+        let number = statistics.polycubesPlayed
         Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
-            guard let self = self, number == self.polycubeCount else { return }
+            guard let self = self, number == self.statistics.polycubesPlayed else { return }
             if self.isDropHappened && !afterDrop { return }
-            self.isDropHappened = false
             self.step()
         }
     }
@@ -86,9 +83,8 @@ class GameEngine {
             gameOver()
             return
         }
-        polycubeCount += 1
         isDropHappened = false
-        dropPos = pit.depth - 1
+        dropPosition = pit.depth - 1
         scheduleStepTimer(afterDrop: false)
     }
 
@@ -125,11 +121,7 @@ class GameEngine {
         if !overlap.cells.isEmpty {
             let overlapAfterCorrection = self.overlap(afterRotation: newRotation,
                                                       andTranslation: position + overlap.excess)
-            if !overlapAfterCorrection.cells.isEmpty {
-                delegate?.collision(at: overlapAfterCorrection.cells,
-                                    afterMoveBy: overlap.excess,
-                                    andRotate: newRotation)
-            } else {
+            if overlapAfterCorrection.cells.isEmpty {
                 let newPosition = position + overlap.excess
                 rotation = newRotation
                 position = newPosition
@@ -154,7 +146,7 @@ class GameEngine {
     func step() {
         guard let polycube = currentPolycube else { fatalError("Current polycube fucked up") }
         let delta = Vector3i(0, 0, -1)
-        dropPos -= 1
+        dropPosition -= 1
         if isOverlapped(afterRotation: rotation, andTranslation: position + delta) {
             pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
             let removeResult = pit.removeLayers()
@@ -163,11 +155,12 @@ class GameEngine {
                                      onLevel: level,
                                      layersRemoved: removeResult.layers,
                                      isPitEmpty: removeResult.isPitEmpty,
-                                     droppedFrom: isDropHappened ? dropPos : nil)
-            if level <= maxLevel {
+                                     droppedFrom: isDropHappened ? dropPosition : nil)
+            delegate?.didUpdate(statistics: statistics)
+            if level <= GameEngine.maxLevel {
                 if statistics.cubesPlayed >= cubesPerLevel * (level + 1) {
                     level += 1
-                    delegate?.levelDidChanged(to: level)
+                    delegate?.didChangeLevel(to: level)
                     stepTime *= timeLevelFactor
                 }
             }

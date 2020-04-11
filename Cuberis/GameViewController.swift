@@ -109,4 +109,12 @@ extension GameViewController: GameEngineDelegate {
     func didUpdateContent(of pit: Pit) {
         sceneController.updateContent(of: pit)
     }
+
+    func levelDidChanged(to level: Int) {
+        print("New level: \(level)")
+    }
+
+    func didUpdate(statistics: Statistics) {
+        print("New score: \(statistics.score)")
+    }
 }

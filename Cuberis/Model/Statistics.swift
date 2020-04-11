@@ -8,6 +8,7 @@ import Foundation
 struct Statistics {
     private(set) var score = 0
     private(set) var cubesPlayed = 0
+    private(set) var polycubesPlayed = 0
     private(set) var singleLayerClears  = 0
     private(set) var doubleLayerClears = 0
     private(set) var tripleLayerClears = 0
@@ -59,11 +60,8 @@ struct Statistics {
         // Total score
         let totalScore = (layerScore + polycubeScore + pitScore) * depthFactor[pitDepth]
 
-        // Round
-        var iScore = fround(Float(totalScore))
-        if iScore < 1 { iScore = 1 }
-
-        score += iScore
+        score += max(fround(Float(totalScore)), 1)
+        polycubesPlayed += 1
         cubesPlayed += polycube.cubes.count
         if isPitEmpty { timesPitIsEmpty += 1 }
         switch layersRemoved {
