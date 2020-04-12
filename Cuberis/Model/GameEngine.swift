@@ -45,6 +45,7 @@ class GameEngine {
 
     weak var delegate: GameEngineDelegate?
 
+    // TODO: polycubeSet, emptyPit
     init(pitSize: Size3i, polycubeSet: PolycubeSet, level: Int) {
         self.level = min(level, GameEngine.maxLevel)
         statistics = Statistics(polycubeSet: polycubeSet, pitDepth: pitSize.depth)
