@@ -113,11 +113,17 @@ extension GameViewController: GameEngineDelegate {
     }
 
     func levelDidChanged(to level: Int) {
-        print("New level: \(level)")
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
+            fatalError("Internal error")
+        }
+        gamepad.level = level
     }
 
     func didUpdate(statistics: Statistics) {
-        print("New score: \(statistics.score)")
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
+            fatalError("Internal error")
+        }
+        gamepad.score = statistics.score
     }
 
     func didСlearLayers(count: Int, andPit isEmpty: Bool) {

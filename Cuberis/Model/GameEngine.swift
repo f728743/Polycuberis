@@ -188,4 +188,7 @@ extension GameEngine: GamepadProtocol {
     func moveLeft() { move(by: Vector3i(x: -1, y: 0, z: 0)) }
     func moveRight() { move(by: Vector3i(x: 1, y: 0, z: 0)) }
     func drop() { moveDeep() }
+    func pause() { print("todo: pause game") }
+    func resume() { print("todo: resume game") }
+
 }

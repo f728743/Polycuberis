@@ -17,6 +17,8 @@ protocol GamepadProtocol: AnyObject {
     func moveLeft()
     func moveRight()
     func drop()
+    func pause()
+    func resume()
 }
 
 extension GamepadProtocol {
@@ -31,4 +33,6 @@ extension GamepadProtocol {
     func moveLeft() {}
     func moveRight() {}
     func drop() {}
+    func pause() {}
+    func resume() {}
 }
