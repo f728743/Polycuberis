@@ -26,25 +26,32 @@ extension GameEngineDelegate {
 }
 
 class GameEngine {
+    enum GameState {
+        case new
+        case playing
+        case paused(pauseTime: TimeInterval)
+        case gameOver
+    }
+
+    private(set) var state = GameState.new
     static let maxLevel = 9
-    var level: Int
-    var statistics: Statistics
-    let cubesPerLevel: Int
+    private(set) var level: Int
+    private(set) var statistics: Statistics
+    private let cubesPerLevel: Int
 
-    let timeBase: TimeInterval = 5.51
-    let timeLevelFactor = 0.69
-    var stepTime: TimeInterval
-    var timer: Timer?
-    var pauseTime: TimeInterval?
+    private let timeBase: TimeInterval = 5.51
+    private let timeLevelFactor = 0.69
+    private var stepTime: TimeInterval
+    private var timer: Timer?
 
-    var isDropHappened = false
-    var dropPosition = 0
+    private var isDropHappened = false
+    private var dropPosition = 0
 
-    var pit: Pit
+    private(set) var pit: Pit
     let polycubeSet: [Polycube]
-    var currentPolycube: Polycube?
-    var position = Vector3i()
-    var rotation = SCNMatrix4Identity
+    private(set) var currentPolycube: Polycube?
+    private var position = Vector3i()
+    private var rotation = SCNMatrix4Identity
 
     weak var delegate: GameEngineDelegate?
 
@@ -63,20 +70,25 @@ class GameEngine {
         srand48(Int(Date().timeIntervalSince1970))
     }
 
+    func start() {
+        newPolycube()
+        state = .playing
+    }
+
     func gameOver() {
+        state = .gameOver
+        timer?.invalidate()
         delegate?.gameOver()
     }
 
-    func scheduleStepTimer(afterDrop: Bool) {
-        let interval: TimeInterval = afterDrop ? 0.6 : pauseTime ?? stepTime
+    private func scheduleStep(after interval: TimeInterval) {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
-            guard let self = self else { return }
-            self.step()
+            self?.step()
         }
     }
 
-    func newPolycube() {
+    private func newPolycube() {
         let polycube = polycubeSet[Int(drand48() * Double(polycubeSet.count))]
         position = Vector3i()
         currentPolycube = polycube
@@ -84,11 +96,11 @@ class GameEngine {
         delegate?.didSpawnNew(polycube: polycube, at: position, rotated: rotation)
         if isOverlapped(afterRotation: rotation, andTranslation: position) {
             gameOver()
-            return
+        } else {
+            isDropHappened = false
+            dropPosition = pit.depth - 1
+            scheduleStep(after: stepTime)
         }
-        isDropHappened = false
-        dropPosition = pit.depth - 1
-        scheduleStepTimer(afterDrop: false)
     }
 
     func isOverlapped(afterRotation rotation: SCNMatrix4, andTranslation translation: Vector3i) -> Bool {
@@ -111,7 +123,7 @@ class GameEngine {
     }
 
     func move(by delta: Vector3i) {
-        guard pauseTime == nil else { return }
+        guard case .playing = state else { return }
         let newPosition = position + delta
         if !isOverlapped(afterRotation: rotation, andTranslation: newPosition) {
             position = newPosition
@@ -120,7 +132,7 @@ class GameEngine {
     }
 
     func rotate(by rotationDelta: SCNMatrix4) {
-        guard pauseTime == nil else { return }
+        guard case .playing = state else { return }
         let newRotation = (rotation.transposed() * rotationDelta).transposed()
         let overlap = self.overlap(afterRotation: newRotation, andTranslation: position)
         if !overlap.cells.isEmpty {
@@ -139,14 +151,14 @@ class GameEngine {
     }
 
     func moveDeep() {
-        guard pauseTime == nil else { return }
+        guard case .playing = state else { return }
         if isDropHappened { return }
         var probe = position
         let delta = Vector3i(0, 0, -1)
         while !isOverlapped(afterRotation: rotation, andTranslation: probe + delta) { probe += delta }
         isDropHappened = true
         move(by: probe - position)
-        scheduleStepTimer(afterDrop: true)
+        scheduleStep(after: 0.6)
     }
 
     func step() {
@@ -177,7 +189,7 @@ class GameEngine {
             newPolycube()
         } else {
             move(by: delta)
-            scheduleStepTimer(afterDrop: false)
+            scheduleStep(after: stepTime)
         }
     }
 }
@@ -195,11 +207,14 @@ extension GameEngine: GamepadProtocol {
     func moveRight() { move(by: Vector3i(x: 1, y: 0, z: 0)) }
     func drop() { moveDeep() }
     func pause() {
-        pauseTime = timer?.fireDate.timeIntervalSinceNow
+        guard case .playing = state else { return }
+        guard let timePassed = timer?.fireDate.timeIntervalSinceNow else { fatalError("game state fucked up") }
+        state = .paused(pauseTime: timePassed)
         timer?.invalidate()
     }
     func resume() {
-        scheduleStepTimer(afterDrop: false)
-        pauseTime = nil
+        guard case let .paused(pauseTime) = state else { return }
+        scheduleStep(after: pauseTime)
+        state = .playing
     }
 }

@@ -86,7 +86,7 @@ class GameViewController: UIViewController {
         engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: level)
         engine!.delegate = self
         sceneController.updateContent(of: engine!.pit)
-        engine?.newPolycube()
+        engine!.start()
     }
 }
 
@@ -113,7 +113,7 @@ extension GameViewController: GameEngineDelegate {
         sceneController.updateContent(of: pit)
     }
 
-    func levelDidChanged(to level: Int) {
+    func didChangeLevel(to level: Int) {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
             fatalError("Internal error")
         }
