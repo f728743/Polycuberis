@@ -2,7 +2,7 @@
 
 ![screenshot](gfx/screenshot.gif)
 
-Under construction
+## Under construction
 
 ## TODO
 

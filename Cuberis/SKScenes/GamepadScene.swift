@@ -113,7 +113,6 @@ class GamepadScene: SKScene {
         layoutPlayPauseButton()
         layoutRotationButtons()
         layoutMoveButtons()
-        layoutDropButton()
     }
 
     func setupLabelFont(_ label: SKLabelNode, color: UIColor) {
@@ -178,12 +177,6 @@ class GamepadScene: SKScene {
         moveLeftButton.position = anchor + CGPoint(-buttonWidth, 0)
         moveRightButton.position = anchor + CGPoint(buttonWidth, 0)
         moveDownButton.position = anchor + CGPoint(0, -buttonHeight)
-    }
-
-    private func layoutDropButton() {
-        let buttonWidth = moveUpButton.size.width
-        dropButton.position = CGPoint(x: frame.width - (safeAreaInsets.right + buttonWidth * 2), y: 0) +
-            dropButton.size.mid * CGPoint(-1, 1) +
-            CGPoint(-20, 20)
+        dropButton.position = anchor + CGPoint(0, -160)
     }
 }
