@@ -9,9 +9,8 @@ Under construction
 ### First phase
 
 * Store hi score
-* Game Over scene
 * High Score scene
-* Pause button
+* Game Over scene
 * Show pit fullness
 * Correct layout on different devices
 

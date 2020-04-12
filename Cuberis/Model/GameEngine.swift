@@ -27,12 +27,16 @@ extension GameEngineDelegate {
 
 class GameEngine {
     static let maxLevel = 9
+    var level: Int
     var statistics: Statistics
+    let cubesPerLevel: Int
+
     let timeBase: TimeInterval = 5.51
     let timeLevelFactor = 0.69
     var stepTime: TimeInterval
-    let cubesPerLevel: Int
-    var level: Int
+    var timer: Timer?
+    var pauseTime: TimeInterval?
+
     var isDropHappened = false
     var dropPosition = 0
 
@@ -52,7 +56,10 @@ class GameEngine {
 
         pit = Pit(size: pitSize)
         let url = Bundle.main.resourceURL!.appendingPathComponent("polycubes.json")
-        self.polycubeSet = loadPolycubes(from: url) .filter { $0.isIn(set: polycubeSet) }
+        let minPitSzie = min(pit.width, pit.depth)
+        self.polycubeSet = loadPolycubes(from: url) .filter {
+            $0.isIn(set: polycubeSet) && $0.width <= minPitSzie && $0.height <= minPitSzie && $0.depth <= minPitSzie
+        }
         srand48(Int(Date().timeIntervalSince1970))
     }
 
@@ -61,11 +68,10 @@ class GameEngine {
     }
 
     func scheduleStepTimer(afterDrop: Bool) {
-        let interval: TimeInterval = afterDrop ? 0.6 : stepTime
-        let number = statistics.polycubesPlayed
-        Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
-            guard let self = self, number == self.statistics.polycubesPlayed else { return }
-            if self.isDropHappened && !afterDrop { return }
+        let interval: TimeInterval = afterDrop ? 0.6 : pauseTime ?? stepTime
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
             self.step()
         }
     }
@@ -105,6 +111,7 @@ class GameEngine {
     }
 
     func move(by delta: Vector3i) {
+        guard pauseTime == nil else { return }
         let newPosition = position + delta
         if !isOverlapped(afterRotation: rotation, andTranslation: newPosition) {
             position = newPosition
@@ -113,6 +120,7 @@ class GameEngine {
     }
 
     func rotate(by rotationDelta: SCNMatrix4) {
+        guard pauseTime == nil else { return }
         let newRotation = (rotation.transposed() * rotationDelta).transposed()
         let overlap = self.overlap(afterRotation: newRotation, andTranslation: position)
         if !overlap.cells.isEmpty {
@@ -131,6 +139,7 @@ class GameEngine {
     }
 
     func moveDeep() {
+        guard pauseTime == nil else { return }
         if isDropHappened { return }
         var probe = position
         let delta = Vector3i(0, 0, -1)
@@ -185,6 +194,12 @@ extension GameEngine: GamepadProtocol {
     func moveLeft() { move(by: Vector3i(x: -1, y: 0, z: 0)) }
     func moveRight() { move(by: Vector3i(x: 1, y: 0, z: 0)) }
     func drop() { moveDeep() }
-    func pause() { print("todo: pause game") }
-    func resume() { print("todo: resume game") }
+    func pause() {
+        pauseTime = timer?.fireDate.timeIntervalSinceNow
+        timer?.invalidate()
+    }
+    func resume() {
+        scheduleStepTimer(afterDrop: false)
+        pauseTime = nil
+    }
 }
