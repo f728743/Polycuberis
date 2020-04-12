@@ -37,15 +37,13 @@ class GameEngine {
     var dropPosition = 0
 
     var pit: Pit
-    let allPolycubes: [Polycube]
-    let currentSet: [Polycube]
+    let polycubeSet: [Polycube]
     var currentPolycube: Polycube?
     var position = Vector3i()
     var rotation = SCNMatrix4Identity
 
     weak var delegate: GameEngineDelegate?
 
-    // TODO: polycubeSet, emptyPit
     init(pitSize: Size3i, polycubeSet: PolycubeSet, level: Int) {
         self.level = min(level, GameEngine.maxLevel)
         statistics = Statistics(polycubeSet: polycubeSet, pitDepth: pitSize.depth)
@@ -54,8 +52,7 @@ class GameEngine {
 
         pit = Pit(size: pitSize)
         let url = Bundle.main.resourceURL!.appendingPathComponent("polycubes.json")
-        allPolycubes = loadPolycubes(from: url)
-        currentSet = allPolycubes.filter { $0.info.basic || $0.info.flat }
+        self.polycubeSet = loadPolycubes(from: url) .filter { $0.isIn(set: polycubeSet) }
         srand48(Int(Date().timeIntervalSince1970))
     }
 
@@ -73,11 +70,8 @@ class GameEngine {
         }
     }
 
-    func start() {
-    }
-
     func newPolycube() {
-        let polycube = currentSet[Int(drand48() * Double(currentSet.count))]
+        let polycube = polycubeSet[Int(drand48() * Double(polycubeSet.count))]
         position = Vector3i()
         currentPolycube = polycube
         rotation = SCNMatrix4Identity
@@ -193,5 +187,4 @@ extension GameEngine: GamepadProtocol {
     func drop() { moveDeep() }
     func pause() { print("todo: pause game") }
     func resume() { print("todo: resume game") }
-
 }

@@ -60,6 +60,14 @@ struct Polycube {
     static func height(of cells: [Vector3i]) -> Int { (cells.max { $0.y < $1.x }?.y ?? 0) + 1 }
     static func depth(of cells: [Vector3i]) -> Int { (cells.max { $0.z < $1.z }?.z ?? 0) + 1 }
 
+    func isIn(set: PolycubeSet) -> Bool {
+        switch set {
+        case .extended: return true
+        case .basic: return info.basic
+        case .flat: return info.flat
+        }
+    }
+
     func haveVisibleFace(withIndex index: Int, in cube: Vector3i) -> Bool {
         let faceBorders = [[0, 0, 1], [-1, 0, 0], [0, 0, -1], [1, 0, 0], [0, 1, 0], [0, -1, 0]]
         return !cubes.contains(cube + Vector3i(faceBorders[index]))

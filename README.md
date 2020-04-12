@@ -9,7 +9,6 @@ Under construction
 ### First phase
 
 * Store hi score
-* Use polycube set according setup
 * Game Over scene
 * High Score scene
 * Pause button
