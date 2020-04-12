@@ -152,14 +152,17 @@ class GameEngine {
         dropPosition -= 1
         if isOverlapped(afterRotation: rotation, andTranslation: position + delta) {
             pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
-            let removeResult = pit.removeLayers()
+            let layersRemoved = pit.removeLayers()
+            let isPitEmpty = pit.isEmpty
             delegate?.didUpdateContent(of: pit)
             statistics.accountScores(for: polycube,
                                      onLevel: level,
-                                     layersRemoved: removeResult.layers,
-                                     isPitEmpty: removeResult.isPitEmpty,
+                                     layersRemoved: layersRemoved,
+                                     isPitEmpty: isPitEmpty,
                                      droppedFrom: isDropHappened ? dropPosition : nil)
-            delegate?.didСlearLayers(count: removeResult.layers, andPit: removeResult.isPitEmpty)
+            if layersRemoved > 0 {
+                delegate?.didСlearLayers(count: layersRemoved, andPit: isPitEmpty)
+            }
             delegate?.didUpdate(statistics: statistics)
             if level <= GameEngine.maxLevel {
                 if statistics.cubesPlayed >= cubesPerLevel * (level + 1) {

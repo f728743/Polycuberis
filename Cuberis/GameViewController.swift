@@ -30,9 +30,7 @@ class GameViewController: UIViewController {
         presentMainMenu(animated: animated) { [unowned self] selectedOption in
             switch selectedOption {
             case let .start(level):
-                self.setup.level = level
-                self.setup.save()
-                self.startGame()
+                self.startGame(level: level)
                 self.presentGame { [unowned self] in
                     self.stopGame()
                     DispatchQueue.main.async { self.goToMainMenu(animated: true) }
@@ -63,6 +61,7 @@ class GameViewController: UIViewController {
         sceneController.moveCamera(to: .game, animated: true)
         let gamepad = GamepadScene(size: scnView.bounds.size)
         gamepad.completion = completion
+        gamepad.level = setup.level
         gamepad.gamepadDelegate = engine
         scnView.overlaySKScene = gamepad
     }
@@ -81,8 +80,10 @@ class GameViewController: UIViewController {
         sceneController.clearPit()
     }
 
-    func startGame() {
-        engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: setup.level)
+    func startGame(level: Int) {
+        setup.level = level
+        setup.save()
+        engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: level)
         engine!.delegate = self
         sceneController.updateContent(of: engine!.pit)
         engine?.newPolycube()

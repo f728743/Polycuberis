@@ -8,9 +8,8 @@ Under construction
 
 ### First phase
 
-* Change level
+* Store hi score
 * Use polycube set according setup
-* Account and display score
 * Game Over scene
 * High Score scene
 * Pause button

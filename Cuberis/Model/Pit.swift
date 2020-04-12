@@ -10,6 +10,8 @@ struct Pit {
     var width: Int { size.width }
     var height: Int { size.height }
     var depth: Int { size.depth }
+    var isEmpty: Bool { isEmpty(layer: -depth + 1) }
+
     private var cells: [Int]
 
     init(size: Size3i) {
@@ -33,7 +35,7 @@ struct Pit {
         fill(layer: bound, with: 0)
     }
 
-    mutating func removeLayers() -> (layers: Int, isPitEmpty: Bool) {
+    mutating func removeLayers() -> Int {
         var removed = 0
         var i = (-depth + 1)
         while i < -removed {
@@ -44,7 +46,7 @@ struct Pit {
                 i += 1
             }
         }
-        return (layers: removed, isPitEmpty: false)
+        return removed
     }
 
     func includes(cell: Vector3i) -> Bool { excess(of: cell) == Vector3i() }
