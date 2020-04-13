@@ -10,12 +10,12 @@
 
 * Store hi score
 * High Score scene
-* Game Over scene
 * Show pit fullness
 * Correct layout on different devices
 
 ### Second phase
 
+* "Button" auto-repeat
 * Haptic feedback
 * Small movements of pin based on gyro
 * Move camera to view set of polycubes selected in settings
