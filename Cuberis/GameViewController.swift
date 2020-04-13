@@ -33,6 +33,7 @@ class GameViewController: UIViewController {
                 self.startGame(level: level)
                 self.presentGame { [unowned self] in
                     self.stopGame()
+                    self.sceneController.hideGameOver()
                     DispatchQueue.main.async { self.goToMainMenu(animated: true) }
                 }
             case .setup:
@@ -106,7 +107,13 @@ extension GameViewController: GameEngineDelegate {
     }
 
     func gameOver() {
-        print("Game over")
+        engine = nil
+        sceneController.deletePolycube()
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
+            fatalError("Internal error")
+        }
+        gamepad.hideButtons()
+        sceneController.showGameOver()
     }
 
     func didUpdateContent(of pit: Pit) {

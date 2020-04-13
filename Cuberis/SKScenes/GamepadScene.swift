@@ -48,9 +48,11 @@ class GamepadScene: SKScene {
     private let highScoreLabel = SKLabelNode(text: "Hi-Score")
     private let highScoreValue = SKLabelNode(text: "0")
 
+    private let allButtons = SKNode()
+
     override init(size: CGSize) {
         super.init(size: size)
-
+        addChild(allButtons)
         addChild(levelLabel)
         setupLabelFont(levelLabel, color: .gray)
         addChild(levelValue)
@@ -71,14 +73,14 @@ class GamepadScene: SKScene {
             self.playButton.isHidden = false
             self.gamepadDelegate?.pause()
         }
-        addChild(pauseButton)
+        allButtons.addChild(pauseButton)
 
         playButton.action = { [unowned self] in
             self.playButton.isHidden = true
             self.pauseButton.isHidden = false
             self.gamepadDelegate?.resume()
         }
-        addChild(playButton)
+        allButtons.addChild(playButton)
         playButton.isHidden = true
 
         addGamepadButton(rotateXCounterclockwiseButton) { [unowned self] in
@@ -105,6 +107,10 @@ class GamepadScene: SKScene {
         layoutSubnodes()
         alpha = 0.0
         run(SKAction.fadeIn(withDuration: SceneConstants.scenePresentDuration * 2))
+    }
+
+    func hideButtons() {
+        allButtons.run(SKAction.fadeOut(withDuration: 0.5))
     }
 
     func layoutSubnodes() {
@@ -139,7 +145,7 @@ class GamepadScene: SKScene {
 
     private func addGamepadButton(_ button: GamepadButtonNode, action:@escaping (() -> Void)) {
         button.action = action
-        addChild(button)
+        allButtons.addChild(button)
     }
 
     private func layoutPlayPauseButton() {

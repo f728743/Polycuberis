@@ -57,7 +57,7 @@ struct Polycube {
     }
 
     static func width(of cells: [Vector3i]) -> Int { (cells.max { $0.x < $1.x }?.x ?? 0) + 1 }
-    static func height(of cells: [Vector3i]) -> Int { (cells.max { $0.y < $1.x }?.y ?? 0) + 1 }
+    static func height(of cells: [Vector3i]) -> Int { (cells.max { $0.y < $1.y }?.y ?? 0) + 1 }
     static func depth(of cells: [Vector3i]) -> Int { (cells.max { $0.z < $1.z }?.z ?? 0) + 1 }
 
     func isIn(set: PolycubeSet) -> Bool {

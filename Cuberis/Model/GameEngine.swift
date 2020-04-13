@@ -93,10 +93,13 @@ class GameEngine {
         position = Vector3i()
         currentPolycube = polycube
         rotation = SCNMatrix4Identity
-        delegate?.didSpawnNew(polycube: polycube, at: position, rotated: rotation)
+
         if isOverlapped(afterRotation: rotation, andTranslation: position) {
+            pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
+            delegate?.didUpdateContent(of: pit)
             gameOver()
         } else {
+            delegate?.didSpawnNew(polycube: polycube, at: position, rotated: rotation)
             isDropHappened = false
             dropPosition = pit.depth - 1
             scheduleStep(after: stepTime)

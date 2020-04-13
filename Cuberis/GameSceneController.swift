@@ -29,6 +29,7 @@ class GameSceneController {
     var pit: SCNNode
     var polycube: SCNNode?
     var pitContent: SCNNode?
+    var gameOver: GameOverNode?
     var camera: SCNNode
     var cameraPosition = CameraPosition.menu
     var gameCameraLocation: SCNVector3 {
@@ -49,9 +50,27 @@ class GameSceneController {
         camera = SCNNode()
         camera.camera = SCNCamera()
         scnScene.rootNode.addChildNode(camera)
-
         pit = PitNode(size: pitSize)
         scnScene.rootNode.addChildNode(pit)
+    }
+
+    func showGameOver() {
+        let node = GameOverNode()
+        node.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 0.9, alpha: 1.0)
+        scnScene.rootNode.addChildNode(node)
+        node.position = SCNVector3(gameCameraLocation.x, gameCameraLocation.y, 1.0)
+        node.scale = SCNVector3()
+        let show = SCNAction.scale(to: CGFloat(gameCameraLocation.z / (70 / 3)), duration: 0.5)
+        node.runAction(show)
+        gameOver = node
+    }
+
+    func hideGameOver() {
+        let hide = SCNAction.fadeOut(duration: SceneConstants.scenePresentDuration / 2)
+        gameOver?.runAction(hide) { [unowned self] in
+            self.gameOver?.removeFromParentNode()
+            self.gameOver = nil
+        }
     }
 
     func deletePolycube() {
