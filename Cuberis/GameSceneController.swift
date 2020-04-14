@@ -15,17 +15,16 @@ enum CameraPosition {
     case game
 }
 
-class GameSceneController {
+class GameScene: SCNScene {
     var pitSize: Size3i {
         didSet {
             let node = PitNode(size: pitSize)
-            scnScene.rootNode.addChildNode(node)
+            rootNode.addChildNode(node)
             pit.removeFromParentNode()
             pit = node
             moveCamera(to: cameraPosition, animated: false)
         }
     }
-    var scnScene: SCNScene
     var pit: SCNNode
     var polycube: SCNNode?
     var pitContent: SCNNode?
@@ -44,20 +43,24 @@ class GameSceneController {
 
     init(pitSize: Size3i) {
         self.pitSize = pitSize
-        scnScene = SCNScene()
-        scnScene.background.contents = "art.scnassets/Background_Diffuse.jpg"
-        scnScene.rootNode.addChildNode(LightNode())
-        camera = SCNNode()
-        camera.camera = SCNCamera()
-        scnScene.rootNode.addChildNode(camera)
         pit = PitNode(size: pitSize)
-        scnScene.rootNode.addChildNode(pit)
+        camera = SCNNode()
+        super.init()
+        background.contents = "art.scnassets/Background_Diffuse.jpg"
+        rootNode.addChildNode(LightNode())
+        camera.camera = SCNCamera()
+        rootNode.addChildNode(camera)
+        rootNode.addChildNode(pit)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func showGameOver() {
         let node = GameOverNode()
-        node.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 0.9, alpha: 1.0)
-        scnScene.rootNode.addChildNode(node)
+        node.geometry?.firstMaterial?.diffuse.contents = UIColor(rgb: 0xCC2846)
+        rootNode.addChildNode(node)
         node.position = SCNVector3(gameCameraLocation.x, gameCameraLocation.y, 1.0)
         node.scale = SCNVector3()
         let show = SCNAction.scale(to: CGFloat(gameCameraLocation.z / (70 / 3)), duration: 0.5)

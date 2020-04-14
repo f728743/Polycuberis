@@ -1,6 +1,6 @@
 # Cuberis
 
-Clone of Blockout '3D Tetris' game for iOS
+Clone of Blockout '3D Tetris' game for iOS\
 Written using SceneKit and Swift
 
 ![screenshot](gfx/screenshot.gif)

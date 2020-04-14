@@ -7,7 +7,7 @@ import UIKit
 import SceneKit
 
 class GameViewController: UIViewController {
-    var sceneController: GameSceneController!
+    var scene: GameScene!
     var setup = Setup()
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
@@ -17,9 +17,10 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        scnView.antialiasingMode = .multisampling4X
         setup.load()
-        sceneController = GameSceneController(pitSize: setup.pitSize)
-        scnView.scene = sceneController.scnScene
+        scene = GameScene(pitSize: setup.pitSize)
+        scnView.scene = scene
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -33,7 +34,7 @@ class GameViewController: UIViewController {
                 self.startGame(level: level)
                 self.presentGame { [unowned self] in
                     self.stopGame()
-                    self.sceneController.hideGameOver()
+                    self.scene.hideGameOver()
                     DispatchQueue.main.async { self.goToMainMenu(animated: true) }
                 }
             case .setup:
@@ -51,7 +52,7 @@ class GameViewController: UIViewController {
     }
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
-        sceneController.moveCamera(to: .menu, animated: animated)
+        scene.moveCamera(to: .menu, animated: animated)
         let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
         mainMenu.animatedAppearance = animated
         mainMenu.completion = completion
@@ -59,7 +60,7 @@ class GameViewController: UIViewController {
     }
 
     func presentGame(completion: @escaping () -> Void) {
-        sceneController.moveCamera(to: .game, animated: true)
+        scene.moveCamera(to: .game, animated: true)
         let gamepad = GamepadScene(size: scnView.bounds.size)
         gamepad.completion = completion
         gamepad.level = setup.level
@@ -77,8 +78,8 @@ class GameViewController: UIViewController {
 
     func stopGame() {
         engine = nil
-        sceneController.deletePolycube()
-        sceneController.clearPit()
+        scene.deletePolycube()
+        scene.clearPit()
     }
 
     func startGame(level: Int) {
@@ -86,38 +87,38 @@ class GameViewController: UIViewController {
         setup.save()
         engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: level)
         engine!.delegate = self
-        sceneController.updateContent(of: engine!.pit)
+        scene.updateContent(of: engine!.pit)
         engine!.start()
     }
 }
 
 extension GameViewController: SetupSceneDelegate {
     func changed(pitSize: Size3i) {
-        sceneController.pitSize = pitSize
+        scene.pitSize = pitSize
     }
 }
 
 extension GameViewController: GameEngineDelegate {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {
-        sceneController.spawnNew(polycube: polycube, at: position, rotated: rotation)
+        scene.spawnNew(polycube: polycube, at: position, rotated: rotation)
     }
 
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
-        sceneController.movePolycube(by: delta, andRotateBy: rotationDelta)
+        scene.movePolycube(by: delta, andRotateBy: rotationDelta)
     }
 
     func gameOver() {
         engine = nil
-        sceneController.deletePolycube()
+        scene.deletePolycube()
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
             fatalError("Internal error")
         }
         gamepad.hideButtons()
-        sceneController.showGameOver()
+        scene.showGameOver()
     }
 
     func didUpdateContent(of pit: Pit) {
-        sceneController.updateContent(of: pit)
+        scene.updateContent(of: pit)
     }
 
     func didChangeLevel(to level: Int) {
