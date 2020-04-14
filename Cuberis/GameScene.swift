@@ -1,5 +1,5 @@
 //
-//  GameSceneController.swift
+//  GameScene.swift
 //  Cuberis
 //
 

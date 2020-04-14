@@ -110,9 +110,7 @@ extension GameViewController: GameEngineDelegate {
     func gameOver() {
         engine = nil
         scene.deletePolycube()
-        guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
-            fatalError("Internal error")
-        }
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else { fatalError("Internal error") }
         gamepad.hideButtons()
         scene.showGameOver()
     }
@@ -122,16 +120,12 @@ extension GameViewController: GameEngineDelegate {
     }
 
     func didChangeLevel(to level: Int) {
-        guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
-            fatalError("Internal error")
-        }
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         gamepad.level = level
     }
 
     func didUpdate(statistics: Statistics) {
-        guard let gamepad = scnView.overlaySKScene as? GamepadScene else {
-            fatalError("Internal error")
-        }
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         gamepad.score = statistics.score
     }
 
