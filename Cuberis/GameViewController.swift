@@ -53,6 +53,11 @@ class GameViewController: UIViewController {
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
         scene.moveCamera(to: .menu, animated: animated)
+//---------------------
+//        scene.pit.isHidden = true
+//        let hiScore = HighScoreScene(size: scnView.bounds.size)
+//        scnView.overlaySKScene = hiScore
+//---------------------
         let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
         mainMenu.animatedAppearance = animated
         mainMenu.completion = completion
