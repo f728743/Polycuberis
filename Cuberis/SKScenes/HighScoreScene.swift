@@ -6,6 +6,7 @@
 import SpriteKit
 
 class HighScoreScene: SKScene {
+
     static func setupLabelFont(_ label: SKLabelNode) {
         label.fontName = "GillSans"
         label.fontSize = 26
@@ -13,23 +14,35 @@ class HighScoreScene: SKScene {
 
     class ScoreTableLine: SKSpriteNode {
 
-        let placeLabel = SKLabelNode()
-        let playerLabel = SKLabelNode()
-        let scoreLabel = SKLabelNode()
+        var isHighlighted: Bool = false {
+            didSet {
+                textColor = isHighlighted ? .yellow : .white
+            }
+        }
+        var textColor: UIColor = .white {
+            didSet {
+                rank.fontColor = textColor
+                player.fontColor = textColor
+                value.fontColor = textColor
+            }
+        }
+        let rank = SKLabelNode()
+        let player = SKLabelNode()
+        let value = SKLabelNode()
         init(size: CGSize) {
             super.init(texture: nil, color: UIColor.clear, size: size)
-            addChild(placeLabel)
-            setupLabelFont(placeLabel)
-            placeLabel.horizontalAlignmentMode = .right
-            placeLabel.position = CGPoint(-size.midW + 60, -8)
-            addChild(playerLabel)
-            setupLabelFont(playerLabel)
-            playerLabel.horizontalAlignmentMode = .left
-            playerLabel.position = CGPoint(-size.midW + 70, -8)
-            addChild(scoreLabel)
-            setupLabelFont(scoreLabel)
-            scoreLabel.horizontalAlignmentMode = .right
-            scoreLabel.position = CGPoint(size.midW - 6, -8)
+            addChild(rank)
+            setupLabelFont(rank)
+            rank.horizontalAlignmentMode = .right
+            rank.position = CGPoint(-size.midW + 60, -9)
+            addChild(player)
+            setupLabelFont(player)
+            player.horizontalAlignmentMode = .left
+            player.position = CGPoint(-size.midW + 80, -9)
+            addChild(value)
+            setupLabelFont(value)
+            value.horizontalAlignmentMode = .right
+            value.position = CGPoint(size.midW - 6, -9)
         }
 
         required init?(coder aDecoder: NSCoder) {
@@ -47,7 +60,7 @@ class HighScoreScene: SKScene {
             for (index, cell) in cells.enumerated() {
                 addChild(cell)
                 cell.color = index % 2 == 0 ? UIColor(white: 1.0, alpha: 0.22) : UIColor(white: 1.0, alpha: 0.09)
-                cell.placeLabel.text = "\(index + 1)"
+                cell.rank.text = "\(index + 1)"
                 cell.position = CGPoint(0, size.midH - cellSize.midH - (CGFloat(index) * 30))
             }
         }
@@ -57,12 +70,28 @@ class HighScoreScene: SKScene {
         }
     }
 
+    var leaderboard: [ScoreMart] = [] {
+        didSet {
+            for (index, cell) in table.cells.enumerated() {
+                if index < leaderboard.count {
+                    cell.rank.text = leaderboard[index].rank
+                    cell.player.text = leaderboard[index].player
+                    cell.value.text = leaderboard[index].value
+                    cell.isHighlighted = leaderboard[index].isHighlighted
+                } else {
+                    cell.rank.text = ""
+                    cell.player.text = ""
+                    cell.value.text = ""
+                }
+            }
+        }
+    }
     var animatedAppearance = false
     var completion: (() -> Void)?
 
-    let panel: SKSpriteNode
-    let okButton = createButton(title: "OK")
-    let table: ScoreTableNode
+    private let panel: SKSpriteNode
+    private let okButton = createButton(title: "OK")
+    private let table: ScoreTableNode
 
     override init(size: CGSize) {
         let panelTexture = SKTexture(imageNamed: "HighScorePanel")
@@ -79,7 +108,6 @@ class HighScoreScene: SKScene {
 
         table.position = CGPoint(0, 9)
         panel.addChild(table)
-//        line.set(record: Record(place: 8888, player: "comrade.vorobyov@gmail.com", score: 9000000))
     }
 
     required init?(coder aDecoder: NSCoder) {

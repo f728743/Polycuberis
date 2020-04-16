@@ -51,11 +51,14 @@ class GameViewController: UIViewController {
         return true
     }
 
+    // let leaderboard = Leaderboard()
+
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
         scene.moveCamera(to: .menu, animated: animated)
 //---------------------
 //        scene.pit.isHidden = true
 //        let hiScore = HighScoreScene(size: scnView.bounds.size)
+//        hiScore.leaderboard = leaderboard.mart(modeIdentifier: setup.modeIdentifier)
 //        scnView.overlaySKScene = hiScore
 //---------------------
         let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
