@@ -10,11 +10,6 @@ struct SceneConstants {
     static let polycubeMoveDuration: TimeInterval = 0.1
 }
 
-enum CameraPosition {
-    case menu
-    case game
-}
-
 class GameScene: SCNScene {
     var pitSize: Size3i {
         didSet {
@@ -22,7 +17,6 @@ class GameScene: SCNScene {
             rootNode.addChildNode(node)
             pit.removeFromParentNode()
             pit = node
-            moveCamera(to: cameraPosition, animated: false)
         }
     }
     var pit: SCNNode
@@ -30,16 +24,6 @@ class GameScene: SCNScene {
     var pitContent: SCNNode?
     var gameOver: GameOverNode?
     var camera: SCNNode
-    var cameraPosition = CameraPosition.menu
-    var gameCameraLocation: SCNVector3 {
-        SCNVector3(x: Float(pitSize.width) / 2.0,
-                   y: Float(pitSize.height) / 2.0,
-                   z: Float(max(pitSize.width, pitSize.height)))
-    }
-
-    var menuCameraLocation: SCNVector3 {
-        gameCameraLocation + SCNVector3(-Float(max(pitSize.width, pitSize.height)) / 2.4, 0.0, 0.0)
-    }
 
     init(pitSize: Size3i) {
         self.pitSize = pitSize
@@ -60,10 +44,10 @@ class GameScene: SCNScene {
     func showGameOver() {
         let node = GameOverNode()
         node.geometry?.firstMaterial?.diffuse.contents = UIColor(rgb: 0xCC2846)
-        rootNode.addChildNode(node)
-        node.position = SCNVector3(gameCameraLocation.x, gameCameraLocation.y, 1.0)
+        camera.addChildNode(node)
+        node.position = SCNVector3(0, 0, -2)
         node.scale = SCNVector3()
-        let show = SCNAction.scale(to: CGFloat(gameCameraLocation.z / (70 / 3)), duration: 0.5)
+        let show = SCNAction.scale(to: 0.12, duration: 0.5)
         node.runAction(show)
         gameOver = node
     }
@@ -86,20 +70,20 @@ class GameScene: SCNScene {
         pitContent = nil
     }
 
-    func moveCamera(to position: CameraPosition, animated: Bool) {
-        cameraPosition = position
-        var location = SCNVector3()
-        switch position {
-        case .menu:
-            location = menuCameraLocation
-        case .game:
-            location = gameCameraLocation
-        }
+    func alignPit(withOffset offset: SCNVector3, animated: Bool) {
+        let сentrePosition = SCNVector3(x: -Float(pitSize.width) / 2.0,
+                       y: -Float(pitSize.height) / 2.0,
+                       z: -Float(max(pitSize.width, pitSize.height)))
+        let newPosition = сentrePosition + offset
         if animated {
-            camera.runAction(SCNAction.move(to: location, duration: SceneConstants.scenePresentDuration))
+            pit.runAction(SCNAction.move(to: newPosition, duration: SceneConstants.scenePresentDuration))
         } else {
-            camera.position = location
+            pit.position = newPosition
         }
+    }
+
+    func alignPit(animated: Bool) {
+        alignPit(withOffset: SCNVector3(), animated: animated)
     }
 
     func spawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {

@@ -128,9 +128,10 @@ class GamepadScene: SKScene {
     }
 
     func layoutLabels() {
+        let safeArea = safeAreaInsets()
         let valueInsets: CGFloat = 4
         let y = frame.height - levelLabel.frame.height - 3
-        levelLabel.position = CGPoint(x: safeAreaInsets.left + levelLabel.frame.width / 2 + 100, y: y)
+        levelLabel.position = CGPoint(x: safeArea.left + levelLabel.frame.width / 2 + 100, y: y)
         levelValue.position = levelLabel.position + CGPoint(levelLabel.frame.width / 2 + valueInsets, 0)
         levelValue.horizontalAlignmentMode = .left
 
@@ -138,7 +139,7 @@ class GamepadScene: SKScene {
         scoreValue.position = scoreLabel.position + CGPoint(scoreLabel.frame.width / 2 + valueInsets, 0)
         scoreValue.horizontalAlignmentMode = .left
 
-        highScoreLabel.position = CGPoint(x: frame.width - safeAreaInsets.right - 160, y: y)
+        highScoreLabel.position = CGPoint(x: frame.width - safeArea.right - 160, y: y)
         highScoreValue.position = highScoreLabel.position + CGPoint(highScoreLabel.frame.width / 2 + valueInsets, 0)
         highScoreValue.horizontalAlignmentMode = .left
     }
@@ -149,7 +150,8 @@ class GamepadScene: SKScene {
     }
 
     private func layoutPlayPauseButton() {
-        let position = CGPoint(x: frame.width - safeAreaInsets.right, y: frame.height - safeAreaInsets.top) +
+        let safeArea = safeAreaInsets()
+        let position = CGPoint(x: frame.width - safeArea.right, y: frame.height - safeArea.top) +
             goBackButton.size.mid * CGPoint(-1, -1) +
             CGPoint(-5, -5)
         pauseButton.position = position
@@ -157,7 +159,8 @@ class GamepadScene: SKScene {
     }
 
     private func layoutGoBackButton() {
-        goBackButton.position = CGPoint(x: safeAreaInsets.left, y: frame.height - safeAreaInsets.top) +
+        let safeArea = safeAreaInsets()
+        goBackButton.position = CGPoint(x: safeArea.left, y: frame.height - safeArea.top) +
             goBackButton.size.mid * CGPoint(1, -1) +
             CGPoint(5, -5)
     }
@@ -166,7 +169,7 @@ class GamepadScene: SKScene {
         let spacing: CGFloat = 14
         let buttonHeight = rotateYCounterclockwiseButton.size.height
         let buttonMidW = rotateYCounterclockwiseButton.size.midW
-        let anchor = CGPoint(x: safeAreaInsets.left + buttonMidW, y: frame.midY) +
+        let anchor = CGPoint(x: safeAreaInsets().left + buttonMidW, y: frame.midY) +
             CGPoint(30, -30)
         rotateXCounterclockwiseButton.position = anchor + CGPoint(0, buttonHeight + spacing)
         rotateYCounterclockwiseButton.position = anchor
@@ -177,7 +180,7 @@ class GamepadScene: SKScene {
         let buttonHeight = moveUpButton.size.height
         let buttonWidth = moveUpButton.size.width
         let buttonMidW = moveUpButton.size.midW
-        let anchor = CGPoint(x: frame.width - (buttonWidth + safeAreaInsets.right + buttonMidW), y: frame.midY) +
+        let anchor = CGPoint(x: frame.width - (buttonWidth + safeAreaInsets().right + buttonMidW), y: frame.midY) +
             CGPoint(-20, 40)
         moveUpButton.position = anchor + CGPoint(0, buttonHeight)
         moveLeftButton.position = anchor + CGPoint(-buttonWidth, 0)

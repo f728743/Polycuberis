@@ -101,7 +101,7 @@ class SetupScene: SKScene {
     }
 
     func layoutSubnodes() {
-        panel.position = CGPoint(safeAreaInsets.left + panel.size.midW + 10, frame.midY)
+        panel.position = CGPoint(safeAreaInsets().left + panel.size.midW + 10, frame.midY)
     }
 
     override func didMove(to view: SKView) {

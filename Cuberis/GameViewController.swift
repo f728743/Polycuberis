@@ -51,10 +51,22 @@ class GameViewController: UIViewController {
         return true
     }
 
-    // let leaderboard = Leaderboard()
+    func shiftedPitPosition(xOffset: CGFloat) -> SCNVector3 {
+        let pitSize = scene.pitSize
+        let z = Float(max(pitSize.width, pitSize.height))
+        let x = Float(pitSize.width) / 2.0
+        let p1 = scnView.projectPoint(SCNVector3(x, 0, z))
+        let p2 = scnView.projectPoint(SCNVector3(x + 1, 0, z))
+        let centredPitX = p1.x
+        let ratio = p1.x - p2.x
+        let windowPoints = Float(scnView.bounds.width - xOffset)
+        let pitPoints = Float(pitSize.width) * ratio
+        let centrOffset = (windowPoints - pitPoints) / 2
+        return SCNVector3((Float(xOffset) - centredPitX + centrOffset) / ratio, 0, 0)
+    }
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
-        scene.moveCamera(to: .menu, animated: animated)
+
 //---------------------
 //        scene.pit.isHidden = true
 //        let hiScore = HighScoreScene(size: scnView.bounds.size)
@@ -62,13 +74,15 @@ class GameViewController: UIViewController {
 //        scnView.overlaySKScene = hiScore
 //---------------------
         let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
+        let safeArea = safeAreaInsets()
+        scene.alignPit(withOffset: shiftedPitPosition(xOffset: safeArea.left + 242), animated: animated)
         mainMenu.animatedAppearance = animated
         mainMenu.completion = completion
         scnView.overlaySKScene = mainMenu
     }
 
     func presentGame(completion: @escaping () -> Void) {
-        scene.moveCamera(to: .game, animated: true)
+        scene.alignPit(animated: true)
         let gamepad = GamepadScene(size: scnView.bounds.size)
         gamepad.completion = completion
         gamepad.level = setup.level
@@ -103,6 +117,8 @@ class GameViewController: UIViewController {
 extension GameViewController: SetupSceneDelegate {
     func changed(pitSize: Size3i) {
         scene.pitSize = pitSize
+        let safeArea = safeAreaInsets()
+        scene.alignPit(withOffset: shiftedPitPosition(xOffset: safeArea.left + 242), animated: false)
     }
 }
 

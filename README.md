@@ -14,7 +14,6 @@ Written using SceneKit and Swift
 * Store hi score
 * High Score scene
 * Show pit fullness
-* Correct layout on different devices
 
 ### Second phase
 

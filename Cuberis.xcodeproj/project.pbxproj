@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7C0786A7243892A5002A94B4 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0786A6243892A5002A94B4 /* CGPoint+Extension.swift */; };
 		7C0786A9243892DD002A94B4 /* CGSize+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0786A8243892DD002A94B4 /* CGSize+Extension.swift */; };
-		7C0786AB2438934E002A94B4 /* SKScene+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0786AA2438934E002A94B4 /* SKScene+Extension.swift */; };
 		7C167D3D2438DDCE00BE43A5 /* PitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D3C2438DDCE00BE43A5 /* PitNode.swift */; };
 		7C167D3F2438F6E200BE43A5 /* PitMeshNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D3E2438F6E200BE43A5 /* PitMeshNode.swift */; };
 		7C167D412439023100BE43A5 /* Size3i.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C167D402439023100BE43A5 /* Size3i.swift */; };
@@ -24,6 +23,7 @@
 		7C1FD653243785B600ED901C /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD651243785B600ED901C /* ButtonNode.swift */; };
 		7C1FD654243785B600ED901C /* GamepadButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD652243785B600ED901C /* GamepadButtonNode.swift */; };
 		7C29C54E2445876200AFD007 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29C54D2445876200AFD007 /* UIColor+Extension.swift */; };
+		7C2E4F6B2449CD660060E47F /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2E4F6A2449CD660060E47F /* Misc.swift */; };
 		7C33F98F24273180007BE88C /* SCNMatrix4+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */; };
 		7C36F48823DC54F3004CB85E /* Polycube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C36F48723DC54F3004CB85E /* Polycube.swift */; };
 		7C36F48A23DC6978004CB85E /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C36F48923DC6978004CB85E /* GameEngine.swift */; };
@@ -53,7 +53,6 @@
 /* Begin PBXFileReference section */
 		7C0786A6243892A5002A94B4 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
 		7C0786A8243892DD002A94B4 /* CGSize+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+Extension.swift"; sourceTree = "<group>"; };
-		7C0786AA2438934E002A94B4 /* SKScene+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKScene+Extension.swift"; sourceTree = "<group>"; };
 		7C167D3C2438DDCE00BE43A5 /* PitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitNode.swift; sourceTree = "<group>"; };
 		7C167D3E2438F6E200BE43A5 /* PitMeshNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitMeshNode.swift; sourceTree = "<group>"; };
 		7C167D402439023100BE43A5 /* Size3i.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size3i.swift; sourceTree = "<group>"; };
@@ -68,6 +67,7 @@
 		7C1FD651243785B600ED901C /* ButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		7C1FD652243785B600ED901C /* GamepadButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamepadButtonNode.swift; sourceTree = "<group>"; };
 		7C29C54D2445876200AFD007 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		7C2E4F6A2449CD660060E47F /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 		7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNMatrix4+Operations.swift"; sourceTree = "<group>"; };
 		7C36F48723DC54F3004CB85E /* Polycube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polycube.swift; sourceTree = "<group>"; };
 		7C36F48923DC6978004CB85E /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
@@ -203,6 +203,7 @@
 			children = (
 				7C9F8DA324220FA8005189EA /* GamepadProtocol.swift */,
 				7C167D4424390C1800BE43A5 /* Geometry.swift */,
+				7C2E4F6A2449CD660060E47F /* Misc.swift */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -214,7 +215,6 @@
 				7C0786A8243892DD002A94B4 /* CGSize+Extension.swift */,
 				7CFB47DE2426A10500B2A4B3 /* SCNVector3+Operations.swift */,
 				7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */,
-				7C0786AA2438934E002A94B4 /* SKScene+Extension.swift */,
 				7C29C54D2445876200AFD007 /* UIColor+Extension.swift */,
 			);
 			path = Extensions;
@@ -336,6 +336,7 @@
 				7C4AAD8B23DAEFEA00A9590B /* GameViewController.swift in Sources */,
 				7C36F48823DC54F3004CB85E /* Polycube.swift in Sources */,
 				7C729FE2241BA7D9007DE4B8 /* Pit.swift in Sources */,
+				7C2E4F6B2449CD660060E47F /* Misc.swift in Sources */,
 				7C36F48A23DC6978004CB85E /* GameEngine.swift in Sources */,
 				7C29C54E2445876200AFD007 /* UIColor+Extension.swift in Sources */,
 				7C167D472439114500BE43A5 /* PolycubeNode.swift in Sources */,
@@ -346,7 +347,6 @@
 				7C167D412439023100BE43A5 /* Size3i.swift in Sources */,
 				7CB1F781243228580057499F /* LightNode.swift in Sources */,
 				7C167D432439050900BE43A5 /* PitContentNode.swift in Sources */,
-				7C0786AB2438934E002A94B4 /* SKScene+Extension.swift in Sources */,
 				7C1FD653243785B600ED901C /* ButtonNode.swift in Sources */,
 				7CDC936B244218B8009BAC84 /* Statistics.swift in Sources */,
 				7C167D4524390C1800BE43A5 /* Geometry.swift in Sources */,
