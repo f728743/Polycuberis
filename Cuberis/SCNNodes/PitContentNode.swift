@@ -38,21 +38,18 @@ class PitContentNode: SCNNode {
     }
 
     private func addContentNodes(of pit: Pit) {
-        let palette: [UIColor] = [.systemBlue, .systemGreen, .systemTeal,
-                                   .systemRed, .systemPurple, .systemOrange, .systemGray]
         let cube = createCubeFaces()
-        cube.firstMaterial?.diffuse.contents = palette[1]
+        cube.firstMaterial?.diffuse.contents = Palette.layers[1]
         let cubeEdges = createCubeEdges()
         cubeEdges.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant
         cubeEdges.firstMaterial?.diffuse.contents = UIColor.black
-        var layer = -pit.depth + 1
-        while layer <= 0 && !pit.isEmpty(layer: layer) {
+        let bottom = -pit.depth + 1
+        for layer in bottom..<bottom + pit.pileHeight {
             guard let layerCube = cube.copy() as? SCNGeometry else { fatalError() }
             layerCube.materials = cube.materials.map { ($0.copy() as? SCNMaterial ?? SCNMaterial()) }
-            let colorIndex = (pit.depth + layer - 1) % palette.count
-            layerCube.firstMaterial?.diffuse.contents = palette[colorIndex]
+            let colorIndex = (pit.depth + layer - 1) % Palette.layers.count
+            layerCube.firstMaterial?.diffuse.contents = Palette.layers[colorIndex]
             addContentNodes(of: pit, layer: layer, cubeGeometry: layerCube, cubeEdges: cubeEdges)
-            layer += 1
         }
     }
 

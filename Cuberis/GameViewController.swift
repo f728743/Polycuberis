@@ -6,11 +6,39 @@
 import UIKit
 import SceneKit
 
+struct SceneProjection {
+    let center: CGPoint
+    let canvasRect: CGRect
+    let pitRect: CGRect
+    let ratio: CGFloat
+}
+
 class GameViewController: UIViewController {
     var scene: GameScene!
     var setup = Setup()
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
+    var sceneProjection: SceneProjection {
+        let pitSize = scene.pitSize
+        let maxSize = max(pitSize.width, pitSize.height)
+        let z = maxSize
+        let sceneCenter = scnView.projectPoint(SCNVector3(0, 0, z))
+        let ratio = CGFloat(sceneCenter.x - scnView.projectPoint(SCNVector3(1, 0, z)).x)
+        let center = CGPoint(CGFloat(sceneCenter.x), CGFloat(sceneCenter.y))
+        let canvasRect = CGRect(origin: CGPoint(center.x - CGFloat(maxSize) / 2 * ratio,
+                                                center.y - CGFloat(maxSize) / 2 * ratio),
+                                size: CGSize(width: CGFloat(maxSize) * ratio,
+                                             height: CGFloat(maxSize) * ratio))
+
+        let pitRect = CGRect(origin: CGPoint(center.x - CGFloat(pitSize.width) / 2 * ratio,
+                                             center.y - CGFloat(pitSize.height) / 2 * ratio),
+                             size: CGSize(width: CGFloat(pitSize.width) * ratio,
+                                          height: CGFloat(pitSize.height) * ratio))
+        return SceneProjection(center: center,
+                               canvasRect: canvasRect,
+                               pitRect: pitRect,
+                               ratio: ratio)
+    }
 
     // todo: haptic
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
@@ -52,17 +80,9 @@ class GameViewController: UIViewController {
     }
 
     func shiftedPitPosition(xOffset: CGFloat) -> SCNVector3 {
-        let pitSize = scene.pitSize
-        let z = Float(max(pitSize.width, pitSize.height))
-        let x = Float(pitSize.width) / 2.0
-        let p1 = scnView.projectPoint(SCNVector3(x, 0, z))
-        let p2 = scnView.projectPoint(SCNVector3(x + 1, 0, z))
-        let centredPitX = p1.x
-        let ratio = p1.x - p2.x
-        let windowPoints = Float(scnView.bounds.width - xOffset)
-        let pitPoints = Float(pitSize.width) * ratio
-        let centrOffset = (windowPoints - pitPoints) / 2
-        return SCNVector3((Float(xOffset) - centredPitX + centrOffset) / ratio, 0, 0)
+        let centrOffset = (scnView.bounds.width - xOffset - sceneProjection.pitRect.width) / 2
+        let x = (xOffset - sceneProjection.pitRect.minX + centrOffset) / sceneProjection.ratio
+        return SCNVector3(x, 0, 0)
     }
 
     func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
@@ -83,7 +103,9 @@ class GameViewController: UIViewController {
 
     func presentGame(completion: @escaping () -> Void) {
         scene.alignPit(animated: true)
-        let gamepad = GamepadScene(size: scnView.bounds.size)
+        let gamepad = GamepadScene(size: scnView.bounds.size,
+                                   sceneProjection: sceneProjection,
+                                   pitDepth: setup.pitSize.depth)
         gamepad.completion = completion
         gamepad.level = setup.level
         gamepad.gamepadDelegate = engine
@@ -141,6 +163,8 @@ extension GameViewController: GameEngineDelegate {
 
     func didUpdateContent(of pit: Pit) {
         scene.updateContent(of: pit)
+        guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
+        gamepad.gaugeValue = pit.pileHeight
     }
 
     func didChangeLevel(to level: Int) {

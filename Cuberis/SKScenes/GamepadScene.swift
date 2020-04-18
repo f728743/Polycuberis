@@ -28,6 +28,12 @@ class GamepadScene: SKScene {
         }
     }
 
+    var gaugeValue = 0 {
+        didSet {
+            gaugeNode.value = gaugeValue
+        }
+    }
+
     private let playButton = ButtonNode(buttonImageName: "PlayButton")
     private let pauseButton = ButtonNode(buttonImageName: "PauseButton")
 
@@ -47,10 +53,11 @@ class GamepadScene: SKScene {
     private let scoreValue = SKLabelNode(text: "0")
     private let highScoreLabel = SKLabelNode(text: "Hi-Score")
     private let highScoreValue = SKLabelNode(text: "0")
-
+    private let gaugeNode: GaugeNode
     private let allButtons = SKNode()
 
-    override init(size: CGSize) {
+    init(size: CGSize, sceneProjection: SceneProjection, pitDepth: Int) {
+        gaugeNode = GaugeNode(fullHeight: sceneProjection.canvasRect.height, cellCount: pitDepth)
         super.init(size: size)
         addChild(allButtons)
         addChild(levelLabel)
@@ -74,6 +81,10 @@ class GamepadScene: SKScene {
             self.gamepadDelegate?.pause()
         }
         allButtons.addChild(pauseButton)
+
+        gaugeNode.position = CGPoint(sceneProjection.pitRect.minX - gaugeNode.width - 10,
+                                     sceneProjection.canvasRect.minY)
+        allButtons.addChild(gaugeNode)
 
         playButton.action = { [unowned self] in
             self.playButton.isHidden = true

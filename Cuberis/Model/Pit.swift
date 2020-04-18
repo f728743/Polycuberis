@@ -11,6 +11,15 @@ struct Pit {
     var height: Int { size.height }
     var depth: Int { size.depth }
     var isEmpty: Bool { isEmpty(layer: -depth + 1) }
+    var pileHeight: Int {
+        var pile = 0
+        var layer = -depth + 1
+        while layer <= 0 && !isEmpty(layer: layer) {
+            layer += 1
+            pile += 1
+        }
+        return pile
+    }
 
     private var cells: [Int]
 

@@ -52,11 +52,11 @@ class HighScoreScene: SKScene {
 
     class ScoreTableNode: SKSpriteNode {
         let cells: [ScoreTableLine]
-        init(cellSize: CGSize, cellsCount: Int) {
-            cells =  (0..<cellsCount).map { _ in ScoreTableLine(size: CGSize(width: cellSize.width, height: 30)) }
+        init(cellSize: CGSize, cellCount: Int) {
+            cells =  (0..<cellCount).map { _ in ScoreTableLine(size: CGSize(width: cellSize.width, height: 30)) }
             super.init(texture: nil,
                        color: .clear,
-                       size: CGSize(width: cellSize.width, height: cellSize.height * CGFloat(cellsCount)))
+                       size: CGSize(width: cellSize.width, height: cellSize.height * CGFloat(cellCount)))
             for (index, cell) in cells.enumerated() {
                 addChild(cell)
                 cell.color = index % 2 == 0 ? UIColor(white: 1.0, alpha: 0.22) : UIColor(white: 1.0, alpha: 0.09)
@@ -97,7 +97,7 @@ class HighScoreScene: SKScene {
         let panelTexture = SKTexture(imageNamed: "HighScorePanel")
         panel = SKSpriteNode(texture: panelTexture)
         table = ScoreTableNode(cellSize: CGSize(width: Int(panelTexture.size().width) - 42, height: 30),
-                          cellsCount: 7)
+                          cellCount: 7)
 
         super.init(size: size)
         addChild(panel)

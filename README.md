@@ -11,7 +11,6 @@ Written using SceneKit and Swift
 
 ### First phase
 
-* Display fullness of the pit
 * Add some sounds
 * Leaderboard
 

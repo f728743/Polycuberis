@@ -42,6 +42,7 @@
 		7CA349BD23DD89CB000721E9 /* polycubes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA349BC23DD89CA000721E9 /* polycubes.json */; };
 		7CA3CA8C243CC10A00009458 /* StringPickerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA3CA8B243CC10A00009458 /* StringPickerNode.swift */; };
 		7CB1F781243228580057499F /* LightNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB1F780243228580057499F /* LightNode.swift */; };
+		7CB5DEB9244B160D0074760E /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB5DEB8244B160D0074760E /* Palette.swift */; };
 		7CC34F67242A3F9000928EE1 /* Vector3i.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC34F66242A3F9000928EE1 /* Vector3i.swift */; };
 		7CD6AE9D2445BCD000C95338 /* HighScoreScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6AE9C2445BCD000C95338 /* HighScoreScene.swift */; };
 		7CDC936B244218B8009BAC84 /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDC936A244218B8009BAC84 /* Statistics.swift */; };
@@ -89,6 +90,7 @@
 		7CA349BC23DD89CA000721E9 /* polycubes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = polycubes.json; sourceTree = "<group>"; };
 		7CA3CA8B243CC10A00009458 /* StringPickerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringPickerNode.swift; sourceTree = "<group>"; };
 		7CB1F780243228580057499F /* LightNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightNode.swift; sourceTree = "<group>"; };
+		7CB5DEB8244B160D0074760E /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		7CC34F66242A3F9000928EE1 /* Vector3i.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector3i.swift; sourceTree = "<group>"; };
 		7CD6AE9C2445BCD000C95338 /* HighScoreScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreScene.swift; sourceTree = "<group>"; };
 		7CDC936A244218B8009BAC84 /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
@@ -113,7 +115,6 @@
 			isa = PBXGroup;
 			children = (
 				7CF234132444997E00CC3D8C /* GameOverNode.swift */,
-				7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */,
 				7CF234112444937000CC3D8C /* BoundingBoxNode.swift */,
 				7CB1F780243228580057499F /* LightNode.swift */,
 				7C167D422439050900BE43A5 /* PitContentNode.swift */,
@@ -140,6 +141,7 @@
 			children = (
 				7C1FD651243785B600ED901C /* ButtonNode.swift */,
 				7C1FD652243785B600ED901C /* GamepadButtonNode.swift */,
+				7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */,
 				7C7C3CDA243AFF82004E3D31 /* NumericUpDownNode.swift */,
 				7C1FD4BF243DA1CE0020E3E5 /* PickerNode.swift */,
 				7CA3CA8B243CC10A00009458 /* StringPickerNode.swift */,
@@ -207,6 +209,7 @@
 				7C9F8DA324220FA8005189EA /* GamepadProtocol.swift */,
 				7C167D4424390C1800BE43A5 /* Geometry.swift */,
 				7C2E4F6A2449CD660060E47F /* Misc.swift */,
+				7CB5DEB8244B160D0074760E /* Palette.swift */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 			files = (
 				7C1FD64C2437857000ED901C /* MainMenuScene.swift in Sources */,
 				7C1FD64B2437857000ED901C /* GamepadScene.swift in Sources */,
+				7CB5DEB9244B160D0074760E /* Palette.swift in Sources */,
 				7C0786A7243892A5002A94B4 /* CGPoint+Extension.swift in Sources */,
 				7CA3CA8C243CC10A00009458 /* StringPickerNode.swift in Sources */,
 				7C1FD4C0243DA1CE0020E3E5 /* PickerNode.swift in Sources */,

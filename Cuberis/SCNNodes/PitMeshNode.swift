@@ -9,14 +9,14 @@ class PitMeshNode: SCNNode {
 
     init(size: Size3i) {
         super.init()
-        geometry = createPitFrameNode(size: size)
+        geometry = createPitMeshGeometry(size: size)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func createPitFrameNode(size: Size3i) -> SCNGeometry {
+    private func createPitMeshGeometry(size: Size3i) -> SCNGeometry {
         var indices: [Int32] = []
         var vertices: [SCNVector3] = []
         let w = size.width
@@ -48,7 +48,7 @@ class PitMeshNode: SCNNode {
         let geometry = SCNGeometry(sources: [SCNGeometrySource(vertices: vertices)],
                                    elements: [SCNGeometryElement(indices: indices, primitiveType: .line)])
         geometry.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant
-        geometry.firstMaterial?.diffuse.contents = UIColor.systemGreen
+        geometry.firstMaterial?.diffuse.contents = Palette.mesh
         return geometry
     }
 
