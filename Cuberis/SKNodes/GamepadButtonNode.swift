@@ -5,7 +5,7 @@
 
 import SpriteKit
 
-public class GamepadButtonNode: SKSpriteNode {
+class GamepadButtonNode: SKSpriteNode {
 	var action:(() -> Void)?
 
     init(buttonImageName: String) {

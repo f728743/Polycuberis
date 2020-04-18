@@ -1,5 +1,5 @@
 //
-//  NumericUpDown.swift
+//  NumericUpDownNode.swift
 //  Cuberis
 //
 
@@ -56,7 +56,7 @@ class NumericUpDownNode: PickerNode {
         valueNode.verticalAlignmentMode = .baseline
         valueNode.horizontalAlignmentMode = .right
         valueNode.position = CGPoint(width / 2 - increaseButton.size.width - inset, -9)
-        valueNode.zPosition = labelNode.zPosition
+//        valueNode.zPosition = labelNode.zPosition
         decreaseButton.action = { [unowned self] in if range.contains(self.value - 1) { self.value -= 1 } }
         increaseButton.action = { [unowned self] in if range.contains(self.value + 1) { self.value += 1 } }
     }

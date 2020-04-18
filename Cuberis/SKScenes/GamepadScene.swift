@@ -110,7 +110,7 @@ class GamepadScene: SKScene {
     }
 
     func hideButtons() {
-        allButtons.run(SKAction.fadeOut(withDuration: 0.5))
+        allButtons.run(SKAction.fadeOut(withDuration: 1))
     }
 
     func layoutSubnodes() {

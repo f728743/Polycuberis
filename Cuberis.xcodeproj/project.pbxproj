@@ -23,6 +23,7 @@
 		7C1FD653243785B600ED901C /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD651243785B600ED901C /* ButtonNode.swift */; };
 		7C1FD654243785B600ED901C /* GamepadButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FD652243785B600ED901C /* GamepadButtonNode.swift */; };
 		7C29C54E2445876200AFD007 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29C54D2445876200AFD007 /* UIColor+Extension.swift */; };
+		7C2B4767244AE8E4005F6DFC /* GaugeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */; };
 		7C2E4F6B2449CD660060E47F /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2E4F6A2449CD660060E47F /* Misc.swift */; };
 		7C33F98F24273180007BE88C /* SCNMatrix4+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */; };
 		7C36F48823DC54F3004CB85E /* Polycube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C36F48723DC54F3004CB85E /* Polycube.swift */; };
@@ -35,7 +36,7 @@
 		7C5C32622441AE17000F3430 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7C5C32612441AE17000F3430 /* README.md */; };
 		7C717887244827B200F1C6AB /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C717886244827B200F1C6AB /* Leaderboard.swift */; };
 		7C729FE2241BA7D9007DE4B8 /* Pit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C729FE1241BA7D9007DE4B8 /* Pit.swift */; };
-		7C7C3CDB243AFF82004E3D31 /* NumericUpDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C3CDA243AFF82004E3D31 /* NumericUpDown.swift */; };
+		7C7C3CDB243AFF82004E3D31 /* NumericUpDownNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C3CDA243AFF82004E3D31 /* NumericUpDownNode.swift */; };
 		7C8AAE802439A9D40083AD7C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8AAE7F2439A9D40083AD7C /* GameScene.swift */; };
 		7C9F8DA424220FA8005189EA /* GamepadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F8DA324220FA8005189EA /* GamepadProtocol.swift */; };
 		7CA349BD23DD89CB000721E9 /* polycubes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA349BC23DD89CA000721E9 /* polycubes.json */; };
@@ -67,6 +68,7 @@
 		7C1FD651243785B600ED901C /* ButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		7C1FD652243785B600ED901C /* GamepadButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamepadButtonNode.swift; sourceTree = "<group>"; };
 		7C29C54D2445876200AFD007 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeNode.swift; sourceTree = "<group>"; };
 		7C2E4F6A2449CD660060E47F /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 		7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNMatrix4+Operations.swift"; sourceTree = "<group>"; };
 		7C36F48723DC54F3004CB85E /* Polycube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polycube.swift; sourceTree = "<group>"; };
@@ -81,7 +83,7 @@
 		7C5C32612441AE17000F3430 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7C717886244827B200F1C6AB /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
 		7C729FE1241BA7D9007DE4B8 /* Pit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pit.swift; sourceTree = "<group>"; };
-		7C7C3CDA243AFF82004E3D31 /* NumericUpDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericUpDown.swift; sourceTree = "<group>"; };
+		7C7C3CDA243AFF82004E3D31 /* NumericUpDownNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericUpDownNode.swift; sourceTree = "<group>"; };
 		7C8AAE7F2439A9D40083AD7C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		7C9F8DA324220FA8005189EA /* GamepadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamepadProtocol.swift; sourceTree = "<group>"; };
 		7CA349BC23DD89CA000721E9 /* polycubes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = polycubes.json; sourceTree = "<group>"; };
@@ -110,13 +112,14 @@
 		7C096F1E2438865A00D4D4D7 /* SCNNodes */ = {
 			isa = PBXGroup;
 			children = (
+				7CF234132444997E00CC3D8C /* GameOverNode.swift */,
+				7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */,
+				7CF234112444937000CC3D8C /* BoundingBoxNode.swift */,
 				7CB1F780243228580057499F /* LightNode.swift */,
 				7C167D422439050900BE43A5 /* PitContentNode.swift */,
 				7C167D3E2438F6E200BE43A5 /* PitMeshNode.swift */,
 				7C167D3C2438DDCE00BE43A5 /* PitNode.swift */,
 				7C167D462439114500BE43A5 /* PolycubeNode.swift */,
-				7CF234112444937000CC3D8C /* BoundingBoxNode.swift */,
-				7CF234132444997E00CC3D8C /* GameOverNode.swift */,
 			);
 			path = SCNNodes;
 			sourceTree = "<group>";
@@ -137,7 +140,7 @@
 			children = (
 				7C1FD651243785B600ED901C /* ButtonNode.swift */,
 				7C1FD652243785B600ED901C /* GamepadButtonNode.swift */,
-				7C7C3CDA243AFF82004E3D31 /* NumericUpDown.swift */,
+				7C7C3CDA243AFF82004E3D31 /* NumericUpDownNode.swift */,
 				7C1FD4BF243DA1CE0020E3E5 /* PickerNode.swift */,
 				7CA3CA8B243CC10A00009458 /* StringPickerNode.swift */,
 			);
@@ -324,11 +327,12 @@
 				7C1FD654243785B600ED901C /* GamepadButtonNode.swift in Sources */,
 				7CF234122444937000CC3D8C /* BoundingBoxNode.swift in Sources */,
 				7C167D3F2438F6E200BE43A5 /* PitMeshNode.swift in Sources */,
+				7C2B4767244AE8E4005F6DFC /* GaugeNode.swift in Sources */,
 				7CF234142444997E00CC3D8C /* GameOverNode.swift in Sources */,
 				7C1FD64F2437859F00ED901C /* Setup.swift in Sources */,
 				7C0786A9243892DD002A94B4 /* CGSize+Extension.swift in Sources */,
 				7C183F19243BA5540037932D /* SetupScene.swift in Sources */,
-				7C7C3CDB243AFF82004E3D31 /* NumericUpDown.swift in Sources */,
+				7C7C3CDB243AFF82004E3D31 /* NumericUpDownNode.swift in Sources */,
 				7C8AAE802439A9D40083AD7C /* GameScene.swift in Sources */,
 				7C167D3D2438DDCE00BE43A5 /* PitNode.swift in Sources */,
 				7C9F8DA424220FA8005189EA /* GamepadProtocol.swift in Sources */,
