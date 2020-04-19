@@ -3,7 +3,7 @@
 //  Cuberis
 //
 
-import SceneKit
+import SpriteKit
 
 enum SoundType {
     case move
@@ -14,34 +14,16 @@ enum SoundType {
 }
 
 struct Sound {
-    let move = SCNAudioSource(named: "Move.wav")!
-    let hit = SCNAudioSource(named: "Hit.wav")!
-//    var hit: SCNAudioSource { hits[Int(drand48() * Double(hits.count))] }
-//    let hits = [SCNAudioSource(named: "Hit1.wav")!,
-//                       SCNAudioSource(named: "Hit2.wav")!,
-//                       SCNAudioSource(named: "Hit3.wav")!]
-    let empty = SCNAudioSource(named: "Empty.wav")!
-    let layer = SCNAudioSource(named: "Layer.wav")!
-    let levelUp = SCNAudioSource(named: "LevelUp.wav")!
-    init () {
-        move.load()
-        hit.load()
-        empty.load()
-        layer.load()
-        levelUp.load()
-    }
-
-    func play(_ soundType: SoundType, on node: SCNNode) {
+    func play(_ soundType: SoundType, on node: SKNode) {
         switch soundType {
-        case .move: node.runAction(SCNAction.playAudio(move, waitForCompletion: false))
-        case .hit: node.runAction(SCNAction.playAudio(hit, waitForCompletion: false))
-        case .empty: node.runAction(SCNAction.playAudio(empty, waitForCompletion: false))
-        case .layer: node.runAction(SCNAction.playAudio(layer, waitForCompletion: false))
+        case .move: node.run(SKAction.playSoundFileNamed("Move.wav", waitForCompletion: false))
+        case .hit: node.run(SKAction.playSoundFileNamed("Hit.wav", waitForCompletion: false))
+        case .empty: node.run(SKAction.playSoundFileNamed("Empty.wav", waitForCompletion: false))
+        case .layer: node.run(SKAction.playSoundFileNamed("Layer.wav", waitForCompletion: false))
         case .levelUp:
-            let wait = SCNAction.wait(duration: 0.4)
-            let play = SCNAction.playAudio(levelUp, waitForCompletion: false)
-            node.runAction(SCNAction.sequence([wait, play]))
+            let wait = SKAction.wait(forDuration: 0.4)
+            let play = SKAction.playSoundFileNamed("LevelUp.wav", waitForCompletion: false)
+            node.run(SKAction.sequence([wait, play]))
         }
-
     }
 }
