@@ -5,9 +5,16 @@
 
 import SceneKit
 
+enum MoveType {
+    case move
+    case drop
+    case timerStep
+    case rotation
+}
+
 protocol GameEngineDelegate: AnyObject {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4)
-    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4)
+    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4, moveType: MoveType)
     func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool)
     func didUpdate(statistics: Statistics)
     func didChangeLevel(to level: Int)
@@ -16,7 +23,7 @@ protocol GameEngineDelegate: AnyObject {
 
 extension GameEngineDelegate {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4) {}
-    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {}
+    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4, moveType: MoveType) {}
     func didUpdate(statistics: Statistics) {}
     func didChangeLevel(to level: Int) {}
     func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool) {}
@@ -123,12 +130,12 @@ class GameEngine {
         return (cells: cells, excess: excess)
     }
 
-    func move(by delta: Vector3i) {
+    func move(by delta: Vector3i, moveType: MoveType) {
         guard case .playing = state else { return }
         let newPosition = position + delta
         if !isOverlapped(afterRotation: rotation, andTranslation: newPosition) {
             position = newPosition
-            delegate?.didMove(by: delta, andRotateBy: SCNMatrix4Identity)
+            delegate?.didMove(by: delta, andRotateBy: SCNMatrix4Identity, moveType: moveType)
         }
     }
 
@@ -143,11 +150,11 @@ class GameEngine {
                 let newPosition = position + overlap.excess
                 rotation = newRotation
                 position = newPosition
-                delegate?.didMove(by: overlap.excess, andRotateBy: rotationDelta)
+                delegate?.didMove(by: overlap.excess, andRotateBy: rotationDelta, moveType: .rotation)
             }
         } else {
             rotation = newRotation
-            delegate?.didMove(by: Vector3i(), andRotateBy: rotationDelta)
+            delegate?.didMove(by: Vector3i(), andRotateBy: rotationDelta, moveType: .rotation)
         }
     }
 
@@ -158,7 +165,7 @@ class GameEngine {
         let delta = Vector3i(0, 0, -1)
         while !isOverlapped(afterRotation: rotation, andTranslation: probe + delta) { probe += delta }
         isDropHappened = true
-        move(by: probe - position)
+        move(by: probe - position, moveType: .drop)
         scheduleStep(after: 0.6)
     }
 
@@ -186,7 +193,7 @@ class GameEngine {
             }
             newPolycube()
         } else {
-            move(by: delta)
+            move(by: delta, moveType: .timerStep)
             scheduleStep(after: stepTime)
         }
     }
@@ -199,10 +206,10 @@ extension GameEngine: GamepadProtocol {
     func rotateYCounterclockwise() { rotate(by: SCNMatrix4MakeRotation(Float.pi / 2.0, 0.0, 1.0, 0.0)) }
     func rotateZClockwise() { rotate(by: SCNMatrix4MakeRotation(Float.pi / 2.0, 0.0, 0.0, -1.0)) }
     func rotateZCounterclockwise() { rotate(by: SCNMatrix4MakeRotation(Float.pi / 2.0, 0.0, 0.0, 1.0)) }
-    func moveUp() { move(by: Vector3i(x: 0, y: 1, z: 0)) }
-    func moveDown() { move(by: Vector3i(x: 0, y: -1, z: 0)) }
-    func moveLeft() { move(by: Vector3i(x: -1, y: 0, z: 0)) }
-    func moveRight() { move(by: Vector3i(x: 1, y: 0, z: 0)) }
+    func moveUp() { move(by: Vector3i(x: 0, y: 1, z: 0), moveType: .move) }
+    func moveDown() { move(by: Vector3i(x: 0, y: -1, z: 0), moveType: .move) }
+    func moveLeft() { move(by: Vector3i(x: -1, y: 0, z: 0), moveType: .move) }
+    func moveRight() { move(by: Vector3i(x: 1, y: 0, z: 0), moveType: .move) }
     func drop() { moveDeep() }
     func pause() {
         guard case .playing = state else { return }

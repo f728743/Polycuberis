@@ -30,6 +30,7 @@
 		7C29C54E2445876200AFD007 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29C54D2445876200AFD007 /* UIColor+Extension.swift */; };
 		7C2B4767244AE8E4005F6DFC /* GaugeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */; };
 		7C2E4F6B2449CD660060E47F /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2E4F6A2449CD660060E47F /* Misc.swift */; };
+		7C316FB8244CA89C008DEC25 /* Step.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C316FB7244CA89C008DEC25 /* Step.wav */; };
 		7C33F98F24273180007BE88C /* SCNMatrix4+Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */; };
 		7C36F48823DC54F3004CB85E /* Polycube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C36F48723DC54F3004CB85E /* Polycube.swift */; };
 		7C36F48A23DC6978004CB85E /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C36F48923DC6978004CB85E /* GameEngine.swift */; };
@@ -82,6 +83,7 @@
 		7C29C54D2445876200AFD007 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7C2B4766244AE8E4005F6DFC /* GaugeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeNode.swift; sourceTree = "<group>"; };
 		7C2E4F6A2449CD660060E47F /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
+		7C316FB7244CA89C008DEC25 /* Step.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Step.wav; sourceTree = "<group>"; };
 		7C33F98E24273180007BE88C /* SCNMatrix4+Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNMatrix4+Operations.swift"; sourceTree = "<group>"; };
 		7C36F48723DC54F3004CB85E /* Polycube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polycube.swift; sourceTree = "<group>"; };
 		7C36F48923DC6978004CB85E /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 		7C58DC6C244C341D003F52BF /* SFX */ = {
 			isa = PBXGroup;
 			children = (
+				7C316FB7244CA89C008DEC25 /* Step.wav */,
 				7C58DC6A244C337C003F52BF /* Hit.wav */,
 				7C27152B244B6FF3006E6551 /* Empty.wav */,
 				7C27152A244B6FF3006E6551 /* Layer.wav */,
@@ -315,6 +318,7 @@
 				7C5C32622441AE17000F3430 /* README.md in Resources */,
 				7C271532244B6FF3006E6551 /* LevelUp.wav in Resources */,
 				7C27152F244B6FF3006E6551 /* Layer.wav in Resources */,
+				7C316FB8244CA89C008DEC25 /* Step.wav in Resources */,
 				7C271530244B6FF3006E6551 /* Empty.wav in Resources */,
 				7CA349BD23DD89CB000721E9 /* polycubes.json in Resources */,
 				7C4AAD8923DAEFEA00A9590B /* art.scnassets in Resources */,

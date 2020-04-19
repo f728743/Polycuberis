@@ -150,10 +150,15 @@ extension GameViewController: GameEngineDelegate {
         scene.spawnNew(polycube: polycube, at: position, rotated: rotation)
     }
 
-    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
+    func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4, moveType: MoveType) {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         scene.movePolycube(by: delta, andRotateBy: rotationDelta)
-        sound.play(.move, on: gamepad)
+        if moveType != .timerStep {
+            sound.play(.move, on: gamepad)
+        }
+//        else {
+//            sound.play(.step, on: gamepad)
+//        }
     }
 
     func gameOver() {
