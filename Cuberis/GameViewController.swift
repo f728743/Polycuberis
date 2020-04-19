@@ -18,6 +18,7 @@ class GameViewController: UIViewController {
     var setup = Setup()
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
+    let sound = Sound()
     var sceneProjection: SceneProjection {
         let pitSize = scene.pitSize
         let maxSize = max(pitSize.width, pitSize.height)
@@ -151,6 +152,7 @@ extension GameViewController: GameEngineDelegate {
 
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {
         scene.movePolycube(by: delta, andRotateBy: rotationDelta)
+        sound.play(.move, on: scene.pit)
     }
 
     func gameOver() {
@@ -161,24 +163,27 @@ extension GameViewController: GameEngineDelegate {
         scene.showGameOver()
     }
 
-    func didUpdateContent(of pit: Pit) {
+    func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool) {
         scene.updateContent(of: pit)
+        if isPitEmpty {
+            sound.play(.empty, on: scene.pit)
+        } else if layersCleared > 0 {
+            sound.play(.layer, on: scene.pit)
+        } else {
+            sound.play(.hit, on: scene.pit)
+        }
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         gamepad.gaugeValue = pit.pileHeight
     }
 
     func didChangeLevel(to level: Int) {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
+        sound.play(.levelUp, on: scene.pit)
         gamepad.level = level
     }
 
     func didUpdate(statistics: Statistics) {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         gamepad.score = statistics.score
-    }
-
-    func didСlearLayers(count: Int, andPit isEmpty: Bool) {
-        print("Clear \(count) layer(s)")
-        if isEmpty { print("Pit is empty") }
     }
 }

@@ -11,7 +11,6 @@ Written using SceneKit and Swift
 
 ### First phase
 
-* Add some sounds
 * Leaderboard
 
 ### Second phase

@@ -8,9 +8,8 @@ import SceneKit
 protocol GameEngineDelegate: AnyObject {
     func didSpawnNew(polycube: Polycube, at position: Vector3i, rotated rotation: SCNMatrix4)
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4)
-    func didUpdateContent(of pit: Pit)
+    func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool)
     func didUpdate(statistics: Statistics)
-    func didСlearLayers(count: Int, andPit isEmpty: Bool)
     func didChangeLevel(to level: Int)
     func gameOver()
 }
@@ -20,8 +19,7 @@ extension GameEngineDelegate {
     func didMove(by delta: Vector3i, andRotateBy rotationDelta: SCNMatrix4) {}
     func didUpdate(statistics: Statistics) {}
     func didChangeLevel(to level: Int) {}
-    func didСlearLayers(count: Int, andPit isEmpty: Bool) {}
-    func didUpdateContent(of pit: Pit) {}
+    func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool) {}
     func gameOver() {}
 }
 
@@ -96,7 +94,7 @@ class GameEngine {
 
         if isOverlapped(afterRotation: rotation, andTranslation: position) {
             pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
-            delegate?.didUpdateContent(of: pit)
+            delegate?.didUpdateContent(of: pit, layersCleared: 0, isPitEmpty: false)
             gameOver()
         } else {
             delegate?.didSpawnNew(polycube: polycube, at: position, rotated: rotation)
@@ -172,15 +170,12 @@ class GameEngine {
             pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
             let layersRemoved = pit.removeLayers()
             let isPitEmpty = pit.isEmpty
-            delegate?.didUpdateContent(of: pit)
+            delegate?.didUpdateContent(of: pit, layersCleared: layersRemoved, isPitEmpty: isPitEmpty)
             statistics.accountScores(for: polycube,
                                      onLevel: level,
                                      layersRemoved: layersRemoved,
                                      isPitEmpty: isPitEmpty,
                                      droppedFrom: isDropHappened ? dropPosition : nil)
-            if layersRemoved > 0 {
-                delegate?.didСlearLayers(count: layersRemoved, andPit: isPitEmpty)
-            }
             delegate?.didUpdate(statistics: statistics)
             if level <= GameEngine.maxLevel {
                 if statistics.cubesPlayed >= cubesPerLevel * (level + 1) {
