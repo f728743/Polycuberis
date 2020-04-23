@@ -38,12 +38,6 @@ struct Setup {
     static let defaultDepth = 12
     static let defaultPolycubeSet = PolycubeSet.flat
 
-    var modeIdentifier: String {
-        switch mode {
-        case .flatFun, .the3DMania, .outOfControl: return GameMode.names[mode.rawValue]
-        case .custom: return GameMode.names[mode.rawValue] + " \(pitSize.width)x\(pitSize.height)"
-        }
-    }
     var level: Int
     var mode: GameMode
     var customSetup: ModeSetup

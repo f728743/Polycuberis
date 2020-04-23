@@ -1,11 +1,11 @@
 //
-//  HighScoreScene.swift
+//  LeaderboardScene.swift
 //  Cuberis
 //
 
 import SpriteKit
 
-class HighScoreScene: SKScene {
+class LeaderboardScene: SKScene {
 
     static func setupLabelFont(_ label: SKLabelNode) {
         label.fontName = "GillSans"
@@ -60,24 +60,22 @@ class HighScoreScene: SKScene {
             for (index, cell) in cells.enumerated() {
                 addChild(cell)
                 cell.color = index % 2 == 0 ? UIColor(white: 1.0, alpha: 0.22) : UIColor(white: 1.0, alpha: 0.09)
-                cell.rank.text = "\(index + 1)"
                 cell.position = CGPoint(0, size.midH - cellSize.midH - (CGFloat(index) * 30))
             }
         }
-
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
     }
 
-    var leaderboard: [ScoreMart] = [] {
+    var rows: [ScoreRow] = [] {
         didSet {
             for (index, cell) in table.cells.enumerated() {
-                if index < leaderboard.count {
-                    cell.rank.text = leaderboard[index].rank
-                    cell.player.text = leaderboard[index].player
-                    cell.value.text = leaderboard[index].value
-                    cell.isHighlighted = leaderboard[index].isHighlighted
+                if index < rows.count {
+                    cell.rank.text = rows[index].rank
+                    cell.player.text = rows[index].player
+                    cell.value.text = rows[index].value
+                    cell.isHighlighted = rows[index].isHighlighted
                 } else {
                     cell.rank.text = ""
                     cell.player.text = ""
@@ -119,7 +117,7 @@ class HighScoreScene: SKScene {
         caption.verticalAlignmentMode = .baseline
         caption.horizontalAlignmentMode = .center
         caption.position = CGPoint(0, panel.size.midH - 40)
-        HighScoreScene.setupLabelFont(caption)
+        LeaderboardScene.setupLabelFont(caption)
         return caption
     }
 

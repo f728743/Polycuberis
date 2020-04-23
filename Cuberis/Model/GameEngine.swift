@@ -18,7 +18,7 @@ protocol GameEngineDelegate: AnyObject {
     func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool)
     func didUpdate(statistics: Statistics)
     func didChangeLevel(to level: Int)
-    func gameOver()
+    func gameOver(with statistics: Statistics)
 }
 
 extension GameEngineDelegate {
@@ -27,7 +27,7 @@ extension GameEngineDelegate {
     func didUpdate(statistics: Statistics) {}
     func didChangeLevel(to level: Int) {}
     func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool) {}
-    func gameOver() {}
+    func gameOver(with statistics: Statistics) {}
 }
 
 class GameEngine {
@@ -68,7 +68,7 @@ class GameEngine {
 
         pit = Pit(size: pitSize)
         let url = Bundle.main.resourceURL!.appendingPathComponent("polycubes.json")
-        let minPitSzie = min(pit.width, pit.depth)
+        let minPitSzie = min(pit.width, pit.height)
         self.polycubeSet = loadPolycubes(from: url) .filter {
             $0.isIn(set: polycubeSet) && $0.width <= minPitSzie && $0.height <= minPitSzie && $0.depth <= minPitSzie
         }
@@ -83,7 +83,7 @@ class GameEngine {
     func gameOver() {
         state = .gameOver
         timer?.invalidate()
-        delegate?.gameOver()
+        delegate?.gameOver(with: statistics)
     }
 
     private func scheduleStep(after interval: TimeInterval) {

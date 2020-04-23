@@ -19,6 +19,7 @@ class GameViewController: UIViewController {
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
     var sound = Sound()
+    var leaderboard = Leaderboard()
     var sceneProjection: SceneProjection {
         let pitSize = scene.pitSize
         let maxSize = max(pitSize.width, pitSize.height)
@@ -54,6 +55,8 @@ class GameViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         goToMainMenu(animated: false)
+        leaderboard.authenticateUser(rootViewController: self)
+        leaderboard.setup = setup
     }
 
     func goToMainMenu(animated: Bool) {
@@ -62,14 +65,27 @@ class GameViewController: UIViewController {
             case let .start(level):
                 self.startGame(level: level)
                 self.presentGame { [unowned self] in
-                    self.stopGame()
                     self.scene.hideGameOver()
-                    DispatchQueue.main.async { self.goToMainMenu(animated: true) }
+                    self.processScores { [unowned self] in
+                        self.scene.pit.isHidden = false
+                        self.stopGame()
+                        DispatchQueue.main.async { self.goToMainMenu(animated: true) }
+                    }
+                }
+            case .leaderboard:
+                self.scene.pit.isHidden = true
+                self.presentLeaderboard { [unowned self] in
+                    DispatchQueue.main.async {
+                        self.scene.pit.isHidden = false
+                        self.goToMainMenu(animated: false)
+                    }
                 }
             case .setup:
                 self.presentSetupMenu { [unowned self] newSetup in
                     self.setup = newSetup
                     self.setup.save()
+                    self.leaderboard.setup = newSetup
+                    self.leaderboard.upateLocalPlayerScore()
                     DispatchQueue.main.async { self.goToMainMenu(animated: false) }
                 }
             }
@@ -86,14 +102,28 @@ class GameViewController: UIViewController {
         return SCNVector3(x, 0, 0)
     }
 
-    func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
+    func processScores(completion: @escaping () -> Void) {
+        guard let score = engine?.statistics.score else { fatalError("Engine fucked up") }
+        engine = nil
+        print("new score! \(score)")
+        if score > leaderboard.localPlayerScore {
+            scene.pit.isHidden = true
+            leaderboard.report(score: score)
+            leaderboard.loadHighScores { [unowned self] rows in
+                let highScoreTable = LeaderboardScene(size: self.scnView.bounds.size)
+                self.leaderboard.loadHighScores { rows in
+                    highScoreTable.rows = rows
+                }
+                highScoreTable.completion = completion
+                self.scnView.overlaySKScene = highScoreTable
+            }
+        } else {
+            leaderboard.upateLocalPlayerScore()
+            completion()
+        }
+    }
 
-//---------------------
-//        scene.pit.isHidden = true
-//        let hiScore = HighScoreScene(size: scnView.bounds.size)
-//        hiScore.leaderboard = leaderboard.mart(modeIdentifier: setup.modeIdentifier)
-//        scnView.overlaySKScene = hiScore
-//---------------------
+    func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
         let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
         let safeArea = safeAreaInsets()
         scene.alignPit(withOffset: shiftedPitPosition(xOffset: safeArea.left + 242), animated: animated)
@@ -109,8 +139,18 @@ class GameViewController: UIViewController {
                                    pitDepth: setup.pitSize.depth)
         gamepad.completion = completion
         gamepad.level = setup.level
+        gamepad.hiScore = leaderboard.bestScore
         gamepad.gamepadDelegate = engine
         scnView.overlaySKScene = gamepad
+    }
+
+    func presentLeaderboard(completion: @escaping () -> Void) {
+        let highScoreTable = LeaderboardScene(size: scnView.bounds.size)
+        leaderboard.loadHighScores { rows in
+            highScoreTable.rows = rows
+        }
+        highScoreTable.completion = completion
+        scnView.overlaySKScene = highScoreTable
     }
 
     func presentSetupMenu(completion: @escaping (Setup) -> Void) {
@@ -161,8 +201,7 @@ extension GameViewController: GameEngineDelegate {
 //        }
     }
 
-    func gameOver() {
-        engine = nil
+    func gameOver(with statistics: Statistics) {
         scene.deletePolycube()
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { fatalError("Internal error") }
         gamepad.hideButtons()
