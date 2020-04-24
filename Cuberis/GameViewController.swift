@@ -15,11 +15,11 @@ struct SceneProjection {
 
 class GameViewController: UIViewController {
     var scene: GameScene!
-    var setup = Setup()
+    var setup: Setup
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
     var sound = Sound()
-    var leaderboard = Leaderboard()
+    var leaderboard: Leaderboard
     var sceneProjection: SceneProjection {
         let pitSize = scene.pitSize
         let maxSize = max(pitSize.width, pitSize.height)
@@ -45,8 +45,16 @@ class GameViewController: UIViewController {
     // todo: haptic
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
+    required init?(coder: NSCoder) {
+        let setup = Setup()
+        self.setup = setup
+        leaderboard = Leaderboard(setup: setup)
+        super.init(coder: coder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        leaderboard.test()
         scnView.antialiasingMode = .multisampling4X
         setup.load()
         scene = GameScene(pitSize: setup.pitSize)
@@ -105,8 +113,7 @@ class GameViewController: UIViewController {
     func processScores(completion: @escaping () -> Void) {
         guard let score = engine?.statistics.score else { fatalError("Engine fucked up") }
         engine = nil
-        print("new score! \(score)")
-        if score > leaderboard.localPlayerScore {
+        if score > leaderboard.localPlayerScoreValue {
             scene.pit.isHidden = true
             leaderboard.report(score: score)
             leaderboard.loadHighScores { [unowned self] rows in
@@ -139,7 +146,7 @@ class GameViewController: UIViewController {
                                    pitDepth: setup.pitSize.depth)
         gamepad.completion = completion
         gamepad.level = setup.level
-        gamepad.hiScore = leaderboard.bestScore
+        gamepad.hiScore = leaderboard.bestScoreValue
         gamepad.gamepadDelegate = engine
         scnView.overlaySKScene = gamepad
     }
@@ -196,9 +203,6 @@ extension GameViewController: GameEngineDelegate {
         if moveType != .timerStep {
             sound.play(.move, on: gamepad)
         }
-//        else {
-//            sound.play(.step, on: gamepad)
-//        }
     }
 
     func gameOver(with statistics: Statistics) {

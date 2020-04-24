@@ -97,8 +97,8 @@ struct Setup {
     private func save(_ value: Int, forKey key: UserDefaultsKey) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
-    private func loadInt(forKey key: UserDefaultsKey) -> Int? {
-        return UserDefaults.standard.object(forKey: key.rawValue) as? Int ?? 5
-    }
 
+    private func loadInt(forKey key: UserDefaultsKey) -> Int? {
+        return UserDefaults.standard.object(forKey: key.rawValue) as? Int
+    }
 }
