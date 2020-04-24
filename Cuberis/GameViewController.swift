@@ -5,12 +5,19 @@
 
 import UIKit
 import SceneKit
+import GameKit
 
 struct SceneProjection {
     let center: CGPoint
     let canvasRect: CGRect
     let pitRect: CGRect
     let ratio: CGFloat
+}
+
+extension GameViewController: GKGameCenterControllerDelegate {
+    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        gameCenterViewController.dismiss(animated: true, completion: nil)
+    }
 }
 
 class GameViewController: UIViewController {
@@ -46,7 +53,8 @@ class GameViewController: UIViewController {
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     required init?(coder: NSCoder) {
-        let setup = Setup()
+        var setup = Setup()
+        setup.load()
         self.setup = setup
         leaderboard = Leaderboard(setup: setup)
         super.init(coder: coder)
@@ -54,9 +62,7 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        leaderboard.test()
         scnView.antialiasingMode = .multisampling4X
-        setup.load()
         scene = GameScene(pitSize: setup.pitSize)
         scnView.scene = scene
     }
@@ -96,6 +102,14 @@ class GameViewController: UIViewController {
                     self.leaderboard.upateLocalPlayerScore()
                     DispatchQueue.main.async { self.goToMainMenu(animated: false) }
                 }
+            case .debug:
+                let vc = GKGameCenterViewController()
+                vc.gameCenterDelegate = self
+                vc.viewState = .leaderboards
+                vc.leaderboardIdentifier = "smarterplayers"
+                self.present(vc, animated: true) {
+                    DispatchQueue.main.async { self.goToMainMenu(animated: false) }
+                }
             }
         }
     }
@@ -115,14 +129,16 @@ class GameViewController: UIViewController {
         engine = nil
         if score > leaderboard.localPlayerScoreValue {
             scene.pit.isHidden = true
-            leaderboard.report(score: score)
-            leaderboard.loadHighScores { [unowned self] rows in
-                let highScoreTable = LeaderboardScene(size: self.scnView.bounds.size)
-                self.leaderboard.loadHighScores { rows in
-                    highScoreTable.rows = rows
+            leaderboard.report(score: score) { [unowned self] error in
+                if error != nil { print(error!) }
+                self.leaderboard.loadHighScores { [unowned self] rows in
+                    let highScoreTable = LeaderboardScene(size: self.scnView.bounds.size)
+                    self.leaderboard.loadHighScores { rows in
+                        highScoreTable.rows = rows
+                    }
+                    highScoreTable.completion = completion
+                    self.scnView.overlaySKScene = highScoreTable
                 }
-                highScoreTable.completion = completion
-                self.scnView.overlaySKScene = highScoreTable
             }
         } else {
             leaderboard.upateLocalPlayerScore()

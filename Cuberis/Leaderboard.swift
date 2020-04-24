@@ -28,7 +28,11 @@ class Leaderboard: NSObject {
         case bestScore
     }
 
-    var setup: Setup
+    var setup: Setup {
+        didSet {
+            loadLocal()
+        }
+    }
     private(set) var localPlayerScoreValue = 0
     private(set) var bestScoreValue = 0
 
@@ -71,14 +75,14 @@ class Leaderboard: NSObject {
     }
 
     private func save(_ value: Int, forKey key: UserDefaultsKey) {
-        UserDefaults.standard.set(value, forKey: "\(leaderboardIdentifier).\(key.rawValue)")
+        UserDefaults.standard.set(value, forKey: "\(leaderboardIdentifier)_\(key.rawValue)")
     }
 
     private func loadInt(forKey key: UserDefaultsKey) -> Int? {
-        return UserDefaults.standard.object(forKey: "\(leaderboardIdentifier).\(key.rawValue)") as? Int
+        UserDefaults.standard.object(forKey: "\(leaderboardIdentifier)_\(key.rawValue)") as? Int
     }
 
-    func report(score: Int) {
+    func report(score: Int, completion: ((Error?) -> Void)? =  nil) {
         if score > localPlayerScoreValue {
             localPlayerScoreValue = score
         }
@@ -89,32 +93,34 @@ class Leaderboard: NSObject {
         let newScore = GKScore(leaderboardIdentifier: leaderboardIdentifier)
         newScore.value = Int64(score)
         GKScore.report([newScore]) { error in
-            guard error == nil else {
-                print(error?.localizedDescription ?? "")
-                return
-            }
+            completion?(error)
         }
     }
 
     func upateLocalPlayerScore() {
-        localPlayerScoreValue = 0
-        bestScoreValue = 0
         let leaderBoard = GKLeaderboard()
         leaderBoard.timeScope = .allTime
         leaderBoard.range = NSRange(location: 1, length: 1)
         leaderBoard.identifier = leaderboardIdentifier
-        leaderBoard.loadScores { [unowned self] (score: [GKScore]?, error: Error?) -> Void in
+        leaderBoard.loadScores { [unowned self] (scores: [GKScore]?, error: Error?) -> Void in
             if let error = error {
                 print(error)
             } else {
-                guard let score = score else { return }
+                guard let scores = scores else { return }
                 if let score = leaderBoard.localPlayerScore?.value {
-                    self.localPlayerScoreValue = Int(score)
+                    if Int(score) > self.localPlayerScoreValue {
+                        self.localPlayerScoreValue = Int(score)
+                        self.save(self.localPlayerScoreValue, forKey: .localPlayerScore)
+                    } else if Int(score) < self.localPlayerScoreValue {
+                        self.report(score: self.localPlayerScoreValue)
+                    }
                 }
-                if score.count > 0 {
-                    self.bestScoreValue = Int(score[0].value)
+                if scores.count > 0 {
+                    if Int(scores[0].value) > self.bestScoreValue {
+                        self.bestScoreValue = Int(scores[0].value)
+                        self.save(self.bestScoreValue, forKey: .bestScore)
+                    }
                 }
-                self.saveLocal()
             }
         }
     }
@@ -134,12 +140,12 @@ class Leaderboard: NSObject {
                 if let scores = scores {
                     if scores.count > 0 {
                         top = scores
-                        self.bestScoreValue = Int(scores[0].value)
-                        self.saveLocal()
+                        if Int(scores[0].value) > self.bestScoreValue {
+                            self.bestScoreValue = Int(scores[0].value)
+                            self.save(self.bestScoreValue, forKey: .bestScore)
+                        }
                         if let playerScore = leaderBoard.localPlayerScore {
                             localPlayerScore = playerScore
-                            self.localPlayerScoreValue = Int(playerScore.value)
-                            self.saveLocal()
                             if playerScore.rank < 8 {
                                 completion(self.createMart(top: top, localPlayerID: playerScore.player.playerID))
                                 return
@@ -185,7 +191,18 @@ class Leaderboard: NSObject {
     }
 
     func createMart(top: [GKScore], localPlayerID: String?) -> [ScoreRow] {
-        top.map { ScoreRow($0, isHighlighted: $0.player.playerID == localPlayerID) }
+        top.map {
+            var isHighlighted = false
+            var score = Int($0.value)
+            if $0.player.playerID == localPlayerID {
+                isHighlighted = true
+                score = max(score, localPlayerScoreValue)
+            }
+            return ScoreRow(player: $0.player.displayName,
+                            rank: "\($0.rank)",
+                value: "\(score)",
+                isHighlighted: isHighlighted)
+        }
     }
 
     func createMart(top: [GKScore], peers: [GKScore], localPlayerID: String) -> [ScoreRow] {
@@ -207,15 +224,4 @@ class Leaderboard: NSObject {
         ]
     }
  */
-
-    func test() {
-        let mart = createOfflineMart()
-        print(mart)
-    }
-}
-
-extension Leaderboard: GKGameCenterControllerDelegate {
-    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-        gameCenterViewController.dismiss(animated: true, completion: nil)
-    }
 }
