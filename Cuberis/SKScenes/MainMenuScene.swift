@@ -8,7 +8,6 @@ import SpriteKit
 enum MainMenuOption {
     case start(Int)
     case leaderboard
-    case debug
     case setup
 }
 
@@ -28,7 +27,6 @@ class MainMenuScene: SKScene {
     let startButton = createButton(title: "START")
     let setupButton = createButton(title: "SETUP")
     let leadersButton = createButton(title: "LEADERS")
-//    let debugButton = createButton(title: "DEBUG")
     let levelControl: NumericUpDownNode
 
     init(size: CGSize, level: Int) {
@@ -43,9 +41,6 @@ class MainMenuScene: SKScene {
         panel.addChild(leadersButton)
         leadersButton.action = { [unowned self] in self.completion?(.leaderboard) }
 
-//        panel.addChild(debugButton)
-//        debugButton.action = { [unowned self] in self.completion?(.debug) }
-
         setupPickerFont(control: levelControl)
 
         let spacing: CGFloat = 20
@@ -55,7 +50,6 @@ class MainMenuScene: SKScene {
         setupButton.position = anchor + CGPoint(0, 1 * step)
         leadersButton.position = anchor + CGPoint(0, 2 * step)
         levelControl.position = anchor + CGPoint(0, 3 * step)
-        //        debugButton.position = anchor + CGPoint(0, 4 * step)
     }
 
     required init?(coder aDecoder: NSCoder) {

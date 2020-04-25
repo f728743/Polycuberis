@@ -208,20 +208,18 @@ class Leaderboard: NSObject {
     func createMart(top: [GKScore], peers: [GKScore], localPlayerID: String) -> [ScoreRow] {
         var result = top[0..<3].map { ScoreRow($0, isHighlighted: false) }
         result.append(ScoreRow(player: "...", rank: "...", value: "...", isHighlighted: false))
-        result.append(contentsOf: peers.map { ScoreRow($0, isHighlighted: $0.player.playerID == localPlayerID) })
+        result.append(contentsOf: peers.map {
+            var isHighlighted = false
+            var score = Int($0.value)
+            if $0.player.playerID == localPlayerID {
+                isHighlighted = true
+                score = max(score, localPlayerScoreValue)
+            }
+            return ScoreRow(player: $0.player.displayName,
+                            rank: "\($0.rank)",
+                value: "\(score)",
+                isHighlighted: isHighlighted)
+        })
         return result
     }
-/*
-    func createMart() -> [ScoreRow] {
-        return [
-            ScoreRow(player: "习近平", rank: "1", value: "2412043", isHighlighted: false),
-            ScoreRow(player: "Sun Hui Vchay", rank: "2", value: "2301213", isHighlighted: false),
-            ScoreRow(player: "문재인", rank: "3", value: "1967390", isHighlighted: false),
-            ScoreRow(player: "...", rank: "...", value: "...", isHighlighted: false),
-            ScoreRow(player: "Suka zadrot", rank: "2046", value: "56722", isHighlighted: false),
-            ScoreRow(player: "You", rank: "2047", value: "48316", isHighlighted: true),
-            ScoreRow(player: "Average Joe", rank: "2048", value: "32555", isHighlighted: false)
-        ]
-    }
- */
 }

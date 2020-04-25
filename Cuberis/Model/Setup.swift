@@ -102,3 +102,13 @@ struct Setup {
         return UserDefaults.standard.object(forKey: key.rawValue) as? Int
     }
 }
+
+extension Setup: CustomStringConvertible {
+    public var description: String {
+        let name = GameMode.names[mode.rawValue]
+        let w = pitSize.width
+        let h = pitSize.height
+        let set = PolycubeSet.names[polycubeSet.rawValue]
+        return mode == .custom ? "\(name) \(min(w, h))x\(max(w, h)) \(set)" : name
+    }
+}

@@ -13,7 +13,6 @@ class LeaderboardScene: SKScene {
     }
 
     class ScoreTableLine: SKSpriteNode {
-
         var isHighlighted: Bool = false {
             didSet {
                 textColor = isHighlighted ? .yellow : .white
@@ -68,6 +67,12 @@ class LeaderboardScene: SKScene {
         }
     }
 
+    var caption: String = "" {
+        didSet {
+            captionLabel.text = caption
+        }
+    }
+
     var rows: [ScoreRow] = [] {
         didSet {
             for (index, cell) in table.cells.enumerated() {
@@ -87,6 +92,7 @@ class LeaderboardScene: SKScene {
     var animatedAppearance = false
     var completion: (() -> Void)?
 
+    private let captionLabel = SKLabelNode()
     private let panel: SKSpriteNode
     private let okButton = createButton(title: "OK")
     private let table: ScoreTableNode
@@ -99,7 +105,8 @@ class LeaderboardScene: SKScene {
 
         super.init(size: size)
         addChild(panel)
-        panel.addChild(createCaption(text: "High Score"))
+        panel.addChild(captionLabel)
+        setupCaption()
         okButton.action = { [unowned self] in self.completion?() }
         panel.addChild(okButton)
         okButton.position = CGPoint(0, -panel.size.midH + okButton.size.midH + 8)
@@ -112,13 +119,11 @@ class LeaderboardScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func createCaption(text: String) -> SKLabelNode {
-        let caption = SKLabelNode(text: text)
-        caption.verticalAlignmentMode = .baseline
-        caption.horizontalAlignmentMode = .center
-        caption.position = CGPoint(0, panel.size.midH - 40)
-        LeaderboardScene.setupLabelFont(caption)
-        return caption
+    private func setupCaption() {
+        captionLabel.verticalAlignmentMode = .baseline
+        captionLabel.horizontalAlignmentMode = .center
+        captionLabel.position = CGPoint(0, panel.size.midH - 40)
+        LeaderboardScene.setupLabelFont(captionLabel)
     }
 
     func layoutSubnodes() {

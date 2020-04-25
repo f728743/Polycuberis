@@ -102,14 +102,6 @@ class GameViewController: UIViewController {
                     self.leaderboard.upateLocalPlayerScore()
                     DispatchQueue.main.async { self.goToMainMenu(animated: false) }
                 }
-            case .debug:
-                let vc = GKGameCenterViewController()
-                vc.gameCenterDelegate = self
-                vc.viewState = .leaderboards
-                vc.leaderboardIdentifier = "smarterplayers"
-                self.present(vc, animated: true) {
-                    DispatchQueue.main.async { self.goToMainMenu(animated: false) }
-                }
             }
         }
     }
@@ -169,6 +161,7 @@ class GameViewController: UIViewController {
 
     func presentLeaderboard(completion: @escaping () -> Void) {
         let highScoreTable = LeaderboardScene(size: scnView.bounds.size)
+        highScoreTable.caption = "\(setup.description) High Score"
         leaderboard.loadHighScores { rows in
             highScoreTable.rows = rows
         }
