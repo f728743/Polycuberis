@@ -9,14 +9,7 @@ Written using SceneKit and Swift
 
 ## TODO
 
-### First phase
-
-* Leaderboard
-
-### Second phase
-
 * "Button" auto-repeat
-* Haptic feedback
 * Small movements of pin based on gyro
 * Move camera to view set of polycubes selected in settings
 * Demo mode on start scene

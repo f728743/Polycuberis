@@ -19,6 +19,7 @@ protocol GameEngineDelegate: AnyObject {
     func didUpdate(statistics: Statistics)
     func didChangeLevel(to level: Int)
     func gameOver(with statistics: Statistics)
+    func impactOccurred(after move: MoveType)
 }
 
 extension GameEngineDelegate {
@@ -28,6 +29,7 @@ extension GameEngineDelegate {
     func didChangeLevel(to level: Int) {}
     func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool) {}
     func gameOver(with statistics: Statistics) {}
+    func impactOccurred(after move: MoveType) {}
 }
 
 class GameEngine {
@@ -136,6 +138,8 @@ class GameEngine {
         if !isOverlapped(afterRotation: rotation, andTranslation: newPosition) {
             position = newPosition
             delegate?.didMove(by: delta, andRotateBy: SCNMatrix4Identity, moveType: moveType)
+        } else {
+            delegate?.impactOccurred(after: moveType)
         }
     }
 
@@ -151,6 +155,8 @@ class GameEngine {
                 rotation = newRotation
                 position = newPosition
                 delegate?.didMove(by: overlap.excess, andRotateBy: rotationDelta, moveType: .rotation)
+            } else {
+                delegate?.impactOccurred(after: .rotation)
             }
         } else {
             rotation = newRotation

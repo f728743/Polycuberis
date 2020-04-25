@@ -50,7 +50,8 @@ class GameViewController: UIViewController {
     }
 
     // todo: haptic
-    private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    private var lightFeedback = UIImpactFeedbackGenerator(style: .light)
+    private var heavyFeedback = UIImpactFeedbackGenerator(style: .heavy)
 
     required init?(coder: NSCoder) {
         var setup = Setup()
@@ -210,7 +211,15 @@ extension GameViewController: GameEngineDelegate {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         scene.movePolycube(by: delta, andRotateBy: rotationDelta)
         if moveType != .timerStep {
+            lightFeedback.impactOccurred()
             sound.play(.move, on: gamepad)
+        }
+    }
+
+    func impactOccurred(after move: MoveType) {
+        if move == .move || move == .rotation {
+            heavyFeedback.impactOccurred()
+            heavyFeedback.impactOccurred()
         }
     }
 
@@ -224,6 +233,7 @@ extension GameViewController: GameEngineDelegate {
     func didUpdateContent(of pit: Pit, layersCleared: Int, isPitEmpty: Bool) {
         scene.updateContent(of: pit)
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
+        heavyFeedback.impactOccurred()
         if isPitEmpty {
             sound.play(.empty, on: gamepad)
         } else if layersCleared > 0 {
