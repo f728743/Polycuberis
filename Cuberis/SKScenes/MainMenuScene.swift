@@ -6,7 +6,7 @@
 import SpriteKit
 
 enum MainMenuOption {
-    case start(Int)
+    case start
     case leaderboard
     case setup
 }
@@ -21,7 +21,7 @@ func createButton(title: String) -> ButtonNode {
 
 class MainMenuScene: SKScene {
     var animatedAppearance = false
-    var completion: ((MainMenuOption) -> Void)?
+    var completion: ((MainMenuOption, Int) -> Void)?
 
     let panel = SKSpriteNode(texture: SKTexture(imageNamed: "Panel"))
     let startButton = createButton(title: "START")
@@ -34,12 +34,12 @@ class MainMenuScene: SKScene {
         super.init(size: size)
         addChild(panel)
         panel.addChild(levelControl)
-        startButton.action = { [unowned self] in self.completion?(.start(self.levelControl.value)) }
+        startButton.action = { [unowned self] in self.completion?(.start, self.levelControl.value) }
         panel.addChild(startButton)
-        setupButton.action = { [unowned self] in self.completion?(.setup) }
+        setupButton.action = { [unowned self] in self.completion?(.setup, self.levelControl.value) }
         panel.addChild(setupButton)
         panel.addChild(leadersButton)
-        leadersButton.action = { [unowned self] in self.completion?(.leaderboard) }
+        leadersButton.action = { [unowned self] in self.completion?(.leaderboard, self.levelControl.value) }
 
         setupPickerFont(control: levelControl)
 

@@ -75,10 +75,14 @@ class GameViewController: UIViewController {
     }
 
     func goToMainMenu(animated: Bool) {
-        presentMainMenu(animated: animated) { [unowned self] selectedOption in
+        presentMainMenu(animated: animated) { [unowned self] selectedOption, level in
+            if self.setup.level != level {
+                self.setup.level = level
+                self.setup.save()
+            }
             switch selectedOption {
-            case let .start(level):
-                self.startGame(level: level)
+            case .start:
+                self.startGame()
                 self.presentGame { [unowned self] in
                     self.scene.hideGameOver()
                     self.processScores { [unowned self] in
@@ -139,7 +143,7 @@ class GameViewController: UIViewController {
         }
     }
 
-    func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption) -> Void) {
+    func presentMainMenu(animated: Bool, completion: @escaping (MainMenuOption, Int) -> Void) {
         let mainMenu = MainMenuScene(size: scnView.bounds.size, level: setup.level)
         let safeArea = safeAreaInsets()
         scene.alignPit(withOffset: shiftedPitPosition(xOffset: safeArea.left + 242), animated: animated)
@@ -184,10 +188,8 @@ class GameViewController: UIViewController {
         scene.clearPit()
     }
 
-    func startGame(level: Int) {
-        setup.level = level
-        setup.save()
-        engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: level)
+    func startGame() {
+        engine = GameEngine(pitSize: setup.pitSize, polycubeSet: setup.polycubeSet, level: setup.level)
         engine!.delegate = self
         scene.updateContent(of: engine!.pit)
         engine!.start()
