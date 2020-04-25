@@ -12,3 +12,4 @@ Written using SceneKit and Swift
 * "Button" auto-repeat
 * Move camera to view set of polycubes selected in settings
 * Demo mode on start scene
+* Options dialog for setting up sfx, haptic, etc

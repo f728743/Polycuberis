@@ -52,7 +52,8 @@ class GameEngine {
     private var timer: Timer?
 
     private var isDropHappened = false
-    private var dropPosition = 0
+    private var stepPosition = 0
+    private var dropPosition: Int?
 
     private(set) var pit: Pit
     let polycubeSet: [Polycube]
@@ -108,7 +109,8 @@ class GameEngine {
         } else {
             delegate?.didSpawnNew(polycube: polycube, at: position, rotated: rotation)
             isDropHappened = false
-            dropPosition = pit.depth - 1
+            stepPosition = pit.depth - 1
+            dropPosition = nil
             scheduleStep(after: stepTime)
         }
     }
@@ -166,7 +168,9 @@ class GameEngine {
 
     func moveDeep() {
         guard case .playing = state else { return }
-        if isDropHappened { return }
+        if !isDropHappened {
+            dropPosition = stepPosition
+        }
         var probe = position
         let delta = Vector3i(0, 0, -1)
         while !isOverlapped(afterRotation: rotation, andTranslation: probe + delta) { probe += delta }
@@ -178,7 +182,7 @@ class GameEngine {
     func step() {
         guard let polycube = currentPolycube else { fatalError("Current polycube fucked up") }
         let delta = Vector3i(0, 0, -1)
-        dropPosition -= 1
+        stepPosition -= 1
         if isOverlapped(afterRotation: rotation, andTranslation: position + delta) {
             pit.add(cubes: polycube.cubes(afterRotation: rotation, andTranslation: position))
             let layersRemoved = pit.removeLayers()
@@ -188,7 +192,7 @@ class GameEngine {
                                      onLevel: level,
                                      layersRemoved: layersRemoved,
                                      isPitEmpty: isPitEmpty,
-                                     droppedFrom: isDropHappened ? dropPosition : nil)
+                                     droppedFrom: dropPosition)
             delegate?.didUpdate(statistics: statistics)
             if level <= GameEngine.maxLevel {
                 if statistics.cubesPlayed >= cubesPerLevel * (level + 1) {

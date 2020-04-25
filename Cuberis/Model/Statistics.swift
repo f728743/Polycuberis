@@ -30,16 +30,16 @@ struct Statistics {
                                 isPitEmpty: Bool,
                                 droppedFrom dropPosition: Int?) {
         // PolyCube level Factor (from level 0 to 10)
-        let polyCubeLevelFactor = [0.066990, 0.139195, 0.219800, 0.308444, 0.403897, 0.507822,
-                            0.619062, 0.738630, 0.865802, 1.000000, 1.133333]
+        let polyCubeLevelFactor = [0.06699, 0.139195, 0.2198, 0.308444, 0.403897, 0.507822,
+                            0.619062, 0.73863, 0.865802, 1.0, 1.133333]
         // Layer level Factor (from level 0 to 10)
         let layerLevelFactor = [0.096478, 0.163873, 0.242913, 0.328261, 0.422329, 0.518394,
-                           0.630405, 0.747501, 0.867087, 1.000000, 1.131653]
+                           0.630405, 0.747501, 0.867087, 1.0, 1.131653]
         // Depth Factor (from depth 6 to 18)
-        let depthFactor = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.557692, 1.367521, 1.217949, 1.100427, 1.000000,
+        let depthFactor = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.557692, 1.367521, 1.217949, 1.100427, 1.0,
                            0.918803, 0.852564, 0.788996, 0.737714, 0.691774, 0.651709, 0.614850, 0.583868]
         // Layer number factor (from 1 to 5)
-        let layerNumberFactor = [0.0, 1.000000, 3.703372, 8.104827, 14.188325, 22.144941]
+        let layerNumberFactor = [0.0, 1.0, 3.703372, 8.104827, 14.188325, 22.144941]
         // Layer base score (FLAT,BASIC,EXTENDED)
         let layerBase = [762.5, 875.5, 2886.25]
 
