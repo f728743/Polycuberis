@@ -128,14 +128,11 @@ class GameViewController: UIViewController {
             scene.pit.isHidden = true
             leaderboard.report(score: score) { [unowned self] error in
                 if error != nil { print(error!) }
-                self.leaderboard.loadHighScores { [unowned self] rows in
-                    let highScoreTable = LeaderboardScene(size: self.scnView.bounds.size)
-                    self.leaderboard.loadHighScores { rows in
-                        highScoreTable.rows = rows
-                    }
-                    highScoreTable.completion = completion
-                    self.scnView.overlaySKScene = highScoreTable
-                }
+                let newRecord = PersonalRecordScene(size: self.scnView.bounds.size)
+                newRecord.caption = "\(self.setup.description) High Score"  // TODO: show congratz instead
+                // congratz on a new personal record
+                newRecord.completion = completion
+                self.scnView.overlaySKScene = newRecord
             }
         } else {
             leaderboard.upateLocalPlayerScore()

@@ -12,7 +12,7 @@ class LeaderboardScene: SKScene {
         label.fontSize = 26
     }
 
-    class ScoreTableLine: SKSpriteNode {
+    class ScoreTableRow: SKSpriteNode {
         var isHighlighted: Bool = false {
             didSet {
                 textColor = isHighlighted ? .yellow : .white
@@ -50,9 +50,9 @@ class LeaderboardScene: SKScene {
     }
 
     class ScoreTableNode: SKSpriteNode {
-        let cells: [ScoreTableLine]
+        let cells: [ScoreTableRow]
         init(cellSize: CGSize, cellCount: Int) {
-            cells =  (0..<cellCount).map { _ in ScoreTableLine(size: CGSize(width: cellSize.width, height: 30)) }
+            cells =  (0..<cellCount).map { _ in ScoreTableRow(size: CGSize(width: cellSize.width, height: 30)) }
             super.init(texture: nil,
                        color: .clear,
                        size: CGSize(width: cellSize.width, height: cellSize.height * CGFloat(cellCount)))
