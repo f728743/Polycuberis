@@ -196,8 +196,7 @@
 		7C4AAD8523DAEFEA00A9590B /* Cuberis */ = {
 			isa = PBXGroup;
 			children = (
-				7CC489A0245B4E6B00ED3530 /* Classic.sks */,
-				7CC4899F245B4E6B00ED3530 /* FireworkSmokeEmitter.sks */,
+				7C7E892C245B67820098B030 /* GFX */,
 				7C58DC6C244C341D003F52BF /* SFX */,
 				7CFB47E02426A1AD00B2A4B3 /* Extensions */,
 				7C096F1E2438865A00D4D4D7 /* SCNNodes */,
@@ -254,6 +253,15 @@
 				7C167D402439023100BE43A5 /* Size3i.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		7C7E892C245B67820098B030 /* GFX */ = {
+			isa = PBXGroup;
+			children = (
+				7CC489A0245B4E6B00ED3530 /* Classic.sks */,
+				7CC4899F245B4E6B00ED3530 /* FireworkSmokeEmitter.sks */,
+			);
+			path = GFX;
 			sourceTree = "<group>";
 		};
 		7C8AAE7E2439A9000083AD7C /* Misc */ = {

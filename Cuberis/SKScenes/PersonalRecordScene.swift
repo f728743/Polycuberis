@@ -24,12 +24,12 @@ class PersonalRecordScene: SKScene {
     private let topLabel = SKLabelNode(text: "CONGRATZ!")
     private let valueLabel = SKLabelNode()
     private let bottomLabel = SKLabelNode(text: "New personal record!")
-
-    private let okButton = createButton(title: "OK")
+    private var heavyFeedback = UIImpactFeedbackGenerator(style: .heavy)
 
     override init(size: CGSize) {
 
         super.init(size: size)
+        isUserInteractionEnabled = true
         addChild(topLabel)
         topLabel.fontName = "GillSans"
         topLabel.fontSize = 30
@@ -48,11 +48,6 @@ class PersonalRecordScene: SKScene {
         bottomLabel.fontSize = 30
         bottomLabel.zPosition = 1
         bottomLabel.position = CGPoint(size.midW, size.midH - 50)
-
-        okButton.action = { [unowned self] in self.completion?() }
-        addChild(okButton)
-        okButton.position = CGPoint(0, size.midH)
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -87,10 +82,16 @@ class PersonalRecordScene: SKScene {
                 guard let smokeEmitter = SKEmitterNode(fileNamed: "FireworkSmokeEmitter") else { return }
                 smokeEmitter.particlePosition = point
                 smokeEmitter.particleScale *= scaleFactor
+                self.heavyFeedback.impactOccurred()
                 self.addChild(fireworkEmitter)
                 self.addChild(smokeEmitter)
             }])
         run(fireworkSound)
         run(fireworkSequence)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        completion?()
     }
 }

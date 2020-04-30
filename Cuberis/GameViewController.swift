@@ -160,19 +160,13 @@ class GameViewController: UIViewController {
     }
 
     func presentLeaderboard(completion: @escaping () -> Void) {
-        let newRecord = PersonalRecordScene(size: self.scnView.bounds.size)
-        newRecord.value = leaderboard.localPlayerScoreValue
-        // congratz on a new personal record
-        newRecord.completion = completion
-        scnView.overlaySKScene = newRecord
-
-//        let highScoreTable = LeaderboardScene(size: scnView.bounds.size)
-//        highScoreTable.caption = "\(setup.description) High Score"
-//        leaderboard.loadHighScores { rows in
-//            highScoreTable.rows = rows
-//        }
-//        highScoreTable.completion = completion
-//        scnView.overlaySKScene = highScoreTable
+        let highScoreTable = LeaderboardScene(size: scnView.bounds.size)
+        highScoreTable.caption = "\(setup.description) High Score"
+        leaderboard.loadHighScores { rows in
+            highScoreTable.rows = rows
+        }
+        highScoreTable.completion = completion
+        scnView.overlaySKScene = highScoreTable
     }
 
     func presentSetupMenu(completion: @escaping (Setup) -> Void) {
