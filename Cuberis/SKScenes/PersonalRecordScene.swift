@@ -12,30 +12,46 @@ class PersonalRecordScene: SKScene {
         label.fontSize = 26
     }
 
-    var caption: String = "" {
+    var value: Int = 0 {
         didSet {
-            captionLabel.text = caption
+            valueLabel.text = "\(value)"
         }
     }
 
     var animatedAppearance = false
     var completion: (() -> Void)?
 
-    private let captionLabel = SKLabelNode()
-    private let panel: SKSpriteNode
+    private let topLabel = SKLabelNode(text: "CONGRATZ!")
+    private let valueLabel = SKLabelNode()
+    private let bottomLabel = SKLabelNode(text: "New personal record!")
+
     private let okButton = createButton(title: "OK")
 
     override init(size: CGSize) {
-        let panelTexture = SKTexture(imageNamed: "PersonalRecordPanel")
-        panel = SKSpriteNode(texture: panelTexture)
 
         super.init(size: size)
-        addChild(panel)
-        panel.addChild(captionLabel)
-        setupCaption()
+        addChild(topLabel)
+        topLabel.fontName = "GillSans"
+        topLabel.fontSize = 30
+        topLabel.zPosition = 1
+        topLabel.position = CGPoint(size.midW, size.midH + 70)
+
+        addChild(valueLabel)
+        valueLabel.fontName = "GillSans"
+        valueLabel.fontSize = 49
+        valueLabel.fontColor = .yellow
+        valueLabel.zPosition = 1
+        valueLabel.position = CGPoint(size.midW, size.midH)
+
+        addChild(bottomLabel)
+        bottomLabel.fontName = "GillSans"
+        bottomLabel.fontSize = 30
+        bottomLabel.zPosition = 1
+        bottomLabel.position = CGPoint(size.midW, size.midH - 50)
+
         okButton.action = { [unowned self] in self.completion?() }
-        panel.addChild(okButton)
-        okButton.position = CGPoint(0, -panel.size.midH + okButton.size.midH + 8)
+        addChild(okButton)
+        okButton.position = CGPoint(0, size.midH)
 
     }
 
@@ -43,24 +59,38 @@ class PersonalRecordScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupCaption() {
-        captionLabel.verticalAlignmentMode = .baseline
-        captionLabel.horizontalAlignmentMode = .center
-        captionLabel.position = CGPoint(0, panel.size.midH - 40)
-        LeaderboardScene.setupLabelFont(captionLabel)
-    }
-
-    func layoutSubnodes() {
-        panel.position = CGPoint(frame.midX, frame.midY)
-    }
-
     override func didMove(to view: SKView) {
-        layoutSubnodes()
-        if animatedAppearance {
-            alpha = 0.0
-            run(SKAction.fadeIn(withDuration: SceneConstants.scenePresentDuration * 2))
-        } else {
-            alpha = 1.0
+        for _ in 0...5 + Int.random(in: 0...2) {
+            explode(at: CGPoint(size.midW + CGFloat(Int.random(in: Int(-size.midW / 2)...Int(size.midW / 2))),
+                                size.midH + CGFloat(Int.random(in: Int(-size.midH / 2)...Int(size.midH / 2)))),
+                    withDelay: TimeInterval(drand48() * 3),
+                    withColor: UIColor.colorsForCompound[Int.random(in: 0..<UIColor.colorsForCompound.count)],
+                    withScaleFactor: 0.2 + CGFloat(drand48() * 0.4))
         }
+    }
+
+    private func explode(at point: CGPoint, withDelay delay: TimeInterval, withColor color: UIColor,
+                         withScaleFactor scaleFactor: CGFloat) {
+
+        let fireworkSound = SKAction.sequence([
+            SKAction.wait(forDuration: delay),
+            SKAction.playSoundFileNamed("Classic", waitForCompletion: false)
+        ])
+        let fireworkSequence = SKAction.sequence([
+            SKAction.wait(forDuration: delay),
+            SKAction.run { [unowned self] in
+                guard let fireworkEmitter = SKEmitterNode(fileNamed: "Classic") else { return }
+                fireworkEmitter.particlePosition = point
+                fireworkEmitter.particleColorSequence = nil
+                fireworkEmitter.particleScale *= scaleFactor
+                fireworkEmitter.particleColor = color
+                guard let smokeEmitter = SKEmitterNode(fileNamed: "FireworkSmokeEmitter") else { return }
+                smokeEmitter.particlePosition = point
+                smokeEmitter.particleScale *= scaleFactor
+                self.addChild(fireworkEmitter)
+                self.addChild(smokeEmitter)
+            }])
+        run(fireworkSound)
+        run(fireworkSequence)
     }
 }

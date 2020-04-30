@@ -20,4 +20,14 @@ extension UIColor {
            blue: rgb & 0xFF
        )
    }
+
+    convenience init(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) {
+        self.init(red: r, green: g, blue: b, alpha: 1)
+    }
+
+    static let colorsForCompound = [UIColor(1, 0, 0), UIColor(1, 0.5, 0),
+                                    UIColor(1, 1, 0), UIColor(0, 1, 0),
+                                    UIColor(0, 0, 1), UIColor(0.5, 0, 0.5),
+                                    UIColor(1, 1, 1)]
+
 }

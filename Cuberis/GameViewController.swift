@@ -49,7 +49,6 @@ class GameViewController: UIViewController {
                                ratio: ratio)
     }
 
-    // todo: haptic
     private var lightFeedback = UIImpactFeedbackGenerator(style: .light)
     private var heavyFeedback = UIImpactFeedbackGenerator(style: .heavy)
 
@@ -129,8 +128,7 @@ class GameViewController: UIViewController {
             leaderboard.report(score: score) { [unowned self] error in
                 if error != nil { print(error!) }
                 let newRecord = PersonalRecordScene(size: self.scnView.bounds.size)
-                newRecord.caption = "\(self.setup.description) High Score"  // TODO: show congratz instead
-                // congratz on a new personal record
+                newRecord.value = self.leaderboard.localPlayerScoreValue
                 newRecord.completion = completion
                 self.scnView.overlaySKScene = newRecord
             }
@@ -162,13 +160,19 @@ class GameViewController: UIViewController {
     }
 
     func presentLeaderboard(completion: @escaping () -> Void) {
-        let highScoreTable = LeaderboardScene(size: scnView.bounds.size)
-        highScoreTable.caption = "\(setup.description) High Score"
-        leaderboard.loadHighScores { rows in
-            highScoreTable.rows = rows
-        }
-        highScoreTable.completion = completion
-        scnView.overlaySKScene = highScoreTable
+        let newRecord = PersonalRecordScene(size: self.scnView.bounds.size)
+        newRecord.value = leaderboard.localPlayerScoreValue
+        // congratz on a new personal record
+        newRecord.completion = completion
+        scnView.overlaySKScene = newRecord
+
+//        let highScoreTable = LeaderboardScene(size: scnView.bounds.size)
+//        highScoreTable.caption = "\(setup.description) High Score"
+//        leaderboard.loadHighScores { rows in
+//            highScoreTable.rows = rows
+//        }
+//        highScoreTable.completion = completion
+//        scnView.overlaySKScene = highScoreTable
     }
 
     func presentSetupMenu(completion: @escaping (Setup) -> Void) {

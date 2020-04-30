@@ -53,6 +53,9 @@
 		7CB1F781243228580057499F /* LightNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB1F780243228580057499F /* LightNode.swift */; };
 		7CB5DEB9244B160D0074760E /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB5DEB8244B160D0074760E /* Palette.swift */; };
 		7CC34F67242A3F9000928EE1 /* Vector3i.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC34F66242A3F9000928EE1 /* Vector3i.swift */; };
+		7CC489A1245B4E6B00ED3530 /* Classic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CC4899E245B4E6B00ED3530 /* Classic.wav */; };
+		7CC489A2245B4E6B00ED3530 /* FireworkSmokeEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7CC4899F245B4E6B00ED3530 /* FireworkSmokeEmitter.sks */; };
+		7CC489A3245B4E6B00ED3530 /* Classic.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7CC489A0245B4E6B00ED3530 /* Classic.sks */; };
 		7CD6AE9D2445BCD000C95338 /* LeaderboardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6AE9C2445BCD000C95338 /* LeaderboardScene.swift */; };
 		7CDC936B244218B8009BAC84 /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDC936A244218B8009BAC84 /* Statistics.swift */; };
 		7CE36ED923DC6D9800982EF9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE36ED823DC6D9800982EF9 /* AppDelegate.swift */; };
@@ -110,6 +113,9 @@
 		7CB1F780243228580057499F /* LightNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightNode.swift; sourceTree = "<group>"; };
 		7CB5DEB8244B160D0074760E /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		7CC34F66242A3F9000928EE1 /* Vector3i.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector3i.swift; sourceTree = "<group>"; };
+		7CC4899E245B4E6B00ED3530 /* Classic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Classic.wav; sourceTree = "<group>"; };
+		7CC4899F245B4E6B00ED3530 /* FireworkSmokeEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireworkSmokeEmitter.sks; sourceTree = "<group>"; };
+		7CC489A0245B4E6B00ED3530 /* Classic.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Classic.sks; sourceTree = "<group>"; };
 		7CD6AE9C2445BCD000C95338 /* LeaderboardScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardScene.swift; sourceTree = "<group>"; };
 		7CDC936A244218B8009BAC84 /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
 		7CE36ED823DC6D9800982EF9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -190,6 +196,8 @@
 		7C4AAD8523DAEFEA00A9590B /* Cuberis */ = {
 			isa = PBXGroup;
 			children = (
+				7CC489A0245B4E6B00ED3530 /* Classic.sks */,
+				7CC4899F245B4E6B00ED3530 /* FireworkSmokeEmitter.sks */,
 				7C58DC6C244C341D003F52BF /* SFX */,
 				7CFB47E02426A1AD00B2A4B3 /* Extensions */,
 				7C096F1E2438865A00D4D4D7 /* SCNNodes */,
@@ -215,6 +223,7 @@
 		7C58DC6C244C341D003F52BF /* SFX */ = {
 			isa = PBXGroup;
 			children = (
+				7CC4899E245B4E6B00ED3530 /* Classic.wav */,
 				7C316FB7244CA89C008DEC25 /* Step.wav */,
 				7C58DC6A244C337C003F52BF /* Hit.wav */,
 				7C27152B244B6FF3006E6551 /* Empty.wav */,
@@ -333,8 +342,11 @@
 				7C5C32622441AE17000F3430 /* README.md in Resources */,
 				7C271532244B6FF3006E6551 /* LevelUp.wav in Resources */,
 				7C27152F244B6FF3006E6551 /* Layer.wav in Resources */,
+				7CC489A1245B4E6B00ED3530 /* Classic.wav in Resources */,
 				7C316FB8244CA89C008DEC25 /* Step.wav in Resources */,
+				7CC489A3245B4E6B00ED3530 /* Classic.sks in Resources */,
 				7C271530244B6FF3006E6551 /* Empty.wav in Resources */,
+				7CC489A2245B4E6B00ED3530 /* FireworkSmokeEmitter.sks in Resources */,
 				7CA349BD23DD89CB000721E9 /* polycubes.json in Resources */,
 				7C4AAD8923DAEFEA00A9590B /* art.scnassets in Resources */,
 				7C4AAD9323DAEFEA00A9590B /* LaunchScreen.storyboard in Resources */,
