@@ -7,18 +7,12 @@ import SpriteKit
 
 class PersonalRecordScene: SKScene {
 
-    static func setupLabelFont(_ label: SKLabelNode) {
-        label.fontName = "GillSans"
-        label.fontSize = 26
-    }
-
     var value: Int = 0 {
         didSet {
             valueLabel.text = "\(value)"
         }
     }
 
-    var animatedAppearance = false
     var completion: (() -> Void)?
 
     private let topLabel = SKLabelNode(text: "CONGRATZ!")
@@ -27,27 +21,20 @@ class PersonalRecordScene: SKScene {
     private var heavyFeedback = UIImpactFeedbackGenerator(style: .heavy)
 
     override init(size: CGSize) {
-
         super.init(size: size)
         isUserInteractionEnabled = true
-        addChild(topLabel)
-        topLabel.fontName = "GillSans"
-        topLabel.fontSize = 30
-        topLabel.zPosition = 1
-        topLabel.position = CGPoint(size.midW, size.midH + 70)
+        setup(topLabel, offset: CGPoint(0, 70), fontSize: 30, color: .white)
+        setup(valueLabel, offset: CGPoint(0, 0), fontSize: 49, color: .yellow)
+        setup(bottomLabel, offset: CGPoint(0, -50), fontSize: 30, color: .white)
+    }
 
-        addChild(valueLabel)
-        valueLabel.fontName = "GillSans"
-        valueLabel.fontSize = 49
-        valueLabel.fontColor = .yellow
-        valueLabel.zPosition = 1
-        valueLabel.position = CGPoint(size.midW, size.midH)
-
-        addChild(bottomLabel)
-        bottomLabel.fontName = "GillSans"
-        bottomLabel.fontSize = 30
-        bottomLabel.zPosition = 1
-        bottomLabel.position = CGPoint(size.midW, size.midH - 50)
+    func setup(_ label: SKLabelNode, offset: CGPoint, fontSize: CGFloat, color: UIColor) {
+        addChild(label)
+        label.fontName = "GillSans"
+        label.fontSize = fontSize
+        label.zPosition = 1
+        label.fontColor = color
+        label.position = CGPoint(size.midW, size.midH) + offset
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -64,11 +64,6 @@ class Leaderboard: NSObject {
         loadLocal()
     }
 
-    func saveLocal() {
-        save(localPlayerScoreValue, forKey: .localPlayerScore)
-        save(bestScoreValue, forKey: .bestScore)
-    }
-
     func loadLocal() {
         localPlayerScoreValue = loadInt(forKey: .localPlayerScore) ?? 0
         bestScoreValue = loadInt(forKey: .bestScore) ?? 0
@@ -82,19 +77,18 @@ class Leaderboard: NSObject {
         UserDefaults.standard.object(forKey: "\(leaderboardIdentifier)_\(key.rawValue)") as? Int
     }
 
-    func report(score: Int, completion: ((Error?) -> Void)? =  nil) {
+    func report(score: Int) {
         if score > localPlayerScoreValue {
             localPlayerScoreValue = score
+            save(localPlayerScoreValue, forKey: .localPlayerScore)
         }
         if score > bestScoreValue {
             bestScoreValue = score
+            save(bestScoreValue, forKey: .bestScore)
         }
-        saveLocal()
         let newScore = GKScore(leaderboardIdentifier: leaderboardIdentifier)
         newScore.value = Int64(score)
-        GKScore.report([newScore]) { error in
-            completion?(error)
-        }
+        GKScore.report([newScore])
     }
 
     func upateLocalPlayerScore() {

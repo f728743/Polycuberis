@@ -25,7 +25,6 @@ class GameViewController: UIViewController {
     var setup: Setup
     var scnView: SCNView! { self.view as? SCNView }
     var engine: GameEngine?
-    var sound = Sound()
     var leaderboard: Leaderboard
     var sceneProjection: SceneProjection {
         let pitSize = scene.pitSize
@@ -125,13 +124,11 @@ class GameViewController: UIViewController {
         engine = nil
         if score > leaderboard.localPlayerScoreValue {
             scene.pit.isHidden = true
-            leaderboard.report(score: score) { [unowned self] error in
-                if error != nil { print(error!) }
-                let newRecord = PersonalRecordScene(size: self.scnView.bounds.size)
-                newRecord.value = self.leaderboard.localPlayerScoreValue
-                newRecord.completion = completion
-                self.scnView.overlaySKScene = newRecord
-            }
+            leaderboard.report(score: score)
+            let congratsScene = PersonalRecordScene(size: self.scnView.bounds.size)
+            congratsScene.value = self.leaderboard.localPlayerScoreValue
+            congratsScene.completion = completion
+            self.scnView.overlaySKScene = congratsScene
         } else {
             leaderboard.upateLocalPlayerScore()
             completion()
@@ -209,7 +206,7 @@ extension GameViewController: GameEngineDelegate {
         scene.movePolycube(by: delta, andRotateBy: rotationDelta)
         if moveType != .timerStep {
             lightFeedback.impactOccurred()
-            sound.play(.move, on: gamepad)
+            play(.move, on: gamepad)
         }
     }
 
@@ -232,18 +229,18 @@ extension GameViewController: GameEngineDelegate {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
         heavyFeedback.impactOccurred()
         if isPitEmpty {
-            sound.play(.empty, on: gamepad)
+            play(.empty, on: gamepad)
         } else if layersCleared > 0 {
-            sound.play(.layer, on: gamepad)
+            play(.layer, on: gamepad)
         } else {
-            sound.play(.hit, on: gamepad)
+            play(.hit, on: gamepad)
         }
         gamepad.gaugeValue = pit.pileHeight
     }
 
     func didChangeLevel(to level: Int) {
         guard let gamepad = scnView.overlaySKScene as? GamepadScene else { return }
-        sound.play(.levelUp, on: gamepad)
+        play(.levelUp, on: gamepad)
         gamepad.level = level
     }
 
