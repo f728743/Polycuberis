@@ -49,6 +49,7 @@ class PersonalRecordScene: SKScene {
                     withColor: UIColor.colorsForCompound[Int.random(in: 0..<UIColor.colorsForCompound.count)],
                     withScaleFactor: 0.2 + CGFloat(drand48() * 0.4))
         }
+        run(SKAction.playSoundFileNamed("Fanfare.wav", waitForCompletion: false))
     }
 
     private func explode(at point: CGPoint, withDelay delay: TimeInterval, withColor color: UIColor,
@@ -56,12 +57,12 @@ class PersonalRecordScene: SKScene {
 
         let fireworkSound = SKAction.sequence([
             SKAction.wait(forDuration: delay),
-            SKAction.playSoundFileNamed("Classic", waitForCompletion: false)
+            SKAction.playSoundFileNamed("Firework", waitForCompletion: false)
         ])
         let fireworkSequence = SKAction.sequence([
             SKAction.wait(forDuration: delay),
             SKAction.run { [unowned self] in
-                guard let fireworkEmitter = SKEmitterNode(fileNamed: "Classic") else { return }
+                guard let fireworkEmitter = SKEmitterNode(fileNamed: "Firework") else { return }
                 fireworkEmitter.particlePosition = point
                 fireworkEmitter.particleColorSequence = nil
                 fireworkEmitter.particleScale *= scaleFactor
