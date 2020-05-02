@@ -93,10 +93,14 @@ class Leaderboard: NSObject {
 
     func upateLocalPlayerScore() {
         let leaderBoard = GKLeaderboard()
+        let updateSetup = setup
         leaderBoard.timeScope = .allTime
         leaderBoard.range = NSRange(location: 1, length: 1)
         leaderBoard.identifier = leaderboardIdentifier
         leaderBoard.loadScores { [unowned self] (scores: [GKScore]?, error: Error?) -> Void in
+            if updateSetup != self.setup {
+                return
+            }
             if let error = error {
                 print(error)
             } else {
@@ -110,16 +114,16 @@ class Leaderboard: NSObject {
                     }
                 }
                 if scores.count > 0 {
-                    if Int(scores[0].value) > self.bestScoreValue {
-                        self.bestScoreValue = Int(scores[0].value)
-                        self.save(self.bestScoreValue, forKey: .bestScore)
-                    }
+                    self.bestScoreValue = Int(scores[0].value)
+                    self.save(self.bestScoreValue, forKey: .bestScore)
                 }
             }
         }
     }
 
+    // swiftlint:disable cyclomatic_complexity
     func loadHighScores(completion: @escaping (([ScoreRow]) -> Void)) {
+        let loadSetup = setup
         let leaderBoard = GKLeaderboard()
         leaderBoard.timeScope = .allTime
         leaderBoard.range = NSRange(location: 1, length: 7)
@@ -127,6 +131,11 @@ class Leaderboard: NSObject {
 
         var top = [GKScore]()
         leaderBoard.loadScores { [unowned self] (scores: [GKScore]?, error: Error?) -> Void in
+            if loadSetup != self.setup {
+                completion(self.createOfflineMart())
+                return
+            }
+
             var localPlayerScore: GKScore?
             if let error = error {
                 print(error)
@@ -134,10 +143,8 @@ class Leaderboard: NSObject {
                 if let scores = scores {
                     if scores.count > 0 {
                         top = scores
-                        if Int(scores[0].value) > self.bestScoreValue {
-                            self.bestScoreValue = Int(scores[0].value)
-                            self.save(self.bestScoreValue, forKey: .bestScore)
-                        }
+                        self.bestScoreValue = Int(scores[0].value)
+                        self.save(self.bestScoreValue, forKey: .bestScore)
                         if let playerScore = leaderBoard.localPlayerScore {
                             localPlayerScore = playerScore
                             if playerScore.rank < 8 {
@@ -154,6 +161,10 @@ class Leaderboard: NSObject {
             if let localPlayerScore = localPlayerScore {
                 leaderBoard.range = NSRange(location: localPlayerScore.rank - 1, length: 3)
                 leaderBoard.loadScores { [unowned self] (scores: [GKScore]?, error: Error?) -> Void in
+                    if loadSetup != self.setup {
+                        completion(self.createOfflineMart())
+                        return
+                    }
                     if let error = error {
                         print(error)
                         completion(self.createOfflineMart())
@@ -175,6 +186,7 @@ class Leaderboard: NSObject {
             return
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 
     func createOfflineMart() -> [ScoreRow] {
         [ScoreRow(player: "You", rank: "?", value: "\(localPlayerScoreValue)", isHighlighted: true)]
@@ -200,8 +212,10 @@ class Leaderboard: NSObject {
     }
 
     func createMart(top: [GKScore], peers: [GKScore], localPlayerID: String) -> [ScoreRow] {
-        var result = top[0..<3].map { ScoreRow($0, isHighlighted: false) }
-        result.append(ScoreRow(player: "...", rank: "...", value: "...", isHighlighted: false))
+        var result = top[0..<min(3, top.count)].map { ScoreRow($0, isHighlighted: false) }
+        for _ in 0...3 - min(3, top.count) {
+            result.append(ScoreRow(player: "...", rank: "...", value: "...", isHighlighted: false))
+        }
         result.append(contentsOf: peers.map {
             var isHighlighted = false
             var score = Int($0.value)

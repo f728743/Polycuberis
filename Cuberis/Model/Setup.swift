@@ -103,6 +103,15 @@ struct Setup {
     }
 }
 
+extension Setup: Equatable {
+    public static func == (lhs: Setup, rhs: Setup) -> Bool {
+        return lhs.level == rhs.level &&
+            lhs.pitSize == rhs.pitSize &&
+            lhs.mode == rhs.mode &&
+            lhs.polycubeSet == rhs.polycubeSet
+    }
+}
+
 extension Setup: CustomStringConvertible {
     public var description: String {
         let name = GameMode.names[mode.rawValue]
