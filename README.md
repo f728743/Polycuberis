@@ -1,15 +1,5 @@
-# Cuberis
+# Classic 3D puzzle game
 
-Clone of Blockout '3D Tetris' game for iOS\
-Written using SceneKit and Swift
+The aim is to solve a real-time packing problem by forming complete rows, which then disappear and score points. Poor play leads to incomplete rows, caused by inefficient arrangements of tiles; these rows do not disappear, giving the player progressively less space and less time to play subsequent pieces. Player manipulates a set of polycubes which fall into a three-dimensional pit (seen from above; the pieces appear in the foreground and fall away). The pieces can be rotated around all three axes, and moved horizontally and vertically. The aim is to form complete layers.
 
-![screenshot](gfx/screenshot.gif)
-
-## Under construction
-
-## TODO
-
-* "Button" auto-repeat
-* Move camera to view set of polycubes selected in settings
-* Demo mode on start scene
-* Options dialog for setting up sfx, haptic, etc
+![Screenshot](/assets/img/Screenshot.png)
