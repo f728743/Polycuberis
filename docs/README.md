@@ -1,4 +1,4 @@
-# Remake of famed puzzle game Blockout
+# Remake of 3D Tetris aka Blockout
 
 <a href="https://apps.apple.com/ru/app/polycuberis/id1509292389" target="_blank"><img src="assets/img/Appstore.png" 
 alt="App Store: Polycuberis" width="147" height="50" /></a>
